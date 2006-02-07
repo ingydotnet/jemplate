@@ -16,11 +16,11 @@ Just install this like any CPAN module:
     > make test
     > make install
 
-For the Javascript side, you need to copy `lib/Jemplate.js` to your
+For the Javascript side, you need to copy `share/Jemplate.js` to your
 project, and then use the `jemplate` command line tool to compile your
 templates. Something like this:
 
-    > cp ~/downloads/Jemplate-x.xx/lib/Jemplate.js js/Jemplate.js
+    > cp ~/downloads/Jemplate-x.xx/share/Jemplate.js js/Jemplate.js
     > jemplate --compile templates/* > js/my_jemplate.js
 
 Then just import those two Javascript files into your html document.
