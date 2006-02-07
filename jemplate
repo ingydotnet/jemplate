@@ -1,0 +1,4 @@
+#!/usr/bin/perl
+
+# Usage:
+#    jemplate --compile foo.html > foo.js
