@@ -1,0 +1,213 @@
+= DESIGN GOALS
+
+* Be Useful
+* Support as much of Perl's Template Toolkit (TT2) as feasible
+
+
+= OVERVIEW
+
+Jemplate leverages TT2 by using Template::Parser, but replacing the backend
+(Template::Directive) with Jemplate::Directive to produce 
+
+
+= Perl API
+
+- Jemplate::Parser->new->parse($template_text);
+
+Parse a single template and return a Javascript function (as a string scalar).
+
+- Jemplate::compile_templates(@template_file_paths);
+
+Take a list of template file paths and compile them into a module of
+functions. Returns the text of the module.
+
+- Jemplate::compile_module($module_path, \@template_file_paths);
+
+Similar to `compile_templates`, but prints to result to the $module_path. Returns 1 if successful, undef if error.
+
+- Jemplate::compile_module_cached($module_path, \@template_file_paths);
+
+Similar to `compile_module`, but only compiles if one of the templates
+is newer than the module. Returns 1 if sucessful compile, 0 if no
+compile due to cache, undef if error.
+
+
+= Javascript API
+
+- Jemplate.process(templateFileName, dataObject);
+
+Returns a string containing the rendering of the template.
+templateFileName is something like `my-widget.tt` and dataObject is just
+a Javascript "hash" of data values.
+
+
+= TESTING
+
+Currently we have automated tests that prove that compilation is correct.
+
+We also have a more adhoc `test/` directory with stuff that you need to run
+by hand.
+
+There is no automated testing for the Javascript runtime yet.
+
+= FEATURE CHECKLIST
+
+This is basically a copy of the Template Toolkit Quick Reference Card by
+Andrew Ford. This provides a really nice roadmap for Jemplate.
+
+Index:
+
+   (-) Not done yet but planned.
+   (+) Completed feature.
+   (=) Partially completed feature.
+   (x) Not appropriate for Jemplate.
+
+Each bullet has two symbols. The first is for the feature completion, the
+second is for the testing of the feature.
+
+== Syntax
+
+=== Directives
+
+    ++ [% [GET] var %]
+    -- [% CALL var %]
+    -- [% [SET] var = value ... %] 
+    -- [% DEFAULT var = value ... %] 
+    -- [% META attr = value ... %] 
+
+    -- [% INSERT filename %] 
+    -- [% INCLUDE template [var = value ...] %] 
+    ++ [% PROCESS template [var = value ...] %] 
+    -- [% WRAPPER template [var = value ...] %] text... [% END %] 
+    -- [% BLOCK [name] %] content... [% END %] 
+    -- [% FILTER filter %] text... [% END %] 
+    -- [% MACRO name[(varlist)] directive %] 
+    -- [% USE plugin[(param, ...)] %] 
+    xx [% PERL %] code... [% END %] 
+    xx [% RAWPERL %] code... [% END %] 
+
+    -- [% FOREACH var = list %] ... [% END %] 
+    -- [% WHILE cond %] ... [% END %] 
+    ++ [% IF cond %] ... [% ELSIF cond %] ... [% ELSE %] [% END %] 
+    -- [% SWITCH var %] ... [% CASE [{value|DEFAULT}] %] ... [% END %] 
+    -- [% TRY %] ... [% CATCH [type] %] ... [% FINAL %] ... [% END %] 
+    -- [% THROW type info ... %] 
+    -- [% NEXT %] 
+    -- [% LAST %] 
+    -- [% RETURN %] 
+    -- [% STOP %] 
+    
+=== Special variables
+
+    -- template    outermost template being processed - methods: name, modtime 
+    -- component   innermost template being processed - methods: name, modtime 
+    -- loop        loop iterator - methods: count, first, last, max 
+    -- error       exception object 
+    -- content     captured output for WRAPPER 
+    -- global      top level namespace 
+
+=== Virtual methods 
+
+==== Scalar variables 
+
+    -- chunk(size)     negative size chunks from end 
+    -- defined         is value defined? 
+    -- hash            treat as single-element hash with key value 
+    -- length          length of string representation 
+    -- list            treat as single-item list 
+    -- match(re)       true if value matches re 
+    -- repeat(n)       repeated n times 
+    -- replace(re, sub)    replace instances of re with sub 
+    -- search(re)      returns list of matching subpatterns 
+    -- size            returns 1, as if a single-item list 
+    -- split(re)       split string on re 
+
+==== Hash variables 
+
+    -- each            list of alternating keys/values 
+    -- exists(key)     does key exist? 
+    -- import(hash2)   import contents of hash2 
+    -- import          import into current namespace hash 
+    -- keys            list of keys 
+    -- list            returns alternating key, value 
+    -- nsort           keys sorted numerically 
+    -- size            number of pairs 
+    -- sort            keys sorted alphabetically 
+    -- values          list of values 
+
+==== List variables 
+
+    -- first           first item in list 
+    -- grep(re)        items matching re 
+    -- join(str)       items joined with str 
+    -- last            last item in list 
+    -- max             maximum index number (i.e. size - 1) 
+    -- merge(list [, list...])     combine lists 
+    -- nsort           items sorted numerically 
+    -- pop             remove first item from list 
+    -- push(item)      add item to end of list 
+    -- reverse         items in reverse order 
+    -- shift           remove last item from list 
+    -- size            number of elements 
+    -- slice(from, to)     subset of list 
+    -- sort            items sorted lexically 
+    -- splice(off, len [,list])    modifies list 
+    -- unique          unique items (retains order) 
+    -- unshift(item)   add item to start of list 
+
+=== Standard filters 
+
+    -- collapse        collapses whitespace to a single space 
+    -- eval(text)      evaluate as template text 
+    -- evaltt(text)    evaluate as template text 
+    -- evalperl(text)  evaluate text as Perl code 
+    -- format(str)     format as per printf() 
+    -- html            performs HTML escaping on ‘<’, ‘>’, ‘&’ 
+    -- html_break      convert empty lines to HTML linebreaks 
+    -- html_entity     performs HTML escaping 
+    -- html_line_break     convert newlines to ‘<br>’ 
+    -- html_para convert   blank lines to HTML paras 
+    -- indent(pad)     indent by pad string or width 
+    -- latex(outfmt)   process through LATEX 
+    -- lcfirst         lower case first character 
+    -- lower           convert to lower case 
+    -- null            output to the bit bucket 
+    -- perl(text)      evaluate text as Perl code 
+    -- redirect(file)  redirect output to file 
+    -- remove(re)      removes occurrences of re 
+    -- repeat(n)       repeat n times 
+    -- replace(re, sub)    replace re with sub 
+    -- stderr          redirect output to STDERR 
+    -- stdout(binmode)     redirect output to STDERR in mode binmode 
+    -- trim            removes leading and trailing whitespace 
+    -- truncate(len)   truncate to length len 
+    -- ucfirst         capitalize first character 
+    -- upper           convert to upper case 
+    -- uri             performs URI-escaping 
+
+=== Standard plugins 
+
+Refer to documentation for details of individual plugins. 
+
+    -- Autoformat      autoformatting with Text::Autoformat 
+    -- CGI             interface to CGI.pm 
+    -- Datafile        data stored in plain text files 
+    -- Date            generates formatted time and date strings 
+    -- Directory       interface to directory contents 
+    -- DBI             interface to DBI 
+    -- Dumper          interface to Data::Dumper 
+    -- File            provides general file abstraction 
+    -- Format          provides printf-like formatting 
+    -- GD::*           provide access to GD graphics library 
+    -- HTML            generic HTML generation 
+    -- Iterator        iterator creation 
+    -- Pod             interface to Pod::POM (POD Object Model) 
+    -- String          OO string manipulation interface 
+    -- Table           table formatting 
+    -- Url             URL construction 
+    -- Wrap            simple paragraph wrapping 
+    -- XML.DOM         interface to XML Document Object Model 
+    -- XML.RSS         interface to XML::RSS 
+    -- XML.Simple      interface to XML::Simple 
+    -- XML.Style       simple stylesheet transforms of XML 
+    -- XML.XPath       interface to XML::XPath 
