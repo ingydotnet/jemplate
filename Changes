@@ -4,6 +4,7 @@ date:    Mon Feb  6 23:56:37 PST 2006
 changes:
 - Added IF/ELSIF/ELSE support
 - Added PROCESS support
+- Move Jemplate.js to share/ directory
 
 ---
 version: 0.10

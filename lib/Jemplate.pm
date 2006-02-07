@@ -92,7 +92,7 @@ This will compile all the templates into one Javascript file.
 
 You also need to get the Jemplate runtime.
 
-    > cp ~/Jemplate-0.xx/share/Jemplate.js js/Jemplate.js
+    > cp ~/Jemplate-x.xx/share/Jemplate.js js/Jemplate.js
 
 Now all you need to do is include these two files in the HEAD of
 your html:
