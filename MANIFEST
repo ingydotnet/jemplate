@@ -1,7 +1,4 @@
 Changes
-doc/html/Jemplate.html
-doc/pod/Jemplate.pod
-doc/text/Jemplate.txt
 inc/Module/Install.pm
 inc/Module/Install/Base.pm
 inc/Module/Install/Can.pm
