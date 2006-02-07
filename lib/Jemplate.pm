@@ -103,6 +103,12 @@ template features:
 
 The remaining features will be added very soon.
 
+=head1 CREDIT
+
+This module is only possible because of Andy Wardley's mighty
+Template Toolkit. Thanks Andy. I will gladly give you half of any beers
+I receive for this work.
+
 =head1 AUTHOR
 
 Ingy döt Net <ingy@cpan.org>

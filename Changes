@@ -1,0 +1,6 @@
+---
+version: 0.10
+date:    Mon Feb  6 16:33:53 PST 2006
+changes:
+- Maiden voyage.
+- Only supports text with simple variable substitution.
