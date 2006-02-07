@@ -28,6 +28,8 @@ META.yml
 README
 share/Jemplate.js
 t/hello.t
+t/if-else.t
+t/process.t
 t/test.t
 t/TestJemplate.pm
 test/hello/index.html

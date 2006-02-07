@@ -110,6 +110,7 @@ template features:
   * Plain text
   * Simple [% variable %] substitution
   * IF/ELSIF/ELSE
+  * PROCESS
 
 The remaining features will be added very soon.
 
