@@ -1,8 +1,0 @@
-^Build$
-^Build.PL$
-^MANIFEST.SKIP$
-^Makefile$
-^_build/
-^blib/
-^pm_to_blib$
-.bak$

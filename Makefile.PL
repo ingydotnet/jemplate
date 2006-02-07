@@ -7,6 +7,7 @@ requires        'Template' => '2.14';
 
 use_test_base;
 
+install_share;
 install_script  'jemplate';
 
 WriteAll;

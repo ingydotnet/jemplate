@@ -83,7 +83,7 @@ This will compile all the templates into one Javascript file.
 
 You also need to get the Jemplate runtime.
 
-    > cp ~/Jemplate-0.xx/lib/Jemplate.js js/Jemplate.js
+    > cp ~/Jemplate-0.xx/share/Jemplate.js js/Jemplate.js
 
 Now all you need to do is include these two files in the HEAD of
 your html:
@@ -102,6 +102,11 @@ template features:
   * Variable substitution
 
 The remaining features will be added very soon.
+
+=head1 DEVELOPMENT
+
+Jemplate development is being discussed at
+irc://irc.freenode.net/#jemplate
 
 =head1 CREDIT
 
