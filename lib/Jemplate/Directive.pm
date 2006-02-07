@@ -89,6 +89,27 @@ sub ident {
     return "stash.get($ident)";
 }
 
+
+#------------------------------------------------------------------------
+# filenames(\@names)
+#------------------------------------------------------------------------
+    
+sub filenames {
+    my ($class, $names) = @_;
+    if (@$names > 1) {
+        $names = '[ ' . join(', ', @$names) . ' ]';
+    }
+    else {
+        $names = shift @$names;
+    }
+    return $names;
+}   
+    
+        
+#------------------------------------------------------------------------
+# get($expr)                                                    [% foo %]
+#------------------------------------------------------------------------
+
 sub get {
     my ($class, $expr) = @_;
     return "$OUTPUT $expr;";
@@ -100,6 +121,56 @@ sub block {
         s/^#(?=line \d+)/\/\//gm;
         $_;
     } @{ $block || [] };
+}
+
+#------------------------------------------------------------------------
+# process(\@nameargs)                    [% PROCESS template foo = bar %] 
+#         # => [ [ $file, ... ], \@args ]
+#------------------------------------------------------------------------
+
+sub process {
+    my ($class, $nameargs) = @_;
+    my ($file, $args) = @$nameargs;
+    my $hash = shift @$args;
+    $file = $class->filenames($file);
+    $file .= @$hash ? ', { ' . join(', ', @$hash) . ' }' : '';
+    return "$OUTPUT context.process($file);"; 
+}   
+    
+        
+#------------------------------------------------------------------------
+# if($expr, $block, $else)                             [% IF foo < bar %]
+#                                                         ...
+#                                                      [% ELSE %]
+#                                                         ...
+#                                                      [% END %]
+#------------------------------------------------------------------------
+    
+sub if {
+    my ($class, $expr, $block, $else) = @_;
+    my @else = $else ? @$else : ();
+    $else = pop @else;
+
+    $expr = fix_expr($expr);
+    my $output = "if ($expr) {\n$block\n}\n";
+        
+    foreach my $elsif (@else) {
+        ($expr, $block) = @$elsif;
+        $expr = fix_expr($expr);
+        $output .= "else if ($expr) {\n$block\n}\n";
+    }   
+    if (defined $else) {
+        $output .= "else {\n$else\n}\n";
+    }
+
+    return $output;
+}
+
+# XXX A very nasty hack until I learn more.
+sub fix_expr {
+    my $expr = shift;
+    $expr =~ s/ eq / == /g;
+    return $expr;
 }
 
 1;

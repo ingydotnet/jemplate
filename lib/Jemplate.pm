@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use Template 2.14;
 
-our $VERSION = '0.10';
+our $VERSION = '0.11';
 
 use Jemplate::Parser;
 
@@ -108,7 +108,8 @@ This early release of Jemplate only supports the following
 template features:
 
   * Plain text
-  * Variable substitution
+  * Simple [% variable %] substitution
+  * IF/ELSIF/ELSE
 
 The remaining features will be added very soon.
 

@@ -19,11 +19,7 @@ Jemplate.templateMap = {};
 Jemplate.process = function(template, data) {
     var context = new Jemplate.Context();
     context.stash = new Jemplate.Stash();
-    context.stash.init(data);
-    var func = Jemplate.templateMap[template];
-    if (typeof(func) == 'undefined')
-        throw('No Jemplate template named "' + template + '" available');
-    return func(context);
+    return context.process(template, data);
 }
 
 //------------------------------------------------------------------------------
@@ -33,6 +29,15 @@ if (typeof(Jemplate.Context) == 'undefined')
     Jemplate.Context = function() {};
 
 proto = Jemplate.Context.prototype;
+
+proto.process = function(template, args) {
+    if (typeof(args) != 'undefined')
+        this.stash.add(args);
+    var func = Jemplate.templateMap[template];
+    if (typeof(func) == 'undefined')
+        throw('No Jemplate template named "' + template + '" available');
+    return func(this);
+}
 
 proto.katch = function(error, output) {
     alert(error);
@@ -48,7 +53,7 @@ if (typeof(Jemplate.Stash) == 'undefined')
 
 proto = Jemplate.Stash.prototype;
 
-proto.init = function(object) {
+proto.add = function(object) {
     for (var key in object) {
         var value = object[key];
         this.set(key, value);
