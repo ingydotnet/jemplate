@@ -20,7 +20,7 @@ sub template {
     return <<"...";
 function(context) {
     if (! context)
-        throw('template sub called without context\\n');
+        throw('Jemplate function called without context\\n');
     var stash = context.stash;
     var output = '';
     var error = null;

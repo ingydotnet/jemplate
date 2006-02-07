@@ -1,4 +1,25 @@
 #!/usr/bin/perl
 
-# Usage:
-#    jemplate --compile foo.html > foo.js
+use lib 'lib';
+use Jemplate 0.10;
+
+sub usage {
+    warn <<'...';
+
+Usage:
+    jemplate -c|--compile template-file-list > output.js
+
+...
+    exit;
+}
+
+{
+    if ($ARGV[0] =~ /^(-c|--compile)/) {
+        shift @ARGV;
+        usage() unless @ARGV;
+        print Jemplate->compile_templates(@ARGV);
+    }
+    else {
+        usage();
+    }
+};

@@ -8,8 +8,8 @@ sub parse {
 #     my $parser = Template::Parser->new;
     my $parser = Jemplate::Parser->new;
     my $template = $parser->parse(shift)
-#       or return $parser->error;
-      or die $parser->error;
+      or return $parser->error;
+#       or die $parser->error;
     $template->{BLOCK};
 }
 
@@ -21,7 +21,7 @@ Hello [% name %], and good day!
 --- js
 function(context) {
     if (! context)
-        throw('template sub called without context\n');
+        throw('Jemplate function called without context\n');
     var stash = context.stash;
     var output = '';
     var error = null;
