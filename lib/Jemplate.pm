@@ -48,6 +48,15 @@ Jemplate - Javascript Templating with Template Toolkit
     var elem = document.getElementById('some-div');
     elem.innerHTML = Jemplate.process('my-template.html', data);
 
+Or, with Prototype.js:
+
+    new Ajax.Request("/json", {
+        onComplete: function(req) {
+            var data = eval(req.responseText);
+            $('some-div').innerHTML = Jemplate.process('my-template.html', data);
+        }
+    );
+
 =head1 DESCRIPTION
 
 Jemplate is a templating framework for Javascript that is built over
