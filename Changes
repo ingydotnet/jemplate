@@ -1,4 +1,10 @@
 ---
+version: 0.13
+date:    Tue Feb  7 23:39:04 PST 2006
+changes:
+- Support SET and FOREACH
+
+---
 version: 0.12
 date:    Tue Feb  7 20:14:19 PST 2006
 changes:
