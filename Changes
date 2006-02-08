@@ -1,4 +1,13 @@
 ---
+version: 0.12
+date:    Tue Feb  7 20:14:19 PST 2006
+changes:
+- Added Jemplate->compile_module and Jemplate->compile_module_cached
+- Much refactoring
+- Added output argument to Jemplate.process(template, data, output);
+  output can be a function or DOM element id for innerHTML replacement
+
+---
 version: 0.11
 date:    Mon Feb  6 23:56:37 PST 2006
 changes:

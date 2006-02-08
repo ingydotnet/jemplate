@@ -1,4 +1,5 @@
 Changes
+DESIGN
 inc/Module/Install.pm
 inc/Module/Install/Base.pm
 inc/Module/Install/Can.pm
@@ -32,5 +33,13 @@ t/if-else.t
 t/process.t
 t/test.t
 t/TestJemplate.pm
+test/features/index.html
+test/features/templates/body.html
+test/features/templates/footer.html
+test/features/templates/hacker.html
+test/features/templates/header.html
 test/hello/index.html
 test/hello/templates/hello.html
+test/index.html
+test/js/features.js
+test/js/hello.js
