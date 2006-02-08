@@ -11,15 +11,35 @@ Copyright 2006 Ingy döt Net. All Rights Reserved.
 This module is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself.
 ------------------------------------------------------------------------------*/
+
+//------------------------------------------------------------------------------
+// Main Jemplate class
+//------------------------------------------------------------------------------
 if (typeof(Jemplate) == 'undefined')
     Jemplate = function() {};
 
 Jemplate.templateMap = {};
 
-Jemplate.process = function(template, data) {
+Jemplate.process = function(template, data, output) {
     var context = new Jemplate.Context();
     context.stash = new Jemplate.Stash();
-    return context.process(template, data);
+    var result = context.process(template, data);
+
+    if (typeof(output) == 'undefined')
+        return result;
+    else if (typeof(output) == 'function')
+        output(result);
+    else if (output.match(/^#[\w\-]+$/)) {
+        var id = output.replace(/^#/, '');
+        var element = document.getElementById(id);
+        if (typeof(element) == 'undefined')
+            throw('No element found with id="' + id + '"');
+        element.innerHTML = result;
+    }
+    else
+        throw("Invalid arguments in call to Jemplate.process");
+
+    return 1;
 }
 
 //------------------------------------------------------------------------------
@@ -39,9 +59,8 @@ proto.process = function(template, args) {
     return func(this);
 }
 
-proto.katch = function(error, output) {
-    alert(error);
-    error.type = 'die';
+proto.set_error = function(error, output) {
+    this._error = [error, output];
     return error;
 }
 

@@ -1,23 +1,14 @@
-use t::TestJemplate tests => 1;
+if (typeof(Jemplate) == 'undefined')
+    throw('Jemplate.js must be loaded before any Jemplate template files');
 
-filters { 'tt' => 'parse' };
-# no_diff;
-run_is 'tt' => 'js';
-
-__END__
-
-=== Hello world
---- tt
-Hello [% name %], and good day!
---- js
-function(context) {
+Jemplate.templateMap['hello.html'] = function(context) {
     if (! context) throw('Jemplate function called without context\n');
     var stash = context.stash;
     var output = '';
 
     try {
 output += 'Hello ';
-//line 1 "(unknown template)"
+//line 1 "hello.html"
 output += stash.get('name');
 output += ', and good day!\n';
     }
@@ -28,3 +19,4 @@ output += ', and good day!\n';
 
     return output;
 }
+

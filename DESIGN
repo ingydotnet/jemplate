@@ -2,30 +2,34 @@
 
 * Be Useful
 * Support as much of Perl's Template Toolkit (TT2) as feasible
+* Avoid cruft and scope explosion.
+* Actually complete the project and become stable.
 
 
 = OVERVIEW
 
-Jemplate leverages TT2 by using Template::Parser, but replacing the backend
-(Template::Directive) with Jemplate::Directive to produce 
+Jemplate leverages TT2 by using Template::Parser, but replacing the
+backend (Template::Directive) with Jemplate::Directive to produce
 
 
 = Perl API
 
 - Jemplate::Parser->new->parse($template_text);
 
-Parse a single template and return a Javascript function (as a string scalar).
+Parse a single template and return a Javascript function (as a
+string scalar).
 
-- Jemplate::compile_templates(@template_file_paths);
+- Jemplate->compile_templates(@template_file_paths);
 
 Take a list of template file paths and compile them into a module of
 functions. Returns the text of the module.
 
-- Jemplate::compile_module($module_path, \@template_file_paths);
+- Jemplate->compile_module($module_path, \@template_file_paths);
 
-Similar to `compile_templates`, but prints to result to the $module_path. Returns 1 if successful, undef if error.
+Similar to `compile_templates`, but prints to result to the
+$module_path. Returns 1 if successful, undef if error.
 
-- Jemplate::compile_module_cached($module_path, \@template_file_paths);
+- Jemplate->compile_module_cached($module_path, \@template_file_paths);
 
 Similar to `compile_module`, but only compiles if one of the templates
 is newer than the module. Returns 1 if sucessful compile, 0 if no
@@ -34,26 +38,38 @@ compile due to cache, undef if error.
 
 = Javascript API
 
-- Jemplate.process(templateFileName, dataObject);
+- Jemplate.process(templateFileName[, dataObject][, outputTarget]);
 
 Returns a string containing the rendering of the template.
 templateFileName is something like `my-widget.tt` and dataObject is just
 a Javascript "hash" of data values.
+
+The optional outputTarget can be a string or a function. If it is a
+function, the function is called with the result, and `true` is returned.
+
+If it is a string beginning with '#' followed by a word, then the word
+is used to locate the DOM element with that id, and the innerHTML of the
+element is replaced with the result. (`true` is returned)
+
+If outputTarget is anything else, an exception will be thrown.
 
 
 = TESTING
 
 Currently we have automated tests that prove that compilation is correct.
 
-We also have a more adhoc `test/` directory with stuff that you need to run
-by hand.
+We also have a more adhoc `test/` directory with stuff that you need to
+run by hand.
 
 There is no automated testing for the Javascript runtime yet.
+
 
 = FEATURE CHECKLIST
 
 This is basically a copy of the Template Toolkit Quick Reference Card by
 Andrew Ford. This provides a really nice roadmap for Jemplate.
+
+The original is here: http://refcards.com/refcards/tt2/index.html
 
 Index:
 
@@ -62,8 +78,8 @@ Index:
    (=) Partially completed feature.
    (x) Not appropriate for Jemplate.
 
-Each bullet has two symbols. The first is for the feature completion, the
-second is for the testing of the feature.
+Each bullet consists of a pair of symbols. The first is for the feature
+completion, the second is for the testing of the feature.
 
 == Syntax
 
@@ -211,3 +227,76 @@ Refer to documentation for details of individual plugins.
     -- XML.Simple      interface to XML::Simple 
     -- XML.Style       simple stylesheet transforms of XML 
     -- XML.XPath       interface to XML::XPath 
+
+== Configuration Options
+
+    -- START_TAG       start of directive token ([%) 
+    -- END_TAG         end of directive token (%]) 
+    -- TAG_STYLE       set pre-defined START_TAG/END_TAG style 
+    -- PRE_CHOMP       remove whitespace before directives (0) 
+    -- POST_CHOMP      remove whitespace after directives (0) 
+    -- TRIM remove     leading and trailing whitespace (0) 
+    -- INTERPOLATE     interpolate embedded variables (0) 
+    -- ANYCASE         allow lower case directive keywords (0) 
+
+=== Template files and blocks 
+
+    -- INCLUDE_PATH    search path for templates 
+    -- DELIMITER       delimiter for separating paths (:) 
+    -- ABSOLUTE        allow absolute file names (0) 
+    -- RELATIVE        allow relative filenames (0) 
+    -- DEFAULT         default template 
+    -- BLOCKS          hash array pre-defining template blocks 
+    -- AUTO_RESET      reset BLOCK definitions each time (1) 
+    -- RECURSION       permit recursion in templates (0) 
+
+=== Template variables 
+
+    -- PRE_DEFINE      hash array of variables and values to pre-define 
+    -- VARIABLES       synonym for PRE_DEFINE 
+
+=== Runtime processing options 
+
+    -- EVAL_PERL       process PERL/RAWPERL blocks (0) 
+    -- PRE_PROCESS     template(s) to process before main template 
+    -- POST_PROCESS    template(s) to process after main template 
+    -- PROCESS         template(s) to process instead of main template 
+    -- ERROR           name of error template or reference to hash 
+                       array mapping error types to templates 
+    -- OUTPUT          default output location or handler 
+    -- OUTPUT_PATH     directory into which output files can be written 
+    -- DEBUG           raise 'undef' error on access to undefined variables 
+
+=== Caching and Compiling Options 
+
+    -- CACHE_SIZE      max compiled templates to cache (undef, i.e. cache all) 
+    -- COMPILE_EXT     extension for compiled template files (undef) 
+    -- COMPILE_DIR     directory for compiled template files (undef) 
+
+=== Plugins and Filters 
+
+    -- PLUGINS         reference to a hash array mapping plugin
+                       names to Perl packages. 
+    -- PLUGIN_BASE     base class(es) under which plugins may be found 
+    -- LOAD_PERL       load Perl modules if plugin not found (0) 
+    -- FILTERS         hash array mapping filter names to filter
+                       subroutines or factories. 
+
+=== Compatibility, Customisation and Extension 
+
+    -- V1DOLLAR        backwards compatibility flag 
+    -- LOAD_TEMPLATES  list of template providers 
+    -- LOAD_PLUGINS    list of plugin providers 
+    -- LOAD_FILTERS    list of filter providers 
+    -- TOLERANT        set providers to tolerate errors as declinations (0) 
+    -- SERVICE         custom service obj (Template::Service) 
+    -- CONTEXT         custom context obj (Template::Context) 
+    -- STASH           custom stash object (Template::Stash) 
+    -- PARSER          custom parser object (Template::Parser) 
+    -- GRAMMAR         custom grammar obj(Template::Grammar) 
+
+== Command line tools 
+
+    -- tpage           tpage processes supplied templates and sends output
+                       to STDOUT
+    -- ttree           processes directory hierarchies of templates

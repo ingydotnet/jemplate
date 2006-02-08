@@ -1,12 +1,18 @@
 package Jemplate::Directive;
 use strict;
 use warnings;
-# use base 'Template::Directive';
 
-use YAML; sub XXX { die YAML::Dump @_ }
+{   # XXX This is only temporarily here for debugging
+    no warnings 'redefine';
+    sub XXX {
+        require YAML;
+        die YAML::Dump(@_);
+    }
+}
 
 our( $PRETTY, $OUTPUT );
 BEGIN {
+    no warnings 'once';
     *PRETTY = \ $Template::Directive::PRETTY;
     $OUTPUT = 'output +=';
 }
@@ -19,19 +25,16 @@ sub template {
 
     return <<"...";
 function(context) {
-    if (! context)
-        throw('Jemplate function called without context\\n');
+    if (! context) throw('Jemplate function called without context\\n');
     var stash = context.stash;
     var output = '';
-    var error = null;
 
     try {
 $block
     }
     catch(e) {
-        error = context.katch(e, output);
-        if (error.type != 'return')
-            throw(error);
+        var error = context.set_error(e, output);
+        throw(error);
     }
 
     return output;
@@ -152,12 +155,12 @@ sub if {
     my @else = $else ? @$else : ();
     $else = pop @else;
 
-    $expr = fix_expr($expr);
+    $expr = _fix_expr($expr);
     my $output = "if ($expr) {\n$block\n}\n";
         
     foreach my $elsif (@else) {
         ($expr, $block) = @$elsif;
-        $expr = fix_expr($expr);
+        $expr = _fix_expr($expr);
         $output .= "else if ($expr) {\n$block\n}\n";
     }   
     if (defined $else) {
@@ -168,10 +171,47 @@ sub if {
 }
 
 # XXX A very nasty hack until I learn more.
-sub fix_expr {
+sub _fix_expr {
     my $expr = shift;
     $expr =~ s/ eq / == /g;
     return $expr;
 }
 
 1;
+
+=head1 NAME
+
+Jemplate::Directive - Jemplate Code Generating Backend
+
+=head1 SYNOPSIS
+
+    use Jemplate::Directive;
+
+=head1 DESCRIPTION
+
+Jemplate::Directive is the analog to Template::Directive, which is the
+module that produces that actual code that templates turn into. The
+Jemplate version obviously produces Javascript code rather than Perl.
+Other than that the two modules are almost exactly the same.
+
+=head1 BUGS
+
+Unfortunately, some of the code generation seems to happen before
+Jemplate::Directive gets control. So it currently has heuristical code
+to rejigger Perl code snippets into Javascript. This processing needs to
+happen upstream once I get more clarity on how Template::Toolkit works.
+
+=head1 AUTHOR
+
+Ingy döt Net <ingy@cpan.org>
+
+=head1 COPYRIGHT
+
+Copyright (c) 2006. Ingy döt Net. All rights reserved.
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+See L<http://www.perl.com/perl/misc/Artistic.html>
+
+=cut

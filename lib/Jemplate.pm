@@ -8,6 +8,24 @@ our $VERSION = '0.11';
 
 use Jemplate::Parser;
 
+sub compile_module {
+    my ($class, $module_path, $template_file_paths) = @_;
+    my $result = $class->compile_templates(@$template_file_paths)
+      or return;
+    open MODULE, "> $module_path"
+        or die "Can't open '$module_path' for output:\n$!";
+    print MODULE $result;
+    close MODULE;
+    return 1;
+}
+
+sub compile_module_cached {
+    my ($class, $module_path, $template_file_paths) = @_;
+    my $m = -M $module_path;
+    return 0 unless grep { -M($_) < $m } @$template_file_paths;
+    return $class->compile_module($module_path, $template_file_paths); 
+}
+
 sub compile_templates {
     my $class = shift;
     my $output = $class->_preamble;
@@ -106,28 +124,58 @@ your html:
 
 Now you have Jemplate support for these templates in your html document.
 
+=head1 PUBLIC API
+
+The Jemplate.pm module has the following public class methods:
+
+=over
+
+=item Jemplate->compile_templates(@template_file_paths);
+
+Take a list of template file paths and compile them into a module of
+functions. Returns the text of the module.
+
+=item Jemplate->compile_module($module_path, \@template_file_paths);
+
+Similar to `compile_templates`, but prints to result to the
+$module_path. Returns 1 if successful, undef if error.
+
+=item Jemplate->compile_module_cached($module_path, \@template_file_paths);
+
+Similar to `compile_module`, but only compiles if one of the templates
+is newer than the module. Returns 1 if sucessful compile, 0 if no
+compile due to cache, undef if error.
+
+=back
+
 =head1 BUGS
 
 This early release of Jemplate only supports the following
 template features:
 
   * Plain text
-  * Simple [% variable %] substitution
+  * [% [GET] variable %]
   * IF/ELSIF/ELSE
-  * PROCESS
+  * [% PROCESS [arguments] %]
 
-The remaining features will be added very soon.
+The remaining features will be added very soon. See the DESIGN document
+in the distro for a list of all features and their progress.
 
 =head1 DEVELOPMENT
 
-Jemplate development is being discussed at
-irc://irc.freenode.net/#jemplate
+The bleeding edge code is available via Subversion at
+http://svn.kwiki.org/ingy/Jemplate/
+
+Jemplate development is being discussed at irc://irc.freenode.net/#jemplate
+
+If you want a committer bit, just ask ingy on the irc channel.
 
 =head1 CREDIT
 
-This module is only possible because of Andy Wardley's mighty
-Template Toolkit. Thanks Andy. I will gladly give you half of any beers
-I receive for this work.
+This module is only possible because of Andy Wardley's mighty Template
+Toolkit. Thanks Andy. I will gladly give you half of any beers I
+receive for this work. (As long as you are in the same room when I'm
+drinking them ;)
 
 =head1 AUTHOR
 
