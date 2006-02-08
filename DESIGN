@@ -87,7 +87,7 @@ completion, the second is for the testing of the feature.
 
     ++ [% [GET] var %]
     -- [% CALL var %]
-    -- [% [SET] var = value ... %] 
+    ++ [% [SET] var = value ... %] 
     -- [% DEFAULT var = value ... %] 
     -- [% META attr = value ... %] 
 
@@ -102,7 +102,7 @@ completion, the second is for the testing of the feature.
     xx [% PERL %] code... [% END %] 
     xx [% RAWPERL %] code... [% END %] 
 
-    -- [% FOREACH var = list %] ... [% END %] 
+    ++ [% FOREACH var = list %] ... [% END %] 
     -- [% WHILE cond %] ... [% END %] 
     ++ [% IF cond %] ... [% ELSIF cond %] ... [% ELSE %] [% END %] 
     -- [% SWITCH var %] ... [% CASE [{value|DEFAULT}] %] ... [% END %] 

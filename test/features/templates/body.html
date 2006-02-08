@@ -1,6 +1,8 @@
 [% PROCESS header.html %]
 
+[% FOR x = [3, 6, 9] %]
 [% PROCESS hacker.html name='miyagawa', number=42 %]
 [% PROCESS hacker.html name='ingy', number=69 %]
+[% END %]
 
 [% PROCESS footer.html %]

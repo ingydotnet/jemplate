@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use Template 2.14;
 
-our $VERSION = '0.12';
+our $VERSION = '0.13';
 
 use Jemplate::Parser;
 
@@ -155,8 +155,10 @@ template features:
 
   * Plain text
   * [% [GET] variable %]
+  * [% [SET] variable = value %]
   * IF/ELSIF/ELSE
   * [% PROCESS [arguments] %]
+  * [% FOR x = y %]
 
 The remaining features will be added very soon. See the DESIGN document
 in the distro for a list of all features and their progress.

@@ -10,16 +10,10 @@ use warnings;
     }
 }
 
-our( $PRETTY, $OUTPUT );
-BEGIN {
-    no warnings 'once';
-    *PRETTY = \ $Template::Directive::PRETTY;
-    $OUTPUT = 'output +=';
-}
+our $OUTPUT = 'output +=';
 
 sub template {
     my ($class, $block) = @_;
-    $block = pad($block, 2) if $PRETTY;
 
     return "sub { return '' }" unless $block =~ /\S/;
 
@@ -94,6 +88,26 @@ sub ident {
 
 
 #------------------------------------------------------------------------
+# assign(\@ident, $value, $default)                             foo = bar
+#------------------------------------------------------------------------
+
+sub assign {
+    my ($class, $var, $val, $default) = @_;
+
+    if (ref $var) {
+        if (scalar @$var == 2 && ! $var->[1]) {
+            $var = $var->[0];
+        }
+        else {
+            $var = '[' . join(', ', @$var) . ']';
+        }
+    }
+    $val .= ', 1' if $default;
+    return "stash.set($var, $val)";
+}
+
+
+#------------------------------------------------------------------------
 # filenames(\@names)
 #------------------------------------------------------------------------
     
@@ -125,6 +139,21 @@ sub block {
         $_;
     } @{ $block || [] };
 }
+
+#------------------------------------------------------------------------
+# set(\@setlist)                               [% foo = bar, baz = qux %]
+#------------------------------------------------------------------------
+
+sub set {
+    my ($class, $setlist) = @_;
+    my $output;
+    while (my ($var, $val) = splice(@$setlist, 0, 2)) {
+        $output .= $class->assign($var, $val) . ";\n";
+    }
+    chomp $output;
+    return $output;
+}
+
 
 #------------------------------------------------------------------------
 # process(\@nameargs)                    [% PROCESS template foo = bar %] 
@@ -175,6 +204,61 @@ sub _fix_expr {
     my $expr = shift;
     $expr =~ s/ eq / == /g;
     return $expr;
+}
+
+#------------------------------------------------------------------------
+# foreach($target, $list, $args, $block)    [% FOREACH x = [ foo bar ] %]
+#                                              ...
+#                                           [% END %]
+#------------------------------------------------------------------------
+
+sub foreach {
+    my ($class, $target, $list, $args, $block) = @_;
+    $args  = shift @$args;
+    $args  = @$args ? ', { ' . join(', ', @$args) . ' }' : '';
+
+    my ($loop_save, $loop_set, $loop_restore, $setiter);
+    if ($target) {
+        $loop_save =
+            'try { oldloop = ' . $class->ident(["'loop'"]) . ' } finally {}';
+        $loop_set = "stash['$target'] = value";
+        $loop_restore = "stash.set('loop', oldloop)";
+    }
+    else {
+        die "XXX - Not supported yet";
+        $loop_save = 'stash = context.localise()';
+        $loop_set =
+            "stash.get(['import', [value]]) if typeof(value) == 'object'";
+        $loop_restore = 'stash = context.delocalise()';
+    }
+
+    return <<EOF;
+
+// FOREACH 
+(function() {
+    var list = $list;
+    list = new Jemplate.Iterator(list);
+    var retval = list.get_first();
+    var value = retval[0];
+    var done = retval[1];
+    var oldloop;
+    $loop_save
+    stash.set('loop', list);
+    try {
+        while (! done) {
+            $loop_set;
+$block;
+            retval = list.get_next();
+            var value = retval[0];
+            var done = retval[1];
+        }
+    }
+    catch(e) {
+        throw(context.set_error(e, output));
+    }
+    $loop_restore;
+})();
+EOF
 }
 
 1;

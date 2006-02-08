@@ -28,11 +28,13 @@ MANIFEST			This list of files
 META.yml
 README
 share/Jemplate.js
+t/for.t
 t/hello.t
 t/if-else.t
 t/process.t
 t/test.t
 t/TestJemplate.pm
+test/compile.sh
 test/features/index.html
 test/features/templates/body.html
 test/features/templates/footer.html

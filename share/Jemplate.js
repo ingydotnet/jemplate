@@ -86,3 +86,30 @@ proto.get = function(key) {
 proto.set = function(key, value) {
     this[key] = value;
 }
+
+//------------------------------------------------------------------------------
+// Jemplate.Iterator class
+//------------------------------------------------------------------------------
+if (typeof(Jemplate.Iterator) == 'undefined') {
+    Jemplate.Iterator = function(object) {
+        this.object = object;
+    }
+}
+
+proto = Jemplate.Iterator.prototype;
+
+proto.get_first = function() {
+    this.index = 0;
+    return this.get_next();
+}
+
+proto.get_next = function() {
+    var object = this.object;
+    var index = this.index++;
+    if (typeof(object) == 'undefined')
+        throw('No object to iterate');
+    if (index < object.length)
+        return [object[index], false];
+    else
+        return [null, true];
+}
