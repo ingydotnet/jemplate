@@ -2,14 +2,6 @@ package Jemplate::Directive;
 use strict;
 use warnings;
 
-{   # XXX This is only temporarily here for debugging
-    no warnings 'redefine';
-    sub XXX {
-        require YAML;
-        die YAML::Dump(@_);
-    }
-}
-
 our $OUTPUT = 'output +=';
 our $WHILE_MAX = 1000;
 

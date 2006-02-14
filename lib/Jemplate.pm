@@ -8,8 +8,6 @@ our $VERSION = '0.14';
 
 use Jemplate::Parser;
 
-sub XXX { require YAML; die YAML::Dump(@_) }
-
 sub compile_module {
     my ($class, $module_path, $template_file_paths) = @_;
     my $result = $class->compile_template_files(@$template_file_paths)
