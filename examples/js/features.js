@@ -53,8 +53,32 @@ output += '\n';;
 
 output += '\n\n';
 //line 8 "body.html"
-output += context.process('footer.html');
+stash.set('i', 3);
 output += '\n';
+//line 13 "body.html"
+    
+// WHILE
+var failsafe = 1000;
+while (--failsafe && (stash.get('i'))) {
+output += '\n<h3>';
+//line 10 "body.html"
+output += stash.get('i');
+output += '</h3>\n';
+output += '\n';
+//line 12 "body.html"
+stash.set('i', stash.get('i') - 1);
+output += '\n';
+}
+if (! failsafe)
+    throw("WHILE loop terminated (> 1000 iterations)\n")
+
+output += '\n\n';
+//line 15 "body.html"
+output += context.process('footer.html');
+output += '\n\n';
+//line 17 "body.html"
+throw('Jemplate.STOP\n' + output);
+output += '\nPlease Make It Stop\n';
     }
     catch(e) {
         var error = context.set_error(e, output);
@@ -98,6 +122,9 @@ output += ' ';
 //line 1 "hacker.html"
 output += stash.get('name');
 output += '!!\n<hr>\n';
+//line 3 "hacker.html"
+return output;
+output += '\n\nDon\'t show THIS!!\n';
     }
     catch(e) {
         var error = context.set_error(e, output);

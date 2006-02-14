@@ -5,4 +5,14 @@
 [% PROCESS hacker.html name='ingy', number=69 %]
 [% END %]
 
+[% i = 3 %]
+[% WHILE i %]
+<h3>[% i %]</h3>
+[%# Decrement the loop counter %]
+[% i = i - 1 %]
+[% END %]
+
 [% PROCESS footer.html %]
+
+[% STOP %]
+Please Make It Stop

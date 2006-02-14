@@ -188,13 +188,19 @@ template features:
 
   * Plain text
   * [% [GET] variable %]
-  * [% [CALL] variable %]
+  * [% CALL variable %]
   * [% [SET] variable = value %]
-  * IF/ELSIF/ELSE
+  * [% IF condition %]
+  * [% ELSIF condition %]
+  * [% ELSE %]
   * [% INCLUDE [arguments] %]
   * [% PROCESS [arguments] %]
-  * [% FOR x = y %]
   * [% BLOCK name %]
+  * [% FOR x = y %]
+  * [% WHILE expression %]
+  * [% RETURN %]
+  * [% STOP %]
+  * [%# this is a comment %]
 
 The remaining features will be added very soon. See the DESIGN document
 in the distro for a list of all features and their progress.

@@ -17,7 +17,7 @@ Usage:
     if ($ARGV[0] =~ /^(-c|--compile)/) {
         shift @ARGV;
         usage() unless @ARGV;
-        print Jemplate->compile_templates(@ARGV);
+        print Jemplate->compile_template_files(@ARGV);
     }
     else {
         usage();

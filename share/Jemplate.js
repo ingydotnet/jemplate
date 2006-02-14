@@ -23,7 +23,15 @@ Jemplate.templateMap = {};
 Jemplate.process = function(template, data, output) {
     var context = new Jemplate.Context();
     context.stash = new Jemplate.Stash();
-    var result = context.process(template, data);
+    var result;
+    try { 
+        result = context.process(template, data);
+    }
+    catch(e) {
+        if (! e.match(/Jemplate\.STOP\n/))
+            throw(e);
+        result = e.replace(/Jemplate\.STOP\n/, '')
+    } 
 
     if (typeof(output) == 'undefined')
         return result;

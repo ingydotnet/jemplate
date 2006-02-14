@@ -11,6 +11,7 @@ use warnings;
 }
 
 our $OUTPUT = 'output +=';
+our $WHILE_MAX = 1000;
 
 sub template {
     my ($class, $block) = @_;
@@ -303,15 +304,47 @@ $block;
 EOF
 }
 
+
+#------------------------------------------------------------------------
+# while($expr, $block)                                 [% WHILE x < 10 %]
+#                                                         ...
+#                                                      [% END %]
+#------------------------------------------------------------------------
+
+sub while {
+    my ($class, $expr, $block) = @_; 
+    
+    return <<EOF;
+    
+// WHILE
+var failsafe = $WHILE_MAX;
+while (--failsafe && ($expr)) {
+$block
+}
+if (! failsafe)
+    throw("WHILE loop terminated (> $WHILE_MAX iterations)\\n")
+EOF
+}
+
+
 #------------------------------------------------------------------------
 # return()                                                   [% RETURN %]
 #------------------------------------------------------------------------
 
 sub return {
-#     return "\$context->throw('return', '', \\\$output);";
-    return "return;"
+    return "return output;"
 }
 
+
+#------------------------------------------------------------------------
+# stop()                                                       [% STOP %]
+#------------------------------------------------------------------------
+
+sub stop {
+    return "throw('Jemplate.STOP\\n' + output);";
+}   
+
+    
 1;
 
 =head1 NAME

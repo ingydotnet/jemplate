@@ -1,11 +1,21 @@
-=== Jemplate.js (Runtime)
+= Jemplate.js (Runtime)
 
 - Add multilevel get/set support to Jemplate.Stash
 
-=== Jemplate::Directive (Compilation)
 
-- BLOCK
-- RETURN
+= Jemplate::Directive (Compilation)
+
+== Implement These
+
 - MACRO
-- WHILE
-- INCLUDE
+
+== Bugs
+
+- STOP doesn't work when nested
+
+
+= Research/Questions
+
+- How does Javascript handle truth (cross implementation)? What is/are the
+  best ways to test for truth?
+- Can Javascript throw objects or only strings?
