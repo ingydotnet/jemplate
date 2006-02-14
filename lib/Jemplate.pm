@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use Template 2.14;
 
-our $VERSION = '0.13';
+our $VERSION = '0.14';
 
 use Jemplate::Parser;
 

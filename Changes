@@ -1,4 +1,10 @@
 ---
+version: 0.14
+date:    Mon Feb 13 23:48:51 PST 2006
+changes:
+- Support WHILE, NEXT, LAST, CLEAR, RETURN and STOP
+
+---
 version: 0.13
 date:    Tue Feb  7 23:39:04 PST 2006
 changes:

@@ -92,7 +92,15 @@ proto.add = function(object) {
 }
 
 proto.get = function(key) {
-    return this[key];
+    if (! (key instanceof Array)) {
+        value = this[key];
+        if (typeof(value) == 'function')
+            value = value();
+    }
+    else {
+        throw('Jemplate.Stash.get error. Key = ' + key);
+    }
+    return value;
 }
 
 proto.set = function(key, value) {
