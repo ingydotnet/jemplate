@@ -10,6 +10,11 @@
 
 Jemplate leverages TT2 by using Template::Parser, but replacing the
 backend (Template::Directive) with Jemplate::Directive to produce
+Javascript code instead of Perl code.
+
+The typical usage envisioned is that you compile your templates into one
+big Javascript file. Then you import this document and the Jemplate.js
+runtime support module in your html.
 
 
 = Perl API
@@ -19,10 +24,14 @@ backend (Template::Directive) with Jemplate::Directive to produce
 Parse a single template and return a Javascript function (as a
 string scalar).
 
-- Jemplate->compile_templates(@template_file_paths);
+- Jemplate->compile_template_files(@template_file_paths);
 
 Take a list of template file paths and compile them into a module of
 functions. Returns the text of the module.
+
+- Jemplate->compile_template_content($template_content, $template_name);
+
+Take a template string and its name and return the compiled code.
 
 - Jemplate->compile_module($module_path, \@template_file_paths);
 
@@ -86,16 +95,16 @@ completion, the second is for the testing of the feature.
 === Directives
 
     ++ [% [GET] var %]
-    -- [% CALL var %]
+    ++ [% CALL var %]
     ++ [% [SET] var = value ... %] 
     -- [% DEFAULT var = value ... %] 
     -- [% META attr = value ... %] 
 
     -- [% INSERT filename %] 
-    -- [% INCLUDE template [var = value ...] %] 
+    ++ [% INCLUDE template [var = value ...] %] 
     ++ [% PROCESS template [var = value ...] %] 
     -- [% WRAPPER template [var = value ...] %] text... [% END %] 
-    -- [% BLOCK [name] %] content... [% END %] 
+    ++ [% BLOCK [name] %] content... [% END %] 
     -- [% FILTER filter %] text... [% END %] 
     -- [% MACRO name[(varlist)] directive %] 
     -- [% USE plugin[(param, ...)] %] 
