@@ -1,7 +1,7 @@
 use t::TestJemplate tests => 1;
 
 filters { 'tt' => 'parse_lite' };
-no_diff;
+# no_diff;
 run_is 'tt' => 'js';
 
 __END__

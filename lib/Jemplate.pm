@@ -183,8 +183,7 @@ compile due to cache, undef if error.
 
 =head1 BUGS
 
-This early release of Jemplate only supports the following
-template features:
+Jemplate now supports the following directives:
 
   * Plain text
   * [% [GET] variable %]
@@ -200,6 +199,9 @@ template features:
   * [% WHILE expression %]
   * [% RETURN %]
   * [% STOP %]
+  * [% NEXT %]
+  * [% LAST %]
+  * [% CLEAR %]
   * [%# this is a comment %]
 
 The remaining features will be added very soon. See the DESIGN document
