@@ -14,6 +14,7 @@ __END__
 [% CALL foo.bar(baz.quux) -%]
 [% CALL foo('bar').baz(quux.fox) -%]
 [% foo.bar = baz.quux -%]
+[% foo.bar = { Foo => 'Bar' } -%]
 
 --- js
 //line 1 "(unknown template)"
@@ -28,4 +29,5 @@ stash.get(['foo', 0, 'bar', [ stash.get(['baz', 0, 'quux', 0]) ]]);
 stash.get(['foo', [ 'bar' ], 'baz', [ stash.get(['quux', 0, 'fox', 0]) ]]);
 //line 6 "(unknown template)"
 stash.set(['foo', 0, 'bar', 0], stash.get(['baz', 0, 'quux', 0]));
-
+//line 7 "(unknown template)"
+stash.set(['foo', 0, 'bar', 0], { 'Foo': 'Bar'  });
