@@ -8,5 +8,6 @@ proto.jemplate_process = function(content, block) {
     var j = new Jemplate();
     var data = block.data.context;
     var result = Jemplate.process(template, data);
+    return result;
 }
 

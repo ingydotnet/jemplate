@@ -131,9 +131,10 @@ proto.make_block = function(hunk) {
 
 proto.verify_block = function(block) {
     block.apply_filters(this.state.filters_map);
+    JJJ(block);
     for (var i = 1; i < arguments.length; i++) {
         var value = arguments[i];
-        alert(value);
+        alert('value:' + value + block.data[value]);
         if (typeof block.data[value] == 'undefined') return false;
     }
     return true;
@@ -170,8 +171,7 @@ proto.apply_filters = function(filter_overrides) {
     var sections = this.sections;
     for (var i = 0; i < sections.length; i++) {
         var section = sections[i];
-        var filters = [];
-        //var filters = ['normalize', 'trim'];
+        var filters = ['normalize', 'trim'];
         this.push_filters(filters, this.filters[section]);
         this.push_filters(filters, filter_overrides[section]);
         this.filter_section(section, filters);
@@ -214,7 +214,7 @@ proto.xhr_get = function(url) {
 }
 
 proto.trim = function(content, block) {
-    return content.replace(/^\s*\n/, '').replace(/\n\s*\z/, '');
+    return content.replace(/^\s*\n/, '').replace(/\n\s*$/, '\n');
 }
 
 proto.normalize = function(content, block) {
