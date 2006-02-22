@@ -382,6 +382,52 @@ EOF
 
 
 #------------------------------------------------------------------------
+# switch($expr, \@case)                                    [% SWITCH %]
+#                                                          [% CASE foo %]
+#                                                             ...
+#                                                          [% END %]
+#------------------------------------------------------------------------
+
+sub switch {
+    my ($class, $expr, $case) = @_;
+    my @case = @$case;
+    my ($match, $block, $default);
+    my $caseblock = '';
+
+    $default = pop @case;
+
+    foreach $case (@case) {
+        $match = $case->[0];
+        $block = $case->[1];
+#        $block = pad($block, 1) if $PRETTY;
+        $caseblock .= <<EOF;
+case $match:
+$block
+break;
+
+EOF
+    }
+
+    if (defined $default) {
+        $caseblock .= <<EOF;
+default:
+$default
+break;
+EOF
+    }
+#    $caseblock = pad($caseblock, 2) if $PRETTY;
+
+return <<EOF;
+
+    switch($expr) {
+$caseblock
+    }
+
+EOF
+}
+
+
+#------------------------------------------------------------------------
 # clear()                                                     [% CLEAR %]
 #   
 # NOTE: this is redundant, being hard-coded (for now) into Parser.yp
