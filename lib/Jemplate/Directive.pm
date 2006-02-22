@@ -183,7 +183,6 @@ sub include {
     my ($class, $nameargs) = @_;
     my ($file, $args) = @$nameargs;
     my $hash = shift @$args;
-    s/ => /: / for @$hash;
     $file = $class->filenames($file);
     $file .= @$hash ? ', { ' . join(', ', @$hash) . ' }' : '';
     return "$OUTPUT context.include($file);"; 
@@ -199,7 +198,6 @@ sub process {
     my ($class, $nameargs) = @_;
     my ($file, $args) = @$nameargs;
     my $hash = shift @$args;
-    s/ => /: / for @$hash;
     $file = $class->filenames($file);
     $file .= @$hash ? ', { ' . join(', ', @$hash) . ' }' : '';
     return "$OUTPUT context.process($file);"; 
