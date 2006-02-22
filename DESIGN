@@ -103,7 +103,7 @@ completion, the second is for the testing of the feature.
     -- [% INSERT filename %] 
     ++ [% INCLUDE template [var = value ...] %] 
     ++ [% PROCESS template [var = value ...] %] 
-   --- [% WRAPPER template [var = value ...] %] text... [% END %] 
+    ++ [% WRAPPER template [var = value ...] %] text... [% END %] 
     ++ [% BLOCK [name] %] content... [% END %] 
     -- [% FILTER filter %] text... [% END %] 
     -- [% MACRO name[(varlist)] directive %] 
