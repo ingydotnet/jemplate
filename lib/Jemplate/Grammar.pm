@@ -5845,13 +5845,13 @@ sub
 		 'param', 3,
 sub
 #line 332 "Parser.yp"
-{ "$_[1] => $_[3]"                    }
+{ "$_[1]: $_[3]"                    }
 	],
 	[#Rule 124
 		 'param', 3,
 sub
 #line 333 "Parser.yp"
-{ "$_[1] => $_[3]"                    }
+{ "$_[1]: $_[3]"                    }
 	],
 	[#Rule 125
 		 'ident', 3,
