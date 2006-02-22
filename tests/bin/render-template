@@ -20,10 +20,13 @@ my $t = Template->new(
 my $data = {
     test_harness_title => 'Jemplate Testing',
     javascript_libraries => [qw(
+        lib/JSON.js
         lib/Subclass.js
         lib/Test/Builder.js
         lib/Test/Base.js
         lib/Test/Jemplate.js
+        ../share/Jemplate.js
+        jemplate.js
     )],
     javascript_test_file => $js_name,
     all_test_files => [ glob('*.t.html') ],
