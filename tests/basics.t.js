@@ -1,6 +1,9 @@
 var t = new Test.Jemplate();
 
-var filters = {jemplate: 'jemplate_process'};
+var filters = {
+    jemplate: 'jemplate_process',
+    context: 'evaluate'
+};
 
 t.plan(1);
 t.filters(filters);
@@ -9,16 +12,16 @@ t.run_is('jemplate', 'output');
 
 /* Test
 === Basic Substitution1
+--- context
+{"name":"Wally"}
 --- jemplate: hello.html
---- data
-{name: Wally}
 --- output
 Hello, Wally
 
 === Basic Substitution2
+--- context
+{"name":"Yann"}
 --- jemplate: hello.html
---- data
-{name: Wally}
 --- output
 Hello, Wally
 

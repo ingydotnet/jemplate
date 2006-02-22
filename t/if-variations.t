@@ -1,12 +1,11 @@
 use t::TestJemplate tests => 5;
 
 filters { 'tt' => 'parse_lite' };
-no_diff;
 run_is 'tt' => 'js';
 
 __END__
 
-===
+=== First test
 --- tt
 [% IF foo.bar.baz %]Foo[% END -%]
 --- js
@@ -15,7 +14,7 @@ if (stash.get(['foo', 0, 'bar', 0, 'baz', 0])) {
 output += 'Foo';
 }
 
-===
+=== Second test
 --- tt
 [% UNLESS foo %]Foo[% END -%]
 --- js

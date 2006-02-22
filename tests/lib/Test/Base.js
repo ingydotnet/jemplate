@@ -115,10 +115,11 @@ proto.make_block = function(hunk) {
         line1 = line1.replace(/^---\s*/, '');
         if (! line1.length) throw('xxx2');
         var section_name = '';
-        var section_filters = ['trim'];
+        var section_filters = [];
         if (line1.indexOf(':') >= 0) {
             index = line1.indexOf(':');
-            section_data = line1.substr(index + 1);
+            section_data = line1.substr(index + 1).
+                replace(/^\s*(.*?)\s*$/, '$1');
             line1 = line1.substr(0, index);
         }
         if (! line1.match(/^\w+$/)) throw('xxx3');
@@ -129,9 +130,11 @@ proto.make_block = function(hunk) {
 }
 
 proto.verify_block = function(block) {
-    block.apply_filters(this.state.filters);
+    block.apply_filters(this.state.filters_map);
     for (var i = 1; i < arguments.length; i++) {
-        if (typeof block.data[arguments[i]] == 'undefined') return false;
+        var value = arguments[i];
+        alert(value);
+        if (typeof block.data[value] == 'undefined') return false;
     }
     return true;
 }
@@ -154,6 +157,7 @@ proto.init = function() {
     this.sections = [];
     this.data = {};
     this.filters = {};
+    this.filter_object = new Test.Jemplate.Filter();
 }
 
 proto.add_section = function(name, filters, data) {
@@ -162,13 +166,14 @@ proto.add_section = function(name, filters, data) {
     this.filters[name] = filters;
 }
 
-proto.apply_filters = function(filter_overrides, filters_class) {
+proto.apply_filters = function(filter_overrides) {
     var sections = this.sections;
     for (var i = 0; i < sections.length; i++) {
         var section = sections[i];
-        var filters = ['normalize', 'trim'];
+        var filters = [];
+        //var filters = ['normalize', 'trim'];
         this.push_filters(filters, this.filters[section]);
-        this.push_filters(filters, filter_overrides);
+        this.push_filters(filters, filter_overrides[section]);
         this.filter_section(section, filters);
     }
 }
@@ -176,8 +181,12 @@ proto.apply_filters = function(filter_overrides, filters_class) {
 proto.push_filters = function(a1, a2) {
     if (typeof a2 == 'undefined')
         return;
-    for (var i = 0; i < a2.length; i++) {
-        a1.push(a2[i]);
+    if (typeof a2 == 'string')
+        a1.push(a2);
+    else {
+        for (var i = 0; i < a2.length; i++) {
+            a1.push(a2[i]);
+        }
     }
 }
 
@@ -185,14 +194,15 @@ proto.filter_section = function(section, filters) {
     var data = this.data[section];
     for (var i = 0; i < filters.length; i++) {
         var filter = filters[i];
-        if (window[filter])
-            data = (window[filter])(data, this);
-        else if (Test.Jemplate.Filter[filter])
-            data = (Test.Jemplate.Filter[filter])(data, this);
+        if (typeof window[filter] == 'function')
+            data = (window[filter]).call(data, this);
+        else if (typeof this.filter_object[filter] == 'function') {
+            data = (this.filter_object[filter]).call(this, data, this);
+        }
         else
             throw('No function for filter: ' + filter);
     }
-    this.data = data;
+    this.data[section] = data;
 }
 
 //------------------------------------------------------------------------------
@@ -204,5 +214,16 @@ proto.xhr_get = function(url) {
 }
 
 proto.trim = function(content, block) {
+    return content.replace(/^\s*\n/, '').replace(/\n\s*\z/, '');
+}
+
+proto.normalize = function(content, block) {
     return content;
 }
+
+proto.evaluate = function(content, block) {
+    var javascript = content;
+    var object = JSON.parse(javascript);
+    return object;
+}
+
