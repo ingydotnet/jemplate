@@ -1,0 +1,15 @@
+<html>
+<head>
+[% FOR lib = javascript_libraries -%]
+    <script type="text/javascript" src="[% lib %]"></script>
+[% END -%]
+    <script type="text/javascript" src="[% javascript_test_file %]"></script>
+</head>
+<body>
+<pre id="test">
+<script>
+    // See: [% javascript_test_file %]
+</script>
+</pre>
+</body>
+</html>

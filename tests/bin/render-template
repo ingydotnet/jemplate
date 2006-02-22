@@ -1,0 +1,35 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use Template;
+use IO::All;
+use XXX;
+
+my ($template_path, $output_path) = @ARGV;
+my $output_name = $output_path;
+$output_name =~ s/\.html$// or die;
+my $js_name = "$output_name.js";
+
+my $t = Template->new(
+    {
+        INCLUDE_PATH => ['.', 'template/'],
+    }
+);
+
+my $data = {
+    test_harness_title => 'Jemplate Testing',
+    javascript_libraries => [qw(
+        lib/Subclass.js
+        lib/Test/Builder.js
+        lib/Test/Base.js
+        lib/Test/Jemplate.js
+    )],
+    javascript_test_file => $js_name,
+    all_test_files => [ glob('*.t.html') ],
+};
+my $result;
+
+$t->process($template_path, $data, \$result) or die $t->error;
+
+io($output_path)->print($result);
