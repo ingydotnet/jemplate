@@ -1,0 +1,22 @@
+var t = new Test.Jemplate();
+
+var filters = {
+    jemplate: 'jemplate_process',
+    context: 'evaluate'
+};
+
+t.plan([% tests.size %]);
+t.filters(filters);
+t.spec('[% name %].t.js'); 
+t.run_is('jemplate', 'output');
+
+/* Test
+[%- FOR t = tests %]
+=== [% t.name %]
+--- context
+[% context %]
+--- jemplate: [% t.filename %]
+--- output
+[% t.expect %]
+[%- END %]
+*/
