@@ -164,7 +164,7 @@ completion, the second is for the testing of the feature.
 
     -- first           first item in list 
     -- grep(re)        items matching re 
-    -- join(str)       items joined with str 
+    ++ join(str)       items joined with str 
     -- last            last item in list 
     -- max             maximum index number (i.e. size - 1) 
     -- merge(list [, list...])     combine lists 
