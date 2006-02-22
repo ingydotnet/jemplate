@@ -28,9 +28,9 @@ Jemplate.process = function(template, data, output) {
         result = context.process(template, data);
     }
     catch(e) {
-        if (! e.match(/Jemplate\.STOP\n/))
+        if (! e.toString().match(/Jemplate\.STOP\n/))
             throw(e);
-        result = e.replace(/Jemplate\.STOP\n/, '')
+        result = e.toString().replace(/Jemplate\.STOP\n/, '')
     } 
 
     if (typeof(output) == 'undefined')
@@ -92,19 +92,41 @@ proto.add = function(object) {
 }
 
 proto.get = function(key) {
-    if (! (key instanceof Array)) {
-        value = this[key];
-        if (typeof(value) == 'function')
-            value = value();
+    var root = this;
+    if (key instanceof Array) {
+        var size = key.length - 1;
+
+        for (var i = 0; i <= size; i += 2) {
+            var args = key.splice(i, 2);
+            args.unshift(root);
+            value = this._dotop.apply(this, args);
+            if (typeof(value) == 'undefined')
+                break;
+            root = value;
+        }
     }
     else {
-        throw('Jemplate.Stash.get error. Key = ' + key);
+        value = this._dotop(this, key);
+        /* value = this[key];
+        if (typeof(value) == 'function')
+        value = value(); */
     }
+
     return value;
 }
 
 proto.set = function(key, value) {
     this[key] = value;
+}
+
+proto._dotop = function(root, item, args) {
+    if (typeof(args) == 'undefined')
+        args = [ ];
+
+    if (typeof(item) == 'undefined' || item.match(/^[\._]/))
+        return undefined;
+
+    return this[item];
 }
 
 //------------------------------------------------------------------------------
