@@ -183,12 +183,10 @@ proto.push_filters = function(a1, a2) {
 
 proto.filter_section = function(section, filters) {
     var data = this.data;
-    for (var i = 1; i < filters.length; i++) {
+    for (var i = 0; i < filters.length; i++) {
         var filter = filters[i];
         if (window[filter])
             data = (window[filter])(data, this);
-        else if (Test.Jemplate.Filter[filter])
-            data = (Test.Jemplate.Filter[filter])(data, this);
         else if (Test.Jemplate.Filter[filter])
             data = (Test.Jemplate.Filter[filter])(data, this);
         else
