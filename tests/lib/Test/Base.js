@@ -24,6 +24,7 @@ proto.run_is = function(x, y) {
     var blocks =  this.state.blocks;
     for (var i = 0; i < blocks.length; i++) {
         var block = blocks[i];
+        if (! this.verify_block(block, x, y)) continue;
         this.is(block.data[x], block.data[y], block.name);
     }
 }
@@ -61,7 +62,6 @@ proto.compile = function() {
     if (this.state.compiled) return;
     this.get_spec();
     this.create_blocks();
-    this.apply_filters();
     this.state.compiled = true;
 }
 
@@ -105,10 +105,35 @@ proto.make_block = function(hunk) {
         chunks.push(chunk);
     }
     chunks.push(hunk);
-    alert(JSON.stringify(chunks));
+
+    for (var i = 0; i < chunks.length; i++) {
+        var chunk = chunks[i];
+        index = chunk.indexOf('\n');
+        if (index < 0) throw('xxx1');
+        var line1 = chunk.substr(0, index);
+        var section_data = chunk.substr(index + 1);
+        line1 = line1.replace(/^---\s*/, '');
+        if (! line1.length) throw('xxx2');
+        var section_name = '';
+        var section_filters = ['trim'];
+        if (line1.indexOf(':') >= 0) {
+            index = line1.indexOf(':');
+            section_data = line1.substr(index + 1);
+            line1 = line1.substr(0, index);
+        }
+        if (! line1.match(/^\w+$/)) throw('xxx3');
+        section_name = line1;
+        block.add_section(section_name, section_filters, section_data);
+    }
+    return block;
 }
 
-proto.apply_filters = function() {
+proto.verify_block = function(block) {
+    block.apply_filters(this.state.filters);
+    for (var i = 1; i < arguments.length; i++) {
+        if (typeof block.data[arguments[i]] == 'undefined') return false;
+    }
+    return true;
 }
 
 Test.Base.xhr_get = function(url) {
@@ -123,7 +148,54 @@ Test.Base.xhr_get = function(url) {
 //------------------------------------------------------------------------------
 proto = Subclass('Test.Base.Block');
 
-proto.data = {};
+proto.init = function() {
+    this.name = null;
+    this.description = null;
+    this.sections = [];
+    this.data = {};
+    this.filters = {};
+}
+
+proto.add_section = function(name, filters, data) {
+    this.sections.push(name);
+    this.data[name] = data;
+    this.filters[name] = filters;
+}
+
+proto.apply_filters = function(filter_overrides, filters_class) {
+    var sections = this.sections;
+    for (var i = 0; i < sections.length; i++) {
+        var section = sections[i];
+        var filters = ['normalize', 'trim'];
+        this.push_filters(filters, this.filters[section]);
+        this.push_filters(filters, filter_overrides);
+        this.filter_section(section, filters);
+    }
+}
+
+proto.push_filters = function(a1, a2) {
+    if (typeof a2 == 'undefined')
+        return;
+    for (var i = 0; i < a2.length; i++) {
+        a1.push(a2[i]);
+    }
+}
+
+proto.filter_section = function(section, filters) {
+    var data = this.data;
+    for (var i = 1; i < filters.length; i++) {
+        var filter = filters[i];
+        if (window[filter])
+            data = (window[filter])(data, this);
+        else if (Test.Jemplate.Filter[filter])
+            data = (Test.Jemplate.Filter[filter])(data, this);
+        else if (Test.Jemplate.Filter[filter])
+            data = (Test.Jemplate.Filter[filter])(data, this);
+        else
+            throw('No function for filter: ' + filter);
+    }
+    this.data = data;
+}
 
 //------------------------------------------------------------------------------
 proto = Subclass('Test.Base.Filter');
@@ -133,3 +205,6 @@ proto.xhr_get = function(url) {
     return Test.Base.xhr_get(url);
 }
 
+proto.trim = function(content, block) {
+    return content;
+}
