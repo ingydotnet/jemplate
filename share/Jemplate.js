@@ -79,8 +79,11 @@ proto.set_error = function(error, output) {
 //------------------------------------------------------------------------------
 // Jemplate.Stash class
 //------------------------------------------------------------------------------
-if (typeof(Jemplate.Stash) == 'undefined')
-    Jemplate.Stash = function() {};
+if (typeof(Jemplate.Stash) == 'undefined') {
+    Jemplate.Stash = function() {
+        this.data = {};
+    };
+}
 
 proto = Jemplate.Stash.prototype;
 
@@ -92,12 +95,10 @@ proto.add = function(object) {
 }
 
 proto.get = function(key) {
-    var root = this;
+    var root = this.data;
     if (key instanceof Array) {
-        var size = key.length - 1;
-
-        for (var i = 0; i <= size; i += 2) {
-            var args = key.splice(i, 2);
+        for (var i = 0; i < key.length; i += 2) {
+            var args = key.slice(i, i+2);
             args.unshift(root);
             value = this._dotop.apply(this, args);
             if (typeof(value) == 'undefined')
@@ -106,17 +107,14 @@ proto.get = function(key) {
         }
     }
     else {
-        value = this._dotop(this, key);
-        /* value = this[key];
-        if (typeof(value) == 'function')
-        value = value(); */
+        value = this._dotop(root, key);
     }
 
     return value;
 }
 
 proto.set = function(key, value) {
-    this[key] = value;
+    this.data[key] = value;
 }
 
 proto._dotop = function(root, item, args) {
@@ -126,7 +124,12 @@ proto._dotop = function(root, item, args) {
     if (typeof(item) == 'undefined' || item.match(/^[\._]/))
         return undefined;
 
-    return this[item];
+    if (item == 'join')
+        return root.join(args[0]);
+    var value = root[item];
+    if (typeof(value) == 'function')
+        value = value();
+    return value;
 }
 
 //------------------------------------------------------------------------------

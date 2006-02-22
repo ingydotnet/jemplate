@@ -10,4 +10,3 @@ proto.jemplate_process = function(content, block) {
     var result = Jemplate.process(template, data);
     return result;
 }
-

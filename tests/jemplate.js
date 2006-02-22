@@ -28,3 +28,22 @@ output += '\n';
     return output;
 }
 
+Jemplate.templateMap['join.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+//line 1 "join.html"
+stash.set('a', [ 'foo', 'bar', 'baz' ]);
+//line 1 "join.html"
+output += stash.get(['a', 0, 'join', [ '::' ]]);
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
