@@ -40,7 +40,9 @@ Subclass = function(name, base) {
     var subclass = window;
     for (var i = 0; i < parts.length; i++) {
         if (! subclass[parts[i]])
-            subclass[parts[i]] = function() {};
+            subclass[parts[i]] = function() {
+                try { this.init() } catch(e) {}
+            };
         subclass = subclass[parts[i]];
     }
 
@@ -75,6 +77,12 @@ Subclass.generate_superfunc = function() {
             "caller was: " + arguments.callee.caller
         );
     }
+}
+
+function XXX(msg) {
+    //if (! confirm(arguments.join('\n')))
+    if (! confirm(msg))
+        throw("terminated...");
 }
 
 /*

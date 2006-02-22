@@ -1,24 +1,25 @@
-var test = new Test.Jemplate();
-test.plan({tests: 2});
-test.filters({jemplate: 'process'});
-test.spec('basics.t.js'); 
-test.run_is('jemplate', 'output');
+var t = new Test.Jemplate();
 
-function process(block, template) {
-    var j = new Jemplate();
-    var data = block.data;
-    return j.process(template, data);
-}
+var filters = {jemplate: 'jemplate_process'};
 
-/* Test.Base
+t.plan(1);
+t.filters(filters);
+t.spec('basics.t.js'); 
+t.run_is('jemplate', 'output');
 
-=== Basic Substitution
-Hello, [% name %]
+/* Test
+=== Basic Substitution1
 --- jemplate: hello.html
 --- data
-name: Wally
+{name: Wally}
 --- output
 Hello, Wally
 
+=== Basic Substitution2
+--- jemplate: hello.html
+--- data
+{name: Wally}
+--- output
+Hello, Wally
 
 */
