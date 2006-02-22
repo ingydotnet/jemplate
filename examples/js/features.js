@@ -73,10 +73,24 @@ if (! failsafe)
     throw("WHILE loop terminated (> 1000 iterations)\n")
 
 output += '\n\n';
-//line 15 "body.html"
+//line 17 "body.html"
+
+// WRAPPER
+output += (function() {
+    var output = '';
+output += '\nLife is good\n';;
+    var files = new Array('wrapper2.html', 'wrapper.html');
+    for (var i = 0; i < files.length; i++) {
+        output = context.include(files[i], { 'content': output });
+    }
+    return output;
+})();
+
+output += '\n\n';
+//line 19 "body.html"
 output += context.process('footer.html');
 output += '\n\n';
-//line 17 "body.html"
+//line 21 "body.html"
 throw('Jemplate.STOP\n' + output);
 output += '\nPlease Make It Stop\n';
     }
@@ -141,6 +155,44 @@ Jemplate.templateMap['header.html'] = function(context) {
 
     try {
 output += '<h1>Enter the Dragons</h1>\n<hr>\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['wrapper.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += 'And Yann added: \n<blockquote>';
+//line 2 "wrapper.html"
+output += stash.get('content');
+output += '</blockquote>\nAnd everyone agreed\n\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['wrapper2.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '<em>';
+//line 1 "wrapper2.html"
+output += stash.get('content');
+output += '</em>\n';
     }
     catch(e) {
         var error = context.set_error(e, output);

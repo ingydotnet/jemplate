@@ -59,7 +59,7 @@ if (typeof(Jemplate.Context) == 'undefined')
 proto = Jemplate.Context.prototype;
 
 proto.include = function(template, args) {
-    this.process(template, args);
+    return this.process(template, args);
 }
 
 proto.process = function(template, args) {

@@ -307,6 +307,57 @@ sub next {
     return "continue;";
 }
 
+#------------------------------------------------------------------------
+# wrapper(\@nameargs, $block)            [% WRAPPER template foo = bar %] 
+#          # => [ [$file,...], \@args ]    
+#------------------------------------------------------------------------
+sub wrapper {
+    my ($class, $nameargs, $block) = @_;
+    my ($file, $args) = @$nameargs;
+    my $hash = shift @$args;
+
+    s/ => /: / for @$hash;
+    return $class->multi_wrapper($file, $hash, $block)
+        if @$file > 1;
+    $file = shift @$file;
+    push(@$hash, "'content': output");
+    $file .= @$hash ? ', { ' . join(', ', @$hash) . ' }' : '';
+
+    return <<EOF;
+
+// WRAPPER
+$OUTPUT (function() {
+    var output = '';
+$block;
+    return context.include($file);
+})();
+EOF
+}
+
+sub multi_wrapper {
+    my ($class, $file, $hash, $block) = @_;
+
+    push(@$hash, "'content': output");
+    $hash = @$hash ? ', { ' . join(', ', @$hash) . ' }' : '';
+
+    $file = join(', ', reverse @$file);
+#    print STDERR "multi wrapper: $file\n";
+
+    return <<EOF;
+
+// WRAPPER
+$OUTPUT (function() {
+    var output = '';
+$block;
+    var files = new Array($file);
+    for (var i = 0; i < files.length; i++) {
+        output = context.include(files[i]$hash);
+    }
+    return output;
+})();
+EOF
+}
+
 
 #------------------------------------------------------------------------
 # while($expr, $block)                                 [% WHILE x < 10 %]
