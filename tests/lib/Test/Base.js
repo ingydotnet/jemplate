@@ -131,10 +131,8 @@ proto.make_block = function(hunk) {
 
 proto.verify_block = function(block) {
     block.apply_filters(this.state.filters_map);
-    JJJ(block);
     for (var i = 1; i < arguments.length; i++) {
         var value = arguments[i];
-        alert('value:' + value + block.data[value]);
         if (typeof block.data[value] == 'undefined') return false;
     }
     return true;

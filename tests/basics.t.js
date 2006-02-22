@@ -23,6 +23,6 @@ Hello, Wally
 {"name":"Yann"}
 --- jemplate: hello.html
 --- output
-Hello, Wally
+Hello, Yann
 
 */
