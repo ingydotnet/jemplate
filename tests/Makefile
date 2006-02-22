@@ -1,4 +1,4 @@
-all: index.html basics.t.html
+all: index.html basics.t.html jemplate.js
 
 index.html: template/index.html bin/render-template
 	perl bin/render-template template/index.html index.html
