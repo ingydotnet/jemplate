@@ -85,6 +85,10 @@ function XXX(msg) {
         throw("terminated...");
 }
 
+function JJJ(obj) {
+    XXX(JSON.stringify(obj));
+}
+
 /*
 
 =head1 NAME

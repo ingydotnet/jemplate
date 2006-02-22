@@ -182,7 +182,7 @@ proto.push_filters = function(a1, a2) {
 }
 
 proto.filter_section = function(section, filters) {
-    var data = this.data;
+    var data = this.data[section];
     for (var i = 0; i < filters.length; i++) {
         var filter = filters[i];
         if (window[filter])
