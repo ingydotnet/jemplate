@@ -47,3 +47,28 @@ output += stash.get(['a', 0, 'join', [ '::' ]]);
     return output;
 }
 
+Jemplate.templateMap['list.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+//line 1 "list.html"
+stash.set('a1', [ 'one', 'two', 'three' ]);
+//line 2 "list.html"
+stash.get(['a1', 0, 'push', [ 'four' ]]);
+//line 2 "list.html"
+output += stash.get(['a1', 0, 'first', 0]);
+output += ' - ';
+//line 2 "list.html"
+output += stash.get(['a1', 0, 'last', 0]);
+output += '\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+

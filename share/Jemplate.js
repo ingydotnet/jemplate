@@ -121,31 +121,41 @@ proto._dotop = function(root, item, args) {
     if (typeof(item) == 'undefined' || item.match(/^[\._]/))
         return undefined;
 
-    if (args instanceof Array) {
-        if (typeof root == 'string' && this.string_functions[item])
-            return this.string_functions[item](root, args);
-        if (root instanceof Array && this.list_functions[item])
-            return this.list_functions[item](root, args);
-        if (typeof root == 'object' && this.hash_functions[item])
-            return this.hash_functions[item](root, args);
-    }
+    if (typeof root == 'string' && this.string_functions[item])
+        return this.string_functions[item](root, args);
+    if (root instanceof Array && this.list_functions[item])
+        return this.list_functions[item](root, args);
+    if (typeof root == 'object' && this.hash_functions[item])
+        return this.hash_functions[item](root, args);
+
     var value = root[item];
     if (typeof(value) == 'function')
         value = value();
     return value;
 }
 
-proto.string_functions = {
+proto.string_functions = {};
+
+proto.list_functions = {};
+
+proto.list_functions.join = function(list, args) {
+    return list.join(args[0]);
+};
+
+proto.list_functions.push = function(list, args) {
+    list.push(args);
+    return list;        
 }
 
-proto.list_functions = {
-    join: function(list, args) {
-        return list.join(args[0]);
-    }
+proto.list_functions.first = function(list) {
+    return list[0];        
 }
 
-proto.hash_functions = {
+proto.list_functions.last = function(list) {
+    return list.slice(-1);        
 }
+
+proto.hash_functions = {};
 
 //------------------------------------------------------------------------------
 // Jemplate.Iterator class

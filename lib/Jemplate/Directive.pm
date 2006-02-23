@@ -254,7 +254,7 @@ sub foreach {
     if ($target) {
         $loop_save =
             'try { oldloop = ' . $class->ident(["'loop'"]) . ' } finally {}';
-        $loop_set = "stash['$target'] = value";
+        $loop_set = "stash.data['$target'] = value";
         $loop_restore = "stash.set('loop', oldloop)";
     }
     else {

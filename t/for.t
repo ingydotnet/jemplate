@@ -32,7 +32,7 @@ output += 'Top\n';
     stash.set('loop', list);
     try {
         while (! done) {
-            stash['x'] = value;
+            stash.data['x'] = value;
 output += 'Middle\n';;
             retval = list.get_next();
             var value = retval[0];
