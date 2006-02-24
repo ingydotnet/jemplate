@@ -179,7 +179,10 @@ compile due to cache, undef if error.
 
 =back
 
-=head1 BUGS
+=head1 CURRENT SUPPORT
+
+The goal of Jemplate is to support all of the Template Toolkit features
+that can possibly be supported.
 
 Jemplate now supports the following directives:
 
@@ -187,12 +190,15 @@ Jemplate now supports the following directives:
   * [% [GET] variable %]
   * [% CALL variable %]
   * [% [SET] variable = value %]
-  * [% IF condition %]
-  * [% ELSIF condition %]
-  * [% ELSE %]
   * [% INCLUDE [arguments] %]
   * [% PROCESS [arguments] %]
   * [% BLOCK name %]
+  * [% WRAPPER template [variable = value ...] %]
+  * [% IF condition %]
+  * [% ELSIF condition %]
+  * [% ELSE %]
+  * [% SWITCH variable %]
+  * [% CASE [{value|DEFAULT}] %]
   * [% FOR x = y %]
   * [% WHILE expression %]
   * [% RETURN %]
@@ -202,6 +208,30 @@ Jemplate now supports the following directives:
   * [% CLEAR %]
   * [%# this is a comment %]
 
+All the array virtual functions are supported:
+
+  * first           first item in list
+  * grep(re)        items matching re
+  * join(str)       items joined with str
+  * last            last item in list
+  * max             maximum index number (i.e. size - 1)
+  * merge(list [, list...])     combine lists
+  * nsort           items sorted numerically
+  * pop             remove first item from list
+  * push(item)      add item to end of list
+  * reverse         items in reverse order
+  * shift           remove last item from list
+  * size            number of elements
+  * slice(from, to)     subset of list
+  * sort            items sorted lexically
+  * splice(off, len [,list])    modifies list
+  * unique          unique items (retains order)
+  * unshift(item)   add item to start of list
+
+None of the hash virtual functions are supported yet. Very soon.
+
+None of the string virtual functions are supported yet. Very soon.
+
 The remaining features will be added very soon. See the DESIGN document
 in the distro for a list of all features and their progress.
 
@@ -209,6 +239,10 @@ in the distro for a list of all features and their progress.
 
 The bleeding edge code is available via Subversion at
 http://svn.kwiki.org/ingy/Jemplate/
+
+You can run the runtime tests directly from
+http://svn.kwiki.org/ingy/Jemplate/tests or from the corresponding CPAN
+or JSAN directories.
 
 Jemplate development is being discussed at irc://irc.freenode.net/#jemplate
 
@@ -221,9 +255,13 @@ Toolkit. Thanks Andy. I will gladly give you half of any beers I
 receive for this work. (As long as you are in the same room when I'm
 drinking them ;)
 
-=head1 AUTHOR
+=head1 AUTHORS
 
 Ingy döt Net <ingy@cpan.org>
+
+* miyagawa
+* yann
+* xantus
 
 =head1 COPYRIGHT
 

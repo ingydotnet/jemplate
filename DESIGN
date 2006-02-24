@@ -167,7 +167,7 @@ completion, the second is for the testing of the feature.
     ++ join(str)       items joined with str 
     ++ last            last item in list 
     ++ max             maximum index number (i.e. size - 1) 
-    -- merge(list [, list...])     combine lists 
+    ++ merge(list [, list...])     combine lists 
     ++ nsort           items sorted numerically 
     ++ pop             remove first item from list 
     ++ push(item)      add item to end of list 
