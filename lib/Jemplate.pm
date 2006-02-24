@@ -261,7 +261,7 @@ Ingy döt Net <ingy@cpan.org>
 
 * miyagawa
 * yann
-* xantus
+* David Davis <xantus@xantus.org>
 
 =head1 COPYRIGHT
 
