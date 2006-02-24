@@ -102,6 +102,17 @@ stash.get(['a3', 0, 'splice', [ -2, 1 ]]);
 //line 13 "list.html"
 output += stash.get(['a3', 0, 'nsort', 0, 'join', [ '~' ]]);
 output += '\n';
+//line 14 "list.html"
+stash.set('a4', [ 11, 22, 33 ]);
+//line 15 "list.html"
+stash.set('a5', [ 44, 55, 66 ]);
+//line 16 "list.html"
+stash.set('a6', [ 77, 88, 99 ]);
+//line 17 "list.html"
+stash.set('a7', stash.get(['a4', 0, 'merge', [ stash.get('a5'), 'foo', stash.get('a6') ]]));
+//line 18 "list.html"
+output += stash.get(['a7', 0, 'join', [ '\'' ]]);
+output += '\n';
     }
     catch(e) {
         var error = context.set_error(e, output);

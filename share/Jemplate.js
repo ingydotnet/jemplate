@@ -180,6 +180,25 @@ proto.list_functions.reverse = function(list) {
     return result;
 }
 
+proto.list_functions.merge = function(list, args) {
+    var result = [];
+    var push_all = function(elem) {
+        if (elem instanceof Array) {
+            for (var j = 0; j < elem.length; j++) {
+                result.push(elem[j]);
+            }
+        }
+        else {
+            result.push(elem);
+        }
+    }
+    push_all(list);
+    for (var i = 0; i < args.length; i++) {
+        push_all(args[i]);
+    }
+    return result;
+}
+
 proto.list_functions.slice = function(list, args) {
     return list.slice(args[0], args[1]);
 }

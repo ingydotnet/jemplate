@@ -11,3 +11,8 @@
 [% a1.unshift('zero').sort().join('!') %]
 [% CALL a1.shift(); CALL a1.pop(); a1.join('_') %]
 [% CALL a3.splice(2,1); CALL a3.splice(-2,1); a3.nsort.join('~') %]
+[% SET a4 = [11, 22, 33] -%]
+[% SET a5 = [44, 55, 66] -%]
+[% SET a6 = [77, 88, 99] -%]
+[% SET a7 = a4.merge(a5, 'foo', a6) -%]
+[% a7.join("'") %]

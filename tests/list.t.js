@@ -22,5 +22,6 @@ three*two
 four!one!three!two!zero
 one_three_two
 5~5~9~9~12~17~33
+11'22'33'44'55'66'foo'77'88'99
 
 */
