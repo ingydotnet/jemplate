@@ -162,22 +162,22 @@ completion, the second is for the testing of the feature.
 
 ==== List variables 
 
-    -- first           first item in list 
-    -- grep(re)        items matching re 
+    ++ first           first item in list 
+    ++ grep(re)        items matching re 
     ++ join(str)       items joined with str 
-    -- last            last item in list 
-    -- max             maximum index number (i.e. size - 1) 
+    ++ last            last item in list 
+    ++ max             maximum index number (i.e. size - 1) 
     -- merge(list [, list...])     combine lists 
     -- nsort           items sorted numerically 
     -- pop             remove first item from list 
     -- push(item)      add item to end of list 
-    -- reverse         items in reverse order 
+    ++ reverse         items in reverse order 
     -- shift           remove last item from list 
-    -- size            number of elements 
-    -- slice(from, to)     subset of list 
+    ++ size            number of elements 
+    ++ slice(from, to)     subset of list 
     -- sort            items sorted lexically 
     -- splice(off, len [,list])    modifies list 
-    -- unique          unique items (retains order) 
+    ++ unique          unique items (retains order) 
     -- unshift(item)   add item to start of list 
 
 === Standard filters 

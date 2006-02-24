@@ -142,13 +142,55 @@ proto.list_functions.join = function(list, args) {
     return list.join(args[0]);
 };
 
+proto.list_functions.grep = function(list, args) {
+    var regexp = new RegExp(args[0]);
+    var result = [];
+    for (var i = 0; i < list.length; i++) {
+        if (list[i].match(regexp))
+            result.push(list[i]);
+    }
+    return result;
+}
+
+proto.list_functions.unique = function(list) {
+    var result = [];
+    var seen = {};
+    for (var i = 0; i < list.length; i++) {
+        var elem = list[i];
+        if (! seen[elem])
+            result.push(elem);
+        seen[elem] = true;
+    }
+    return result;
+}
+
+proto.list_functions.reverse = function(list) {
+    var result = [];
+    for (var i = list.length - 1; i >= 0; i--) {
+        result.push(list[i]);
+    }
+    return result;
+}
+
+proto.list_functions.slice = function(list, args) {
+    return list.slice(args[0], args[1]);
+}
+
 proto.list_functions.push = function(list, args) {
-    list.push(args);
+    list.push(args[0]);
     return list;        
 }
 
 proto.list_functions.first = function(list) {
     return list[0];        
+}
+
+proto.list_functions.size = function(list) {
+    return list.length;
+}
+
+proto.list_functions.max = function(list) {
+    return list.length - 1;
 }
 
 proto.list_functions.last = function(list) {

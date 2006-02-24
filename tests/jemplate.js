@@ -57,11 +57,33 @@ Jemplate.templateMap['list.html'] = function(context) {
 stash.set('a1', [ 'one', 'two', 'three' ]);
 //line 2 "list.html"
 stash.get(['a1', 0, 'push', [ 'four' ]]);
-//line 2 "list.html"
+//line 3 "list.html"
 output += stash.get(['a1', 0, 'first', 0]);
 output += ' - ';
-//line 2 "list.html"
+//line 3 "list.html"
 output += stash.get(['a1', 0, 'last', 0]);
+output += '\n';
+//line 4 "list.html"
+output += stash.get(['a1', 0, 'grep', [ 'o' ], 'join', [ '/' ]]);
+output += '\n';
+//line 5 "list.html"
+output += stash.get(['a1', 0, 'max', 0]);
+output += '+';
+//line 5 "list.html"
+output += stash.get(['a1', 0, 'size', 0]);
+output += '\n';
+//line 6 "list.html"
+stash.set('a2', stash.get(['a1', 0, 'reverse', 0]));
+//line 7 "list.html"
+output += stash.get(['a2', 0, 'join', [ '^' ]]);
+output += '\n';
+//line 8 "list.html"
+output += stash.get(['a2', 0, 'slice', [ 1, 3 ], 'join', [ '*' ]]);
+output += '\n';
+//line 9 "list.html"
+stash.set('a3', [ 5, 9, 'x', 17, 9, 33, 12, 'x', 5 ]);
+//line 10 "list.html"
+output += stash.get(['a3', 0, 'unique', 0, 'join', [ ',' ]]);
 output += '\n';
     }
     catch(e) {
