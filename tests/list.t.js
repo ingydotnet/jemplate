@@ -19,5 +19,8 @@ one/two/four
 four^three^two^one
 three*two
 5,9,x,17,33,12
+four!one!three!two!zero
+one_three_two
+5~5~9~9~12~17~33
 
 */

@@ -85,6 +85,23 @@ stash.set('a3', [ 5, 9, 'x', 17, 9, 33, 12, 'x', 5 ]);
 //line 10 "list.html"
 output += stash.get(['a3', 0, 'unique', 0, 'join', [ ',' ]]);
 output += '\n';
+//line 11 "list.html"
+output += stash.get(['a1', 0, 'unshift', [ 'zero' ], 'sort', 0, 'join', [ '!' ]]);
+output += '\n';
+//line 12 "list.html"
+stash.get(['a1', 0, 'shift', 0]);
+//line 12 "list.html"
+stash.get(['a1', 0, 'pop', 0]);
+//line 12 "list.html"
+output += stash.get(['a1', 0, 'join', [ '_' ]]);
+output += '\n';
+//line 13 "list.html"
+stash.get(['a3', 0, 'splice', [ 2, 1 ]]);
+//line 13 "list.html"
+stash.get(['a3', 0, 'splice', [ -2, 1 ]]);
+//line 13 "list.html"
+output += stash.get(['a3', 0, 'nsort', 0, 'join', [ '~' ]]);
+output += '\n';
     }
     catch(e) {
         var error = context.set_error(e, output);
