@@ -259,9 +259,11 @@ drinking them ;)
 
 Ingy döt Net <ingy@cpan.org>
 
-* miyagawa
-* yann
-* David Davis <xantus@xantus.org>
+Tatsuhiko Miyagawa <miyagawa@bulknews.net>
+
+yann
+
+David Davis <xantus@xantus.org>
 
 =head1 COPYRIGHT
 
