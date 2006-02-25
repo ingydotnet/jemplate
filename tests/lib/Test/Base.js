@@ -84,7 +84,10 @@ proto.get_spec = function() {
 
 proto.create_blocks = function() {
     var text = this.state.spec_content;
-    var hunks = text.split(/(?=(\A|^)===)/m);
+    // This is what we want but Safari is broken with ^ and m flag
+    // var hunks = text.split(/(?=(\A|^)===)/m);
+    // This works for now but is too fragile.
+    var hunks = text.split(/(?====)/);
     for (var i = 0; i < hunks.length; i++) {
         var hunk = hunks[i];
         if (! hunk.match(/^===/)) continue;
@@ -173,7 +176,6 @@ proto.add_section = function(name, filters, data) {
 
 proto.apply_filters = function(filter_overrides) {
     var sections = this.sections;
-    JJJ(sections);
     for (var i = 0; i < sections.length; i++) {
         var section = sections[i];
         var filters = ['normalize', 'trim'];

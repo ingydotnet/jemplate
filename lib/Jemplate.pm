@@ -235,6 +235,14 @@ None of the string virtual functions are supported yet. Very soon.
 The remaining features will be added very soon. See the DESIGN document
 in the distro for a list of all features and their progress.
 
+=head1 BROWSER SUPPORT
+
+Tested in:
+
+    * Firefox Mac/Win32
+    * IE 6.0
+    * Safari
+
 =head1 DEVELOPMENT
 
 The bleeding edge code is available via Subversion at

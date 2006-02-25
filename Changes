@@ -1,4 +1,13 @@
 ---
+version: 0.15
+date:    Fri Feb 24 18:02:46 PST 2006
+changes:
+- Support SWITCH CASE and WRAPPER directives thanks to xantus and yann!
+- Now the Stash really works
+- Test.Base javascript runtime test framework
+- Support all the TT array primitives in JS
+
+---
 version: 0.14
 date:    Mon Feb 13 23:48:51 PST 2006
 changes:
