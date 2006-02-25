@@ -20,12 +20,18 @@ proto.filters = function(obj) {
 }
 
 proto.run_is = function(x, y) {
-    this.compile();
-    var blocks =  this.state.blocks;
-    for (var i = 0; i < blocks.length; i++) {
-        var block = blocks[i];
-        if (! this.verify_block(block, x, y)) continue;
-        this.is(block.data[x], block.data[y], block.name);
+    try {
+        this.compile();
+        var blocks =  this.state.blocks;
+        for (var i = 0; i < blocks.length; i++) {
+            var block = blocks[i];
+            if (! this.verify_block(block, x, y)) continue;
+            this.is(block.data[x], block.data[y], block.name);
+        }
+    }
+    catch(e) {
+        // alert(e);
+        throw(e);
     }
 }
 
@@ -167,6 +173,7 @@ proto.add_section = function(name, filters, data) {
 
 proto.apply_filters = function(filter_overrides) {
     var sections = this.sections;
+    JJJ(sections);
     for (var i = 0; i < sections.length; i++) {
         var section = sections[i];
         var filters = ['normalize', 'trim'];
@@ -212,7 +219,9 @@ proto.xhr_get = function(url) {
 }
 
 proto.trim = function(content, block) {
-    return content.replace(/^\s*\n/, '').replace(/\n\s*$/, '\n');
+    var result = content.replace(/^\s*\n/, '');
+    result = result.replace(/\n\s*$/, '\n');
+    return result;
 }
 
 proto.normalize = function(content, block) {

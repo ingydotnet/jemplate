@@ -463,6 +463,26 @@ sub stop {
     return "throw('Jemplate.STOP\\n' + output);";
 }   
 
+#------------------------------------------------------------------------
+# stubs()                                                      [% STOP %]
+#------------------------------------------------------------------------
+
+sub filter {
+    return "throw('FILTER not yet supported in Jemplate');";
+}   
+
+sub quoted {
+    return "throw('QUOTED not yet supported in Jemplate');";
+}   
+
+sub macro {
+    return "throw('MACRO not yet supported in Jemplate');";
+}   
+
+sub capture {
+    return "throw('CAPTURE not yet supported in Jemplate');";
+}   
+
     
 1;
 

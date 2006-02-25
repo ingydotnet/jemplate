@@ -1,0 +1,217 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Jemplate - Javascript Templating with Template Toolkit</title>
+<link rev="made" href="mailto:ingy@bytes.local" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#howto">HOWTO</a></li>
+	<li><a href="#public_api">PUBLIC API</a></li>
+	<li><a href="#current_support">CURRENT SUPPORT</a></li>
+	<li><a href="#development">DEVELOPMENT</a></li>
+	<li><a href="#credit">CREDIT</a></li>
+	<li><a href="#authors">AUTHORS</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Jemplate - Javascript Templating with Template Toolkit</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+    var data = fetchSomeJsonResult();
+    var elem = document.getElementById('some-div');
+    elem.innerHTML = Jemplate.process('my-template.html', data);</pre>
+<p>or</p>
+<pre>
+    Jemplate.process('my-template.html', fetchSomeJsonResult(), '#some-div');</pre>
+<p>or, with Prototype.js:</p>
+<pre>
+    new Ajax.Request(&quot;/json&quot;, {
+        onComplete: function(req) {
+            var data = eval(req.responseText);
+            Jemplate.process('my-template.html', data, '#some-div');
+        }
+    );</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>Jemplate is a templating framework for Javascript that is built over
+Perl's Template Toolkit (TT2).</p>
+<p>Jemplate parses TT2 templates using the TT2 Perl framework, but with a
+twist. Instead of compiling the templates into Perl code, it compiles
+them into Javascript.</p>
+<p>Jemplate then provides a Javascript runtime module for processing
+the template code. Presto, we have full featured Javascript
+templating language!</p>
+<p>Combined with JSON and xmlHttpRequest, Jemplate provides a really simple
+and powerful way to do Ajax stuff.</p>
+<p>
+</p>
+<hr />
+<h1><a name="howto">HOWTO</a></h1>
+<p>Jemplate comes with a command line tool call <code>jemplate</code> that you use to
+precompile your templates into javscript. For example if you have a
+template directory called <code>templates</code> that contains:</p>
+<pre>
+    &gt; ls templates/
+    body.html
+    footer.html
+    header.html</pre>
+<p>You might run this command:</p>
+<pre>
+    &gt; jemplate --compile template/* &gt; js/jemplate01.js</pre>
+<p>This will compile all the templates into one Javascript file.</p>
+<p>You also need to get the Jemplate runtime.</p>
+<pre>
+    &gt; cp ~/Jemplate-x.xx/share/Jemplate.js js/Jemplate.js</pre>
+<p>Now all you need to do is include these two files in the HEAD of
+your html:</p>
+<pre>
+    &lt;script src=&quot;js/Jemplate.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;js/jemplate01.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;</pre>
+<p>Now you have Jemplate support for these templates in your html document.</p>
+<p>
+</p>
+<hr />
+<h1><a name="public_api">PUBLIC API</a></h1>
+<p>The Jemplate.pm module has the following public class methods:</p>
+<dl>
+<dt><strong><a name="item_compile_template_files">Jemplate-&gt;compile_template_files(@template_file_paths);</a></strong><br />
+</dt>
+<dd>
+Take a list of template file paths and compile them into a module of
+functions. Returns the text of the module.
+</dd>
+<p></p>
+<dt><strong><a name="item_compile_template_content">Jemplate-&gt;compile_template_content($content, $template_name);</a></strong><br />
+</dt>
+<dd>
+Compile one template whose content is in memory. You must provide a
+unique template name. Returns the Javascript text result of the
+compilation.
+</dd>
+<p></p>
+<dt><strong><a name="item_compile_module">Jemplate-&gt;compile_module($module_path, \@template_file_paths);</a></strong><br />
+</dt>
+<dd>
+Similar to `compile_template_files`, but prints to result to the
+$module_path. Returns 1 if successful, undef if error.
+</dd>
+<p></p>
+<dt><strong><a name="item_compile_module_cached">Jemplate-&gt;compile_module_cached($module_path, \@template_file_paths);</a></strong><br />
+</dt>
+<dd>
+Similar to `compile_module`, but only compiles if one of the templates
+is newer than the module. Returns 1 if sucessful compile, 0 if no
+compile due to cache, undef if error.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="current_support">CURRENT SUPPORT</a></h1>
+<p>The goal of Jemplate is to support all of the Template Toolkit features
+that can possibly be supported.</p>
+<p>Jemplate now supports the following directives:</p>
+<pre>
+  * Plain text
+  * [% [GET] variable %]
+  * [% CALL variable %]
+  * [% [SET] variable = value %]
+  * [% INCLUDE [arguments] %]
+  * [% PROCESS [arguments] %]
+  * [% BLOCK name %]
+  * [% WRAPPER template [variable = value ...] %]
+  * [% IF condition %]
+  * [% ELSIF condition %]
+  * [% ELSE %]
+  * [% SWITCH variable %]
+  * [% CASE [{value|DEFAULT}] %]
+  * [% FOR x = y %]
+  * [% WHILE expression %]
+  * [% RETURN %]
+  * [% STOP %]
+  * [% NEXT %]
+  * [% LAST %]
+  * [% CLEAR %]
+  * [%# this is a comment %]</pre>
+<p>All the array virtual functions are supported:</p>
+<pre>
+  * first           first item in list
+  * grep(re)        items matching re
+  * join(str)       items joined with str
+  * last            last item in list
+  * max             maximum index number (i.e. size - 1)
+  * merge(list [, list...])     combine lists
+  * nsort           items sorted numerically
+  * pop             remove first item from list
+  * push(item)      add item to end of list
+  * reverse         items in reverse order
+  * shift           remove last item from list
+  * size            number of elements
+  * slice(from, to)     subset of list
+  * sort            items sorted lexically
+  * splice(off, len [,list])    modifies list
+  * unique          unique items (retains order)
+  * unshift(item)   add item to start of list</pre>
+<p>None of the hash virtual functions are supported yet. Very soon.</p>
+<p>None of the string virtual functions are supported yet. Very soon.</p>
+<p>The remaining features will be added very soon. See the DESIGN document
+in the distro for a list of all features and their progress.</p>
+<p>
+</p>
+<hr />
+<h1><a name="development">DEVELOPMENT</a></h1>
+<p>The bleeding edge code is available via Subversion at
+<a href="http://svn.kwiki.org/ingy/Jemplate/">http://svn.kwiki.org/ingy/Jemplate/</a></p>
+<p>You can run the runtime tests directly from
+<a href="http://svn.kwiki.org/ingy/Jemplate/tests">http://svn.kwiki.org/ingy/Jemplate/tests</a> or from the corresponding CPAN
+or JSAN directories.</p>
+<p>Jemplate development is being discussed at <a href="irc://irc.freenode.net/#jemplate">irc://irc.freenode.net/#jemplate</a></p>
+<p>If you want a committer bit, just ask ingy on the irc channel.</p>
+<p>
+</p>
+<hr />
+<h1><a name="credit">CREDIT</a></h1>
+<p>This module is only possible because of Andy Wardley's mighty Template
+Toolkit. Thanks Andy. I will gladly give you half of any beers I
+receive for this work. (As long as you are in the same room when I'm
+drinking them ;)</p>
+<p>
+</p>
+<hr />
+<h1><a name="authors">AUTHORS</a></h1>
+<p>Ingy döt Net &lt;<a href="mailto:ingy@cpan.org">ingy@cpan.org</a>&gt;</p>
+<p>Tatsuhiko Miyagawa &lt;<a href="mailto:miyagawa@bulknews.net">miyagawa@bulknews.net</a>&gt;</p>
+<p>Yann Kerherve</p>
+<p>David Davis &lt;<a href="mailto:xantus@xantus.org">xantus@xantus.org</a>&gt;</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright (c) 2006. Ingy döt Net. All rights reserved.</p>
+<p>This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.</p>
+<p>See <a href="http://www.perl.com/perl/misc/Artistic.html">http://www.perl.com/perl/misc/Artistic.html</a></p>
+
+</body>
+
+</html>
