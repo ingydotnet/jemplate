@@ -17,7 +17,9 @@
 	<li><a href="#description">DESCRIPTION</a></li>
 	<li><a href="#howto">HOWTO</a></li>
 	<li><a href="#public_api">PUBLIC API</a></li>
+	<li><a href="#ajax_and_json_methods">AJAX AND JSON METHODS</a></li>
 	<li><a href="#current_support">CURRENT SUPPORT</a></li>
+	<li><a href="#browser_support">BROWSER SUPPORT</a></li>
 	<li><a href="#development">DEVELOPMENT</a></li>
 	<li><a href="#credit">CREDIT</a></li>
 	<li><a href="#authors">AUTHORS</a></li>
@@ -35,15 +37,20 @@
 <hr />
 <h1><a name="synopsis">SYNOPSIS</a></h1>
 <pre>
-    var data = fetchSomeJsonResult();
+    var data = Ajax.get('url/data.json');
     var elem = document.getElementById('some-div');
     elem.innerHTML = Jemplate.process('my-template.html', data);</pre>
-<p>or</p>
+<p>or:</p>
 <pre>
-    Jemplate.process('my-template.html', fetchSomeJsonResult(), '#some-div');</pre>
+    var data = Ajax.get('url/data.json');
+    var elem = document.getElementById('some-div');
+    Jemplate.process('my-template.html', data, elem);</pre>
+<p>or simply:</p>
+<pre>
+    Jemplate.process('my-template.html', 'url/data.json', '#some-div');</pre>
 <p>or, with Prototype.js:</p>
 <pre>
-    new Ajax.Request(&quot;/json&quot;, {
+    new Ajax.Request(&quot;url/data.json&quot;, {
         onComplete: function(req) {
             var data = eval(req.responseText);
             Jemplate.process('my-template.html', data, '#some-div');
@@ -68,8 +75,8 @@ and powerful way to do Ajax stuff.</p>
 <hr />
 <h1><a name="howto">HOWTO</a></h1>
 <p>Jemplate comes with a command line tool call <code>jemplate</code> that you use to
-precompile your templates into javscript. For example if you have a
-template directory called <code>templates</code> that contains:</p>
+precompile your templates into a javascript file. For example if you have
+a template directory called <code>templates</code> that contains:</p>
 <pre>
     &gt; ls templates/
     body.html
@@ -77,7 +84,7 @@ template directory called <code>templates</code> that contains:</p>
     header.html</pre>
 <p>You might run this command:</p>
 <pre>
-    &gt; jemplate --compile template/* &gt; js/jemplate01.js</pre>
+    &gt; jemplate --compile template/* &gt; js/jemplates.js</pre>
 <p>This will compile all the templates into one Javascript file.</p>
 <p>You also need to get the Jemplate runtime.</p>
 <pre>
@@ -86,13 +93,42 @@ template directory called <code>templates</code> that contains:</p>
 your html:</p>
 <pre>
     &lt;script src=&quot;js/Jemplate.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
-    &lt;script src=&quot;js/jemplate01.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;</pre>
+    &lt;script src=&quot;js/jemplates.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;</pre>
 <p>Now you have Jemplate support for these templates in your html document.</p>
 <p>
 </p>
 <hr />
 <h1><a name="public_api">PUBLIC API</a></h1>
-<p>The Jemplate.pm module has the following public class methods:</p>
+<p>The Jemplate.js Javascript runtime module has the following API method:</p>
+<dl>
+<dt><strong><a name="item_process">Jemplate.process(template-name, data, [target]);</a></strong><br />
+</dt>
+<dd>
+The <code>template-name</code> is a string like <code>'body.html'</code> that is the name of
+the top level template that you wish to process.
+</dd>
+<dd>
+<p>The <code>data</code> can be a object, a function or a url. If it is an object, it
+is used directly. If it is a function, the function is called and the
+returned object is used. If it is a url, an asynchronous &lt;Ajax.get&gt; is
+performed. The result is expected to be a JSON string, which gets turned
+into an object.</p>
+</dd>
+<dd>
+<p>The optional <code>target</code> can be an HTMLElement reference, a function or a
+string beginning with a <code>#</code> char. If the target is omitted, the
+template result is returned. If it is a function, the function is called
+with the result. If it is a string, the string is used as an id to find
+an HTMLElement.</p>
+</dd>
+<dd>
+<p>If an HTMLElement is used (by id or directly) then the innerHTML
+property is set to the template processing result.</p>
+</dd>
+<p></p></dl>
+<p>The Jemplate.pm Perl module has the following public class methods,
+although you won't likely need to use them directly. Normally, you just
+use the <code>jemplate</code> command line tool.</p>
 <dl>
 <dt><strong><a name="item_compile_template_files">Jemplate-&gt;compile_template_files(@template_file_paths);</a></strong><br />
 </dt>
@@ -122,6 +158,44 @@ $module_path. Returns 1 if successful, undef if error.
 Similar to `compile_module`, but only compiles if one of the templates
 is newer than the module. Returns 1 if sucessful compile, 0 if no
 compile due to cache, undef if error.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="ajax_and_json_methods">AJAX AND JSON METHODS</a></h1>
+<p>Jemplate comes with builtin Ajax and JSON support.</p>
+<dl>
+<dt><strong><a name="item_get">Ajax.get(url, [callback]);</a></strong><br />
+</dt>
+<dd>
+Does a GET operation to the url.
+</dd>
+<dd>
+<p>If a callback is provided, the operation is asynchronous and the request
+object is returned. Otherwise, the operation is synchronous and the data
+is returned.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_post">Ajax.post(url, data, [callback]);</a></strong><br />
+</dt>
+<dd>
+Does a POST operation to the url.
+</dd>
+<dd>
+<p>Same callback rules as GET apply.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_stringify">JSON.stringify(object);</a></strong><br />
+</dt>
+<dd>
+Return the JSON serialization of an object.
+</dd>
+<p></p>
+<dt><strong><a name="item_parse">JSON.parse(jsonString);</a></strong><br />
+</dt>
+<dd>
+Turns a JSON string into an object and returns the object.
 </dd>
 <p></p></dl>
 <p>
@@ -176,6 +250,15 @@ that can possibly be supported.</p>
 <p>None of the string virtual functions are supported yet. Very soon.</p>
 <p>The remaining features will be added very soon. See the DESIGN document
 in the distro for a list of all features and their progress.</p>
+<p>
+</p>
+<hr />
+<h1><a name="browser_support">BROWSER SUPPORT</a></h1>
+<p>Tested in:</p>
+<pre>
+    * Firefox Mac/Win32
+    * IE 6.0
+    * Safari</pre>
 <p>
 </p>
 <hr />

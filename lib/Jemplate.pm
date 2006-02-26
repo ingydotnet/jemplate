@@ -87,17 +87,23 @@ Jemplate - Javascript Templating with Template Toolkit
 
 =head1 SYNOPSIS
 
-    var data = fetchSomeJsonResult();
+    var data = Ajax.get('url/data.json');
     var elem = document.getElementById('some-div');
     elem.innerHTML = Jemplate.process('my-template.html', data);
 
-or
+or:
 
-    Jemplate.process('my-template.html', fetchSomeJsonResult(), '#some-div');
+    var data = Ajax.get('url/data.json');
+    var elem = document.getElementById('some-div');
+    Jemplate.process('my-template.html', data, elem);
+
+or simply:
+
+    Jemplate.process('my-template.html', 'url/data.json', '#some-div');
 
 or, with Prototype.js:
 
-    new Ajax.Request("/json", {
+    new Ajax.Request("url/data.json", {
         onComplete: function(req) {
             var data = eval(req.responseText);
             Jemplate.process('my-template.html', data, '#some-div');
@@ -123,8 +129,8 @@ and powerful way to do Ajax stuff.
 =head1 HOWTO
 
 Jemplate comes with a command line tool call C<jemplate> that you use to
-precompile your templates into javscript. For example if you have a
-template directory called C<templates> that contains:
+precompile your templates into a javascript file. For example if you have
+a template directory called C<templates> that contains:
 
     > ls templates/
     body.html
@@ -133,7 +139,7 @@ template directory called C<templates> that contains:
 
 You might run this command:
 
-    > jemplate --compile template/* > js/jemplate01.js
+    > jemplate --compile template/* > js/jemplates.js
 
 This will compile all the templates into one Javascript file.
 
@@ -145,13 +151,41 @@ Now all you need to do is include these two files in the HEAD of
 your html:
 
     <script src="js/Jemplate.js" type="text/javascript"></script>
-    <script src="js/jemplate01.js" type="text/javascript"></script>
+    <script src="js/jemplates.js" type="text/javascript"></script>
 
 Now you have Jemplate support for these templates in your html document.
 
 =head1 PUBLIC API
 
-The Jemplate.pm module has the following public class methods:
+The Jemplate.js Javascript runtime module has the following API method:
+
+=over
+
+=item Jemplate.process(template-name, data, [target]);
+
+The C<template-name> is a string like C<'body.html'> that is the name of
+the top level template that you wish to process.
+
+The C<data> can be a object, a function or a url. If it is an object, it
+is used directly. If it is a function, the function is called and the
+returned object is used. If it is a url, an asynchronous <Ajax.get> is
+performed. The result is expected to be a JSON string, which gets turned
+into an object.
+
+The optional C<target> can be an HTMLElement reference, a function or a
+string beginning with a C<#> char. If the target is omitted, the
+template result is returned. If it is a function, the function is called
+with the result. If it is a string, the string is used as an id to find
+an HTMLElement.
+
+If an HTMLElement is used (by id or directly) then the innerHTML
+property is set to the template processing result.
+
+=back
+
+The Jemplate.pm Perl module has the following public class methods,
+although you won't likely need to use them directly. Normally, you just
+use the C<jemplate> command line tool.
 
 =over
 
@@ -176,6 +210,36 @@ $module_path. Returns 1 if successful, undef if error.
 Similar to `compile_module`, but only compiles if one of the templates
 is newer than the module. Returns 1 if sucessful compile, 0 if no
 compile due to cache, undef if error.
+
+=back
+
+=head1 AJAX AND JSON METHODS
+
+Jemplate comes with builtin Ajax and JSON support.
+
+=over
+
+=item Ajax.get(url, [callback]);
+
+Does a GET operation to the url.
+
+If a callback is provided, the operation is asynchronous and the request
+object is returned. Otherwise, the operation is synchronous and the data
+is returned.
+
+=item Ajax.post(url, data, [callback]);
+
+Does a POST operation to the url.
+
+Same callback rules as GET apply.
+
+=item JSON.stringify(object);
+
+Return the JSON serialization of an object.
+
+=item JSON.parse(jsonString);
+
+Turns a JSON string into an object and returns the object.
 
 =back
 

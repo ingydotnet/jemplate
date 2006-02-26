@@ -20,7 +20,7 @@ project, and then use the `jemplate` command line tool to compile your
 templates. Something like this:
 
     > cp ~/downloads/Jemplate-x.xx/share/Jemplate.js js/Jemplate.js
-    > jemplate --compile templates/* > js/my_jemplate.js
+    > jemplate --compile templates/* > js/jemplates.js
 
 Then just import those two Javascript files into your html document.
 

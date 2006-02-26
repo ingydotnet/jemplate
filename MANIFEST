@@ -2,6 +2,9 @@ Changes
 DESIGN
 doc/html/Jemplate.html
 doc/text/Jemplate.text
+examples/ajax/data.json
+examples/ajax/index.html
+examples/ajax/template/body.html
 examples/compile.sh
 examples/features/index.html
 examples/features/templates/body.html
@@ -13,6 +16,7 @@ examples/features/templates/wrapper2.html
 examples/hello/index.html
 examples/hello/templates/hello.html
 examples/index.html
+examples/js/ajax.js
 examples/js/features.js
 examples/js/hello.js
 Hackathon
@@ -66,6 +70,7 @@ t/while.t
 t/wrapper.t
 tests/basics.t.html
 tests/basics.t.js
+tests/bin/pull-jemplates
 tests/bin/render-template
 tests/bin/update-prereqs
 tests/index.html
