@@ -11,7 +11,10 @@ t.run_is('jemplate', 'output');
 
 /* Test
 === Test join
---- jemplate: join.html
+--- jemplate
+join.html
+[% a = ['foo', 'bar', 'baz'] %]
+[%- a.join('::') -%]
 --- output
 foo::bar::baz
 */

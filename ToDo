@@ -1,8 +1,14 @@
-= Jemplate.Stash
+- Move XHR and JSON into Jemplate.js
+- Move XXX and JJJ into Jemplate.js
+- Jemplate.xhr_get(url);            // synchronous
+- Jemplate.xhr_get(url, function);  // asynchronous
 
-- Finish string, list and hash virtual methods
+- Support `Jemplate.process('foo.html', 'bar.json', '#baz')`
+- Support `Jemplate.process('foo.html', function, '#baz')`
 
-= Jemplate::Directive (Compilation)
+- Hash virtual methods
+- String virtual methods
+- Standard filters
 
 - MACRO
 - TRY/CATCH/FINAL
@@ -12,18 +18,15 @@
 - INSERT
 - FILTER
 - USE 
+- JAVASCRIPT
 
-= Plugins
+- Write runtime tests for current directives
 
 - Implement plugin support for javascript libraries.
 
-= Win32
-
-- Get xhr to work on win32
+- Write a tutorial pod
 
 = Research/Questions
 
 - How does Javascript handle truth (cross implementation)? What is/are the
   best ways to test for truth?
-- Can Javascript throw objects or only strings?
-

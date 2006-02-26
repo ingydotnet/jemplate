@@ -14,7 +14,9 @@ t.run_is('jemplate', 'output');
 === Basic Substitution1
 --- context
 {"name":"Wally"}
---- jemplate: hello.html
+--- jemplate
+hello.html
+Hello, [% name %]
 --- output
 Hello, Wally
 

@@ -3,6 +3,7 @@
 * Be Useful
 * Support as much of Perl's Template Toolkit (TT2) as feasible
 * Avoid cruft and scope explosion.
+* Make runtime fast as possible.
 * Actually complete the project and become stable.
 
 
@@ -65,12 +66,17 @@ If outputTarget is anything else, an exception will be thrown.
 
 = TESTING
 
-Currently we have automated tests that prove that compilation is correct.
+Currently we have automated tests in the `t/` directory that prove that
+compilation is correct. These tests use Perl's Test::Base data driven
+test framework.
 
-We also have a more adhoc `test/` directory with stuff that you need to
+There is also a Javascript runtime testing suite in the `tests/`
+directory that you can run by simply loading the index.html file into
+any supported browser. These tests use a Javascript port of the
+Test.Base framework.
+
+We also have a more adhoc `examples/` directory with stuff that you need to
 run by hand.
-
-There is no automated testing for the Javascript runtime yet.
 
 
 = FEATURE CHECKLIST
@@ -110,6 +116,7 @@ completion, the second is for the testing of the feature.
     -- [% USE plugin[(param, ...)] %] 
     xx [% PERL %] code... [% END %] 
     xx [% RAWPERL %] code... [% END %] 
+    -- [% JAVASCRIPT %] code... [% END %]
 
     ++ [% FOREACH var = list %] ... [% END %] 
     ++ [% WHILE cond %] ... [% END %] 

@@ -20,8 +20,6 @@ my $t = Template->new(
 my $data = {
     test_harness_title => 'Jemplate Testing',
     javascript_libraries => [qw(
-        lib/JSON.js
-        lib/xmlhttprequest.js
         lib/Subclass.js
         lib/Test/Builder.js
         lib/Test/Base.js
