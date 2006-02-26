@@ -1,10 +1,10 @@
-- Move XHR and JSON into Jemplate.js
-- Move XXX and JJJ into Jemplate.js
-- Jemplate.xhr_get(url);            // synchronous
-- Jemplate.xhr_get(url, function);  // asynchronous
++ Move XHR and JSON into Jemplate.js
++ Move XXX and JJJ into Jemplate.js
++ Jemplate.xhr_get(url);            // synchronous
++ Jemplate.xhr_get(url, function);  // asynchronous
 
-- Support `Jemplate.process('foo.html', 'bar.json', '#baz')`
-- Support `Jemplate.process('foo.html', function, '#baz')`
++ Support `Jemplate.process('foo.html', 'bar.json', '#baz')`
++ Support `Jemplate.process('foo.html', function, '#baz')`
 
 - Hash virtual methods
 - String virtual methods

@@ -15,7 +15,7 @@ modify it under the same terms as Perl itself.
 //------------------------------------------------------------------------------
 // Main Jemplate class
 //------------------------------------------------------------------------------
-if (typeof(Jemplate) == 'undefined')
+if (typeof Jemplate == 'undefined')
     Jemplate = function() {};
 
 Jemplate.templateMap = {};
@@ -24,36 +24,56 @@ Jemplate.process = function(template, data, output) {
     var context = new Jemplate.Context();
     context.stash = new Jemplate.Stash();
     var result;
-    try { 
-        result = context.process(template, data);
-    }
-    catch(e) {
-        if (! e.toString().match(/Jemplate\.STOP\n/))
-            throw(e);
-        result = e.toString().replace(/Jemplate\.STOP\n/, '')
-    } 
 
-    if (typeof(output) == 'undefined')
-        return result;
-    else if (typeof(output) == 'function')
-        output(result);
-    else if (output.match(/^#[\w\-]+$/)) {
-        var id = output.replace(/^#/, '');
-        var element = document.getElementById(id);
-        if (typeof(element) == 'undefined')
-            throw('No element found with id="' + id + '"');
-        element.innerHTML = result;
-    }
-    else
-        throw("Invalid arguments in call to Jemplate.process");
+    var proc = function(input) {
+        try { 
+            result = context.process(template, input);
+        }
+        catch(e) {
+            if (! String(e).match(/Jemplate\.STOP\n/))
+                throw(e);
+            result = e.toString().replace(/Jemplate\.STOP\n/, '')
+        }
 
-    return 1;
+        if (typeof output == 'undefined')
+            return result;
+        else if (typeof output == 'function')
+            output(result);
+        else if (output instanceof HTMLElement)
+            output.innerHTML = result;
+        else if (output.match(/^#[\w\-]+$/)) {
+            var id = output.replace(/^#/, '');
+            var element = document.getElementById(id);
+            if (typeof element == 'undefined')
+                throw('No element found with id="' + id + '"');
+            element.innerHTML = result;
+        }
+        else
+            throw("Invalid arguments in call to Jemplate.process");
+
+        return 1;
+    }
+
+    var req = null;
+    var async = function() {
+        proc(JSON.parse(req.responseText));
+    }
+
+    if (typeof data == 'function')
+        data = data();
+    else if (typeof data == 'string') {
+        req = Ajax.get(data, async);
+        return;
+    }
+
+    return proc(data);
 }
+
 
 //------------------------------------------------------------------------------
 // Jemplate.Context class
 //------------------------------------------------------------------------------
-if (typeof(Jemplate.Context) == 'undefined')
+if (typeof Jemplate.Context == 'undefined')
     Jemplate.Context = function() {};
 
 proto = Jemplate.Context.prototype;
@@ -63,10 +83,10 @@ proto.include = function(template, args) {
 }
 
 proto.process = function(template, args) {
-    if (typeof(args) != 'undefined')
+    if (typeof args != 'undefined')
         this.stash.add(args);
     var func = Jemplate.templateMap[template];
-    if (typeof(func) == 'undefined')
+    if (typeof func == 'undefined')
         throw('No Jemplate template named "' + template + '" available');
     return func(this);
 }
@@ -79,7 +99,7 @@ proto.set_error = function(error, output) {
 //------------------------------------------------------------------------------
 // Jemplate.Stash class
 //------------------------------------------------------------------------------
-if (typeof(Jemplate.Stash) == 'undefined') {
+if (typeof Jemplate.Stash == 'undefined') {
     Jemplate.Stash = function() {
         this.data = {};
     };
@@ -101,7 +121,7 @@ proto.get = function(key) {
             var args = key.slice(i, i+2);
             args.unshift(root);
             value = this._dotop.apply(this, args);
-            if (typeof(value) == 'undefined')
+            if (typeof value == 'undefined')
                 break;
             root = value;
         }
@@ -118,7 +138,7 @@ proto.set = function(key, value) {
 }
 
 proto._dotop = function(root, item, args) {
-    if (typeof(item) == 'undefined' || item.match(/^[\._]/))
+    if (typeof item == 'undefined' || item.match(/^[\._]/))
         return undefined;
 
     if (typeof root == 'string' && this.string_functions[item])
@@ -129,7 +149,7 @@ proto._dotop = function(root, item, args) {
         return this.hash_functions[item](root, args);
 
     var value = root[item];
-    if (typeof(value) == 'function')
+    if (typeof value == 'function')
         value = value();
     return value;
 }
@@ -251,7 +271,7 @@ proto.hash_functions = {};
 //------------------------------------------------------------------------------
 // Jemplate.Iterator class
 //------------------------------------------------------------------------------
-if (typeof(Jemplate.Iterator) == 'undefined') {
+if (typeof Jemplate.Iterator == 'undefined') {
     Jemplate.Iterator = function(object) {
         this.object = object;
     }
@@ -267,7 +287,7 @@ proto.get_first = function() {
 proto.get_next = function() {
     var object = this.object;
     var index = this.index++;
-    if (typeof(object) == 'undefined')
+    if (typeof object == 'undefined')
         throw('No object to iterate');
     if (index < object.length)
         return [object[index], false];
@@ -276,45 +296,50 @@ proto.get_next = function() {
 }
 
 //------------------------------------------------------------------------------
+// Debugging Support
+//------------------------------------------------------------------------------
+
+function XXX(msg) {
+    //if (! confirm(arguments.join('\n')))
+    if (! confirm(msg))
+        throw("terminated...");
+}
+
+function JJJ(obj) {
+    XXX(JSON.stringify(obj));
+}
+
+//------------------------------------------------------------------------------
 // Ajax support
 //------------------------------------------------------------------------------
-Jemplate.ajax = function(http, url, func) {
+if (! this.Ajax) Ajax = {};
+
+Ajax.get = function(url, callback) {
     var req = new XMLHttpRequest();
-    req.open('GET', url, false);
-    req.send(null);
+    req.open('GET', url, Boolean(callback));
+    return Ajax._send(req, null, callback);
+}
+
+Ajax.post = function(url, data, callback) {
+    var req = new XMLHttpRequest();
+    req.open('POST', url, Boolean(callback));
+    req.setRequestHeader(
+        'Content-Type', 
+        'application/x-www-form-urlencoded'
+    );
+    return Ajax._send(req, data, callback);
+}
+
+Ajax._send = function(req, data, callback) {
+    if (callback)
+        req.onreadystatechange = callback;
+    req.send(data);
+    if (callback)
+        return req;
     if (req.status != 200)
         throw('Request for "' + url + '" failed with status: ' + req.status);
     return req.responseText;
 }
-
-Jemplate.liveUpdate = function(method, url, query, callback) {
-    var req = new XMLHttpRequest();
-    var data = null;
-    if (method == 'GET')
-        url = url + '?' + query;
-    else
-        data = query;
-    req.open(method, url);
-    req.onreadystatechange = function() {
-        if (req.readyState == 4 && req.status == 200) {
-            try {
-                response_text = req.responseText;
-            }
-            catch(e) {
-                return;
-            }
-            callback(response_text);
-        }
-    }
-    if (method == 'POST') {
-        req.setRequestHeader(
-            'Content-Type', 
-            'application/x-www-form-urlencoded'
-        );
-    }
-    req.send(data);
-}
-
 
 //------------------------------------------------------------------------------
 // Cross-Browser XMLHttpRequest v1.1
