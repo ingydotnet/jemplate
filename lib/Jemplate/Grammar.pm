@@ -61,8 +61,8 @@ my ($factory, $rawstart);
 # briefly for v2.04d and then took them out again in 2.04e.
 
 %CMPOP = qw( 
-    != ne
-    == eq
+    != !=
+    == ==
     <  <
     >  >
     >= >=
@@ -6118,7 +6118,7 @@ sub
 		 'expr', 3,
 sub
 #line 368 "Parser.yp"
-{ "$_[1]  . $_[3]"                    }
+{ "$_[1]  + $_[3]"                    }
 	],
 	[#Rule 143
 		 'expr', 3,

@@ -223,12 +223,10 @@ sub if {
     my @else = $else ? @$else : ();
     $else = pop @else;
 
-    $expr = _fix_expr($expr);
     my $output = "if ($expr) {\n$block\n}\n";
         
     foreach my $elsif (@else) {
         ($expr, $block) = @$elsif;
-        $expr = _fix_expr($expr);
         $output .= "else if ($expr) {\n$block\n}\n";
     }   
     if (defined $else) {
@@ -236,13 +234,6 @@ sub if {
     }
 
     return $output;
-}
-
-# XXX A very nasty hack until I learn more.
-sub _fix_expr {
-    my $expr = shift;
-    $expr =~ s/ eq / == /g;
-    return $expr;
 }
 
 #------------------------------------------------------------------------

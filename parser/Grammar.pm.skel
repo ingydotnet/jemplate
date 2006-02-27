@@ -61,8 +61,8 @@ my ($factory, $rawstart);
 # briefly for v2.04d and then took them out again in 2.04e.
 
 %CMPOP = qw( 
-    != ne
-    == eq
+    != !=
+    == ==
     <  <
     >  >
     >= >=
