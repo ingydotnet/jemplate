@@ -20,7 +20,7 @@
 - USE 
 - JAVASCRIPT
 
-- Write runtime tests for current directives
++ Write runtime tests for current directives
 
 - Implement plugin support for javascript libraries.
 

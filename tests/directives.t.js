@@ -4,7 +4,7 @@ var filters = {
     jemplate: 'jemplate_process'
 };
 
-t.plan(1);
+t.plan(2);
 t.filters(filters);
 t.spec('directives.t.js'); 
 t.run_is('jemplate', 'output');
