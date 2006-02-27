@@ -5,7 +5,7 @@ var filters = {
     context: 'evaluate'
 };
 
-t.plan(5);
+t.plan(6);
 t.filters(filters);
 t.spec('basics.t.js'); 
 t.run_is('jemplate', 'output');
@@ -53,5 +53,25 @@ operator3.html
 
 --- output
 abcdef
+
+=== Array index fetch"
+--- jemplate
+basic_array1.html
+[%- JAVASCRIPT -%]
+stash.set( "simple_list", ["a","b","c"] );
+stash.set( "mylist", [["a","b","c"],["d","e","f"],["h","i","j"]] );
+[%- END -%]
+a = [% simple_list.0 %]
+a = [% mylist.0.0 %]
+c = [% mylist.0.2 %]
+e = [% mylist.1.1 %]
+j = [% mylist.2.2 -%]
+
+--- output
+a = a
+a = a
+c = c
+e = e
+j = j
 
 */

@@ -138,7 +138,7 @@ proto.set = function(key, value) {
 }
 
 proto._dotop = function(root, item, args) {
-    if (typeof item == 'undefined' || item.match(/^[\._]/))
+    if (typeof item == 'undefined' || typeof item == 'string' && item.match(/^[\._]/))
         return undefined;
 
     if (typeof root == 'string' && this.string_functions[item])

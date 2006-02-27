@@ -9,6 +9,40 @@
 if (typeof(Jemplate) == 'undefined')
     throw('Jemplate.js must be loaded before any Jemplate template files');
 
+Jemplate.templateMap['basic_array1.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+//line 5 "basic_array1.html"
+stash.set( "simple_list", ["a","b","c"] );
+stash.set( "mylist", [["a","b","c"],["d","e","f"],["h","i","j"]] );
+output += 'a = ';
+//line 6 "basic_array1.html"
+output += stash.get(['simple_list', 0, 0, 0]);
+output += '\na = ';
+//line 7 "basic_array1.html"
+output += stash.get(['mylist', 0, 0, 0, 0, 0]);
+output += '\nc = ';
+//line 8 "basic_array1.html"
+output += stash.get(['mylist', 0, 0, 0, 2, 0]);
+output += '\ne = ';
+//line 9 "basic_array1.html"
+output += stash.get(['mylist', 0, 1, 0, 1, 0]);
+output += '\nj = ';
+//line 10 "basic_array1.html"
+output += stash.get(['mylist', 0, 2, 0, 2, 0]);
+output += '\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
 Jemplate.templateMap['directives1.html'] = function(context) {
     if (! context) throw('Jemplate function called without context\n');
     var stash = context.stash;

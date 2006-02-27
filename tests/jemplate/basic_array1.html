@@ -1,0 +1,10 @@
+[%- JAVASCRIPT -%]
+stash.set( "simple_list", ["a","b","c"] );
+stash.set( "mylist", [["a","b","c"],["d","e","f"],["h","i","j"]] );
+[%- END -%]
+a = [% simple_list.0 %]
+a = [% mylist.0.0 %]
+c = [% mylist.0.2 %]
+e = [% mylist.1.1 %]
+j = [% mylist.2.2 -%]
+
