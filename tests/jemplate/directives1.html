@@ -1,0 +1,7 @@
+[% BLOCK foo %]
+I <3 Sushi
+[% END %]
+[% SET list = [3, 4, 5] %]
+[% FOR i = list %]
+[% PROCESS foo %]
+[% END %]

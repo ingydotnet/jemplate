@@ -9,6 +9,73 @@
 if (typeof(Jemplate) == 'undefined')
     throw('Jemplate.js must be loaded before any Jemplate template files');
 
+Jemplate.templateMap['directives1.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+
+output += '\n';
+//line 4 "directives1.html"
+stash.set('list', [ 3, 4, 5 ]);
+output += '\n';
+//line 7 "directives1.html"
+
+// FOREACH 
+(function() {
+    var list = stash.get('list');
+    list = new Jemplate.Iterator(list);
+    var retval = list.get_first();
+    var value = retval[0];
+    var done = retval[1];
+    var oldloop;
+    try { oldloop = stash.get('loop') } finally {}
+    stash.set('loop', list);
+    try {
+        while (! done) {
+            stash.data['i'] = value;
+output += '\n';
+//line 6 "directives1.html"
+output += context.process('foo');
+output += '\n';;
+            retval = list.get_next();
+            var value = retval[0];
+            var done = retval[1];
+        }
+    }
+    catch(e) {
+        throw(context.set_error(e, output));
+    }
+    stash.set('loop', oldloop);
+})();
+
+output += '\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['foo'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '\nI <3 Sushi\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
 Jemplate.templateMap['hello.html'] = function(context) {
     if (! context) throw('Jemplate function called without context\n');
     var stash = context.stash;
