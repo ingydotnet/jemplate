@@ -1,4 +1,4 @@
-use t::TestJemplate tests => 1;
+use t::TestJemplate tests => 2;
 
 filters {
     'tt' => 'compile_lite',
@@ -19,4 +19,12 @@ stash.set('bar', 'bar');
 output += '\n';
 //line 0 "test_template"
 output += stash.get('foo') + '/' + stash.get('bar');
+output += '\n';
+
+=== simple string
+--- tt
+[% "simple" %]
+--- js
+//line 1 "test_template"
+output += 'simple';
 output += '\n';

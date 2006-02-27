@@ -14,6 +14,7 @@
 + fix [% FOREACH key IN obj %] ... iterate over keys where obj is Object/hash
 + fix [% IF foo ne "bar" %]
 + fix [% mylist.2 %] array index lookup
++ fix [% "$foo/$bar" %] quoted strings
 
 - MACRO
 - TRY/CATCH/FINAL
