@@ -1,10 +1,11 @@
+
 var t = new Test.Jemplate();
 
 var filters = {
     jemplate: 'jemplate_process'
 };
 
-t.plan(2);
+t.plan(3);
 t.filters(filters);
 t.spec('directives.t.js'); 
 t.run_is('jemplate', 'output');
@@ -37,5 +38,17 @@ directives2.html
 [% array.join('***') %]
 --- output
 Even***Odd***Even
+
+=== Test JAVASCRIPT
+--- jemplate
+directives3.html
+[%- JAVASCRIPT -%]
+stash.set("obj", {"key1": "val1", "key2": "val2"});
+[%- END -%]
+Key1: [% obj.key1 %]
+Key2: [% obj.key2 %]
+--- output
+Key1: val1
+Key2: val2
 
 */

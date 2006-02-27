@@ -2,22 +2,32 @@
 
 use lib 'lib';
 use Jemplate 0.10;
+use Getopt::Long;
 
 sub usage {
     warn <<'...';
 
 Usage:
-    jemplate -c|--compile template-file-list > output.js
+    jemplate -c|--compile -nojs|--nojavascript template-file-list > output.js
 
 ...
     exit;
 }
 
 {
-    if ($ARGV[0] =~ /^(-c|--compile)/) {
-        shift @ARGV;
+
+    my $javascript = 1;
+    my $compile = 0;
+    GetOptions(
+        "compile|c"     => \$compile,
+        "javascript|js!" => \$javascript,
+        "help"          => \&usage,
+    ) || usage();
+
+    if ($compile) {
         usage() unless @ARGV;
-        print Jemplate->compile_template_files(@ARGV);
+        my $jemplate = Jemplate->new(EVAL_JAVASCRIPT => $javascript);
+        print $jemplate->compile_template_files(@ARGV);
     }
     else {
         usage();

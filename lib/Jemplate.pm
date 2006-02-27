@@ -8,9 +8,14 @@ our $VERSION = '0.15';
 
 use Jemplate::Parser;
 
+sub new { 
+    my $class = shift;
+    return bless { @_ }, $class;
+} 
+
 sub compile_module {
-    my ($class, $module_path, $template_file_paths) = @_;
-    my $result = $class->compile_template_files(@$template_file_paths)
+    my ($self, $module_path, $template_file_paths) = @_;
+    my $result = $self->compile_template_files(@$template_file_paths)
       or return;
     open MODULE, "> $module_path"
         or die "Can't open '$module_path' for output:\n$!";
@@ -20,15 +25,15 @@ sub compile_module {
 }
 
 sub compile_module_cached {
-    my ($class, $module_path, $template_file_paths) = @_;
+    my ($self, $module_path, $template_file_paths) = @_;
     my $m = -M $module_path;
     return 0 unless grep { -M($_) < $m } @$template_file_paths;
-    return $class->compile_module($module_path, $template_file_paths); 
+    return $self->compile_module($module_path, $template_file_paths); 
 }
 
 sub compile_template_files {
-    my $class = shift;
-    my $output = $class->_preamble;
+    my $self = shift;
+    my $output = $self->_preamble;
     for my $filepath (@_) {
         my $filename = $filepath;
         $filename =~ s/.*[\/\\]//;
@@ -37,7 +42,7 @@ sub compile_template_files {
         my $template_input = do {local $/; <FILE>};
         close FILE;
         $output .= 
-            $class->compile_template_content($template_input, $filename);
+            $self->compile_template_content($template_input, $filename);
     }
     return $output;
 }
@@ -45,8 +50,8 @@ sub compile_template_files {
 sub compile_template_content {
     die "Invalid arguments in call to Jemplate->compile_template_content"
       unless @_ == 3;
-    my ($class, $template_content, $template_name) = @_;
-    my $parser = Jemplate::Parser->new;
+    my ($self, $template_content, $template_name) = @_;
+    my $parser = Jemplate::Parser->new( ref($self) ? %$self : () );
     my $parse_tree = $parser->parse(
         $template_content, {name => $template_name}
     ) or die $parser->error;

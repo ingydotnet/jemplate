@@ -98,6 +98,7 @@ directive:  setlist		    { $factory->set($_[1])                }
 	|   switch
 	|   loop
 	|   try
+        |   javascript
 	|   perl
 ;
 
@@ -208,6 +209,13 @@ use:	    USE lnameargs	    { $factory->use($_[2])                }
 view:	    VIEW nameargs ';'	    { $_[0]->push_defblock();		  }
 	      block END             { $factory->view(@_[2,5], 
 						     $_[0]->pop_defblock) }
+;
+
+javascript: PERL ';'                { ${$_[0]->{ INJAVASCRIPT }}++;             }
+	      block END		    { ${$_[0]->{ INJAVASCRIPT }}--;
+				      $_[0]->{ EVAL_JAVASCRIPT } 
+				      ? $factory->javascript($_[4])             
+				      : $factory->no_javascript();              }
 ;
 
 perl:	    PERL ';'                { ${$_[0]->{ INPERL }}++;             }
