@@ -22,7 +22,7 @@ output += 'Foo';
     
 // WHILE
 var failsafe = 1000;
-while (--failsafe && ((stash.get('foo') eq 'bar'))) {
+while (--failsafe && ((stash.get('foo') == 'bar'))) {
 //line 8 "(unknown template)"
 if (1 == 2) {
 //line 5 "(unknown template)"
@@ -55,7 +55,7 @@ output += 'Foo';
     
 // WHILE
 var failsafe = 1000;
-while (--failsafe && ((stash.get('foo') eq 'bar'))) {
+while (--failsafe && ((stash.get('foo') == 'bar'))) {
 //line 8 "(unknown template)"
 if (1 == 2) {
 //line 5 "(unknown template)"
