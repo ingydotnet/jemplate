@@ -211,7 +211,7 @@ view:	    VIEW nameargs ';'	    { $_[0]->push_defblock();		  }
 						     $_[0]->pop_defblock) }
 ;
 
-javascript: PERL ';'                { ${$_[0]->{ INJAVASCRIPT }}++;             }
+javascript: JAVASCRIPT ';'                { ${$_[0]->{ INJAVASCRIPT }}++;             }
 	      block END		    { ${$_[0]->{ INJAVASCRIPT }}--;
 				      $_[0]->{ EVAL_JAVASCRIPT } 
 				      ? $factory->javascript($_[4])             

@@ -5,6 +5,10 @@ use warnings;
 our $OUTPUT = 'output +=';
 our $WHILE_MAX = 1000;
 
+# parser state variable
+# only true when inside JAVASCRIPT blocks
+our $INJAVASCRIPT = 0;
+
 sub template {
     my ($class, $block) = @_;
 
@@ -35,6 +39,7 @@ $block
 
 sub textblock {
     my ($class, $text) = @_;
+    return $text if $INJAVASCRIPT;
     return "$OUTPUT " . $class->text($text) . ';';
 }
 
@@ -378,6 +383,20 @@ if (! failsafe)
 EOF
 }
 
+#------------------------------------------------------------------------
+# javascript($script)                                   [% JAVASCRIPT %]
+#                                                           ...
+#                                                       [% END %]
+#------------------------------------------------------------------------
+sub javascript {
+    my ( $class, $javascript ) = @_;
+    return $javascript;
+}
+
+sub no_javascript {
+    my ( $class ) = @_;
+    die "EVAL_JAVASCRIPT has not been enabled, cannot process [% JAVASCRIPT %] blocks";
+}
 
 #------------------------------------------------------------------------
 # switch($expr, \@case)                                    [% SWITCH %]
