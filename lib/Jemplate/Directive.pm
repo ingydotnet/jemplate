@@ -483,7 +483,11 @@ sub filter {
 }   
 
 sub quoted {
-    return "throw('QUOTED not yet supported in Jemplate');";
+    my $class = shift;
+    if ( @_ && ref($_[0]) ) {
+        return join( " + ", @{$_[0]} );
+    }
+    return "throw('QUOTED called with unknown arguments in Jemplate');";
 }   
 
 sub macro {
