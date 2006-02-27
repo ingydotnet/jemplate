@@ -5,7 +5,7 @@ var filters = {
     jemplate: 'jemplate_process'
 };
 
-t.plan(3);
+t.plan(4);
 t.filters(filters);
 t.spec('directives.t.js'); 
 t.run_is('jemplate', 'output');
@@ -50,5 +50,18 @@ Key2: [% obj.key2 %]
 --- output
 Key1: val1
 Key2: val2
+
+=== Test FOR i IN obj
+--- jemplate
+directives4.html
+[%- JAVASCRIPT -%]
+stash.set("obj", {"key1": "val1", "key2": "val2"});
+[%- END -%]
+[%- FOR key IN obj -%]
+[% key %]: [% obj.$key %]
+[% END -%]
+--- output
+key1: val1
+key2: val2
 
 */

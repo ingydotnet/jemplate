@@ -172,6 +172,55 @@ output += '\n';
     return output;
 }
 
+Jemplate.templateMap['directives4.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+//line 4 "directives4.html"
+stash.set("obj", {"key1": "val1", "key2": "val2"});
+//line 7 "directives4.html"
+
+// FOREACH 
+(function() {
+    var list = stash.get('obj');
+    list = new Jemplate.Iterator(list);
+    var retval = list.get_first();
+    var value = retval[0];
+    var done = retval[1];
+    var oldloop;
+    try { oldloop = stash.get('loop') } finally {}
+    stash.set('loop', list);
+    try {
+        while (! done) {
+            stash.data['key'] = value;
+//line 6 "directives4.html"
+output += stash.get('key');
+output += ': ';
+//line 6 "directives4.html"
+output += stash.get(['obj', 0, stash.get('key'), 0]);
+output += '\n';;
+            retval = list.get_next();
+            var value = retval[0];
+            var done = retval[1];
+        }
+    }
+    catch(e) {
+        throw(context.set_error(e, output));
+    }
+    stash.set('loop', oldloop);
+})();
+
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
 Jemplate.templateMap['hello.html'] = function(context) {
     if (! context) throw('Jemplate function called without context\n');
     var stash = context.stash;

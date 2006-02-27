@@ -273,7 +273,17 @@ proto.hash_functions = {};
 //------------------------------------------------------------------------------
 if (typeof Jemplate.Iterator == 'undefined') {
     Jemplate.Iterator = function(object) {
-        this.object = object;
+        if( object instanceof Array ) {
+            this.object = object;
+        }
+        else if ( object instanceof Object ) {
+            this.object = object;
+            var object_keys = new Array;
+            for( var key in object ) {
+                object_keys[object_keys.length] = key;
+            }
+            this.object_keys = object_keys;
+        }
     }
 }
 
@@ -289,10 +299,14 @@ proto.get_next = function() {
     var index = this.index++;
     if (typeof object == 'undefined')
         throw('No object to iterate');
-    if (index < object.length)
-        return [object[index], false];
-    else
-        return [null, true];
+    if( this.object_keys ) {
+        if (index < this.object_keys.length)
+            return [this.object_keys[index], false];
+    } else {
+        if (index < object.length)
+            return [object[index], false];
+    }
+    return [null, true];
 }
 
 //------------------------------------------------------------------------------
