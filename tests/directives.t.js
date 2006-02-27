@@ -10,16 +10,32 @@ t.spec('directives.t.js');
 t.run_is('jemplate', 'output');
 
 /* Test
-=== Test join
+=== Test BLOCK/SET/FOR/PROCESS
 --- jemplate
 directives1.html
-[% BLOCK foo %]
+[% BLOCK foo -%]
 I <3 Sushi
-[% END %]
-[% SET list = [3, 4, 5] %]
-[% FOR i = list %]
-[% PROCESS foo %]
-[% END %]
+[% END -%]
+[% SET list = [3, 4, 5] -%]
+[% FOR i = list -%]
+[% PROCESS foo -%]
+[% END -%]
 --- output
-foo::bar::baz
+I <3 Sushi
+I <3 Sushi
+I <3 Sushi
+
+=== Test WHILE/IF/ELSE
+--- jemplate
+directives2.html
+[% SET num = 4 -%]
+[% array = [] -%]
+[% WHILE num < 7 -%]
+[% IF num % 2 %][% CALL array.push('Odd') %][% ELSE %][% CALL array.push('Even') %][% END -%]
+[% num = num + 1 -%]
+[% END -%]
+[% array.join('***') %]
+--- output
+Even***Odd***Even
+
 */

@@ -16,10 +16,8 @@ Jemplate.templateMap['directives1.html'] = function(context) {
 
     try {
 
-output += '\n';
 //line 4 "directives1.html"
 stash.set('list', [ 3, 4, 5 ]);
-output += '\n';
 //line 7 "directives1.html"
 
 // FOREACH 
@@ -35,10 +33,8 @@ output += '\n';
     try {
         while (! done) {
             stash.data['i'] = value;
-output += '\n';
 //line 6 "directives1.html"
-output += context.process('foo');
-output += '\n';;
+output += context.process('foo');;
             retval = list.get_next();
             var value = retval[0];
             var done = retval[1];
@@ -50,7 +46,6 @@ output += '\n';;
     stash.set('loop', oldloop);
 })();
 
-output += '\n';
     }
     catch(e) {
         var error = context.set_error(e, output);
@@ -66,7 +61,50 @@ Jemplate.templateMap['foo'] = function(context) {
     var output = '';
 
     try {
-output += '\nI <3 Sushi\n';
+output += 'I <3 Sushi\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['directives2.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+//line 1 "directives2.html"
+stash.set('num', 4);
+//line 2 "directives2.html"
+stash.set('array', [ ]);
+//line 6 "directives2.html"
+    
+// WHILE
+var failsafe = 1000;
+while (--failsafe && (stash.get('num') < 7)) {
+//line 4 "directives2.html"
+if (stash.get('num') % 2) {
+//line 4 "directives2.html"
+stash.get(['array', 0, 'push', [ 'Odd' ]]);
+}
+else {
+//line 4 "directives2.html"
+stash.get(['array', 0, 'push', [ 'Even' ]]);
+}
+
+//line 5 "directives2.html"
+stash.set('num', stash.get('num') + 1);
+}
+if (! failsafe)
+    throw("WHILE loop terminated (> 1000 iterations)\n")
+
+//line 7 "directives2.html"
+output += stash.get(['array', 0, 'join', [ '***' ]]);
+output += '\n';
     }
     catch(e) {
         var error = context.set_error(e, output);
