@@ -4,8 +4,8 @@ filters {
     'tt' => 'compile_lite',
     'tt_nojs' => 'no_javascript',
 };
-run_is 'tt_nojs' => 'js';
 run_is 'tt' => 'js';
+run_is 'tt_nojs' => 'js';
 
 sub no_javascript {
     my $jemplate = Jemplate->new( EVAL_JAVASCRIPT => 0 );
