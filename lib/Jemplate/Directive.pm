@@ -52,6 +52,7 @@ sub text {
     for ($text) {
         s/([\'\\])/\\$1/g;
         s/\n/\\n/g;
+        s/\r/\\r/g;
     }
     return "'" . $text . "'";
 }
