@@ -10,6 +10,11 @@
 - String virtual methods
 - Standard filters
 
+- fix [% foo _ bar %] concat
+- fix [% FOREACH key IN obj %] ... iterate over keys where obj is Object/hash
+- fix [% IF foo ne "bar" %]
+- fix [% mylist.2 %] array index lookup
+
 - MACRO
 - TRY/CATCH/FINAL
 - THROW
