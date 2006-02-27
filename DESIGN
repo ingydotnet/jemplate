@@ -116,7 +116,7 @@ completion, the second is for the testing of the feature.
     -- [% USE plugin[(param, ...)] %] 
     xx [% PERL %] code... [% END %] 
     xx [% RAWPERL %] code... [% END %] 
-    -- [% JAVASCRIPT %] code... [% END %]
+    ++ [% JAVASCRIPT %] code... [% END %]
 
     ++ [% FOREACH var = list %] ... [% END %] 
     ++ [% WHILE cond %] ... [% END %] 
