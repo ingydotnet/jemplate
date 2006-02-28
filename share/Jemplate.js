@@ -178,6 +178,20 @@ proto.filters.indent = function(pad, text) {
     return finalpad + text.split(/\n/).join('\n'+finalpad);
 }
 
+proto.filters.truncate = function(len, text) {
+    if (! text) {
+        text = len;
+        len = 32;
+    }
+    if (! text)
+        return;
+    // This should probably be <=, but TT just uses <
+    if (text.length < len)
+        return text;
+    var newlen = len - 3;
+    return text.substr(0,newlen) + '...';
+}
+
 //------------------------------------------------------------------------------
 // Jemplate.Stash class
 //------------------------------------------------------------------------------

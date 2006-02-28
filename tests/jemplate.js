@@ -274,6 +274,86 @@ output += '1\n2\n3\n4';
     return context.filter('indent', [ 'a' ], output);
 })();
 
+output += '\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['filters_truncate.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+//line 1 "filters_truncate.html"
+stash.set('a', '1234567890');
+//line 2 "filters_truncate.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('a');
+
+    return context.filter('truncate', [ 5 ], output);
+})();
+
+output += '\n';
+//line 3 "filters_truncate.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('a');
+
+    return context.filter('truncate', [ 10 ], output);
+})();
+
+output += '\n';
+//line 4 "filters_truncate.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('a');
+
+    return context.filter('truncate', [ 15 ], output);
+})();
+
+output += '\n';
+//line 5 "filters_truncate.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('a');
+
+    return context.filter('truncate', [ 2 ], output);
+})();
+
+output += '\n';
+//line 6 "filters_truncate.html"
+stash.set('a', '1234567890123456789012345678901234567890');
+//line 7 "filters_truncate.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('a');
+
+    return context.filter('truncate', output);
+})();
+
+output += '\n';
     }
     catch(e) {
         var error = context.set_error(e, output);

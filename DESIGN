@@ -212,7 +212,7 @@ completion, the second is for the testing of the feature.
     -- stderr          redirect output to STDERR 
     -- stdout(binmode)     redirect output to STDERR in mode binmode 
     ++ trim            removes leading and trailing whitespace 
-    -- truncate(len)   truncate to length len 
+    ++ truncate(len)   truncate to length len 
     ++ ucfirst         capitalize first character 
     ++ upper           convert to upper case 
     ++ uri             performs URI-escaping 
