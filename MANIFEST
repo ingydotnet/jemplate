@@ -94,6 +94,7 @@ tests/jemplate/operator2.html
 tests/jemplate/operator3.html
 tests/join.t.html
 tests/join.t.js
+tests/lib/Debug.js
 tests/lib/JSON.js
 tests/lib/Subclass.js
 tests/lib/Test/Base.js
