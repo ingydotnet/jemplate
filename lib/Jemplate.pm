@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use Template 2.14;
 
-our $VERSION = '0.15';
+our $VERSION = '0.16';
 
 use Jemplate::Parser;
 
@@ -262,6 +262,8 @@ Jemplate now supports the following directives:
   * [% INCLUDE [arguments] %]
   * [% PROCESS [arguments] %]
   * [% BLOCK name %]
+  * [% FILTER filter %] text... [% END %]
+  * [% JAVASCRIPT %] code... [% END %]
   * [% WRAPPER template [variable = value ...] %]
   * [% IF condition %]
   * [% ELSIF condition %]
@@ -271,6 +273,7 @@ Jemplate now supports the following directives:
   * [% FOR x = y %]
   * [% WHILE expression %]
   * [% RETURN %]
+  * [% THROW type message %]
   * [% STOP %]
   * [% NEXT %]
   * [% LAST %]
@@ -297,6 +300,8 @@ All the array virtual functions are supported:
   * unique          unique items (retains order)
   * unshift(item)   add item to start of list
 
+Many of the standard filters are implemented.
+
 None of the hash virtual functions are supported yet. Very soon.
 
 None of the string virtual functions are supported yet. Very soon.
@@ -311,6 +316,11 @@ Tested in:
     * Firefox Mac/Win32
     * IE 6.0
     * Safari
+    * Opera
+
+Runtime tests are reportedly failing in:
+
+    * Konqueror
 
 =head1 DEVELOPMENT
 
@@ -341,6 +351,8 @@ Tatsuhiko Miyagawa <miyagawa@bulknews.net>
 Yann Kerhervé <yannk@cpan.org>
 
 David Davis <xantus@xantus.org>
+
+Cory Bennett <coryb@corybennett.org>
 
 =head1 COPYRIGHT
 

@@ -1,4 +1,26 @@
 ---
+version: 0.16
+date:    Mon Feb 27 22:14:37 PST 2006
+changes:
+- Ingy added JSON and Ajax support into Jemplate.js
+- Ingy got tests working on Mozilla, IE, Safari and Opera
+- Ingy streamlined Makefiles and testing
+- Ingy refactored documentation
+- Cory Bennett JAVASCRIPT directive for inlining Javascript
+- Cory added -nojs flag to `jemplate` command line tool
+- Cory eliminated nasty eq/== hack
+- Cory added support for foo.0 numeric indexing
+- Cory added quoting support
+- Cory got [% FOR i IN obj %] working to iterate over keys of object
+- Cory fixed [% "$foo/$bar" %] for quoted strings
+- Cory fixed concatenation
+- Yann Kerhervé added filtering support
+- Yann added these filters: collapse, html, html_break, html_entity,
+  html_line_break, html_para, indent, lcfirst, lower, null, trim, ucfirst,
+  upper, uri
+- Ingy removed PERL and RAWPERL support
+
+---
 version: 0.15
 date:    Fri Feb 24 18:02:46 PST 2006
 changes:

@@ -79,16 +79,6 @@ Subclass.generate_superfunc = function() {
     }
 }
 
-function XXX(msg) {
-    //if (! confirm(arguments.join('\n')))
-    if (! confirm(msg))
-        throw("terminated...");
-}
-
-function JJJ(obj) {
-    XXX(JSON.stringify(obj));
-}
-
 /*
 
 =head1 NAME

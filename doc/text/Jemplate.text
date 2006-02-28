@@ -146,6 +146,8 @@ CURRENT SUPPORT
       * [% INCLUDE [arguments] %]
       * [% PROCESS [arguments] %]
       * [% BLOCK name %]
+      * [% FILTER filter %] text... [% END %]
+      * [% JAVASCRIPT %] code... [% END %]
       * [% WRAPPER template [variable = value ...] %]
       * [% IF condition %]
       * [% ELSIF condition %]
@@ -155,6 +157,7 @@ CURRENT SUPPORT
       * [% FOR x = y %]
       * [% WHILE expression %]
       * [% RETURN %]
+      * [% THROW type message %]
       * [% STOP %]
       * [% NEXT %]
       * [% LAST %]
@@ -181,6 +184,8 @@ CURRENT SUPPORT
       * unique          unique items (retains order)
       * unshift(item)   add item to start of list
 
+    Many of the standard filters are implemented.
+
     None of the hash virtual functions are supported yet. Very soon.
 
     None of the string virtual functions are supported yet. Very soon.
@@ -194,6 +199,11 @@ BROWSER SUPPORT
         * Firefox Mac/Win32
         * IE 6.0
         * Safari
+        * Opera
+
+    Runtime tests are reportedly failing in:
+
+        * Konqueror
 
 DEVELOPMENT
     The bleeding edge code is available via Subversion at
@@ -219,9 +229,11 @@ AUTHORS
 
     Tatsuhiko Miyagawa <miyagawa@bulknews.net>
 
-    Yann Kerherve
+    Yann Kerhervé <yannk@cpan.org>
 
     David Davis <xantus@xantus.org>
+
+    Cory Bennett <coryb@corybennett.org>
 
 COPYRIGHT
     Copyright (c) 2006. Ingy döt Net. All rights reserved.

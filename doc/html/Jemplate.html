@@ -213,6 +213,8 @@ that can possibly be supported.</p>
   * [% INCLUDE [arguments] %]
   * [% PROCESS [arguments] %]
   * [% BLOCK name %]
+  * [% FILTER filter %] text... [% END %]
+  * [% JAVASCRIPT %] code... [% END %]
   * [% WRAPPER template [variable = value ...] %]
   * [% IF condition %]
   * [% ELSIF condition %]
@@ -222,6 +224,7 @@ that can possibly be supported.</p>
   * [% FOR x = y %]
   * [% WHILE expression %]
   * [% RETURN %]
+  * [% THROW type message %]
   * [% STOP %]
   * [% NEXT %]
   * [% LAST %]
@@ -246,6 +249,7 @@ that can possibly be supported.</p>
   * splice(off, len [,list])    modifies list
   * unique          unique items (retains order)
   * unshift(item)   add item to start of list</pre>
+<p>Many of the standard filters are implemented.</p>
 <p>None of the hash virtual functions are supported yet. Very soon.</p>
 <p>None of the string virtual functions are supported yet. Very soon.</p>
 <p>The remaining features will be added very soon. See the DESIGN document
@@ -258,7 +262,11 @@ in the distro for a list of all features and their progress.</p>
 <pre>
     * Firefox Mac/Win32
     * IE 6.0
-    * Safari</pre>
+    * Safari
+    * Opera</pre>
+<p>Runtime tests are reportedly failing in:</p>
+<pre>
+    * Konqueror</pre>
 <p>
 </p>
 <hr />
@@ -284,8 +292,9 @@ drinking them ;)</p>
 <h1><a name="authors">AUTHORS</a></h1>
 <p>Ingy döt Net &lt;<a href="mailto:ingy@cpan.org">ingy@cpan.org</a>&gt;</p>
 <p>Tatsuhiko Miyagawa &lt;<a href="mailto:miyagawa@bulknews.net">miyagawa@bulknews.net</a>&gt;</p>
-<p>Yann Kerherve</p>
+<p>Yann Kerhervé &lt;<a href="mailto:yannk@cpan.org">yannk@cpan.org</a>&gt;</p>
 <p>David Davis &lt;<a href="mailto:xantus@xantus.org">xantus@xantus.org</a>&gt;</p>
+<p>Cory Bennett &lt;<a href="mailto:coryb@corybennett.org">coryb@corybennett.org</a>&gt;</p>
 <p>
 </p>
 <hr />
