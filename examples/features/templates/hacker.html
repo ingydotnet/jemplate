@@ -1,4 +1,4 @@
-[% IF number % 2 %]Hello[% ELSE %]Goodbye[% END %] [% GET name %]!!
+[% IF number % 2 %]Hello[% ELSE %]Goodbye[% END %] [% GET name | upper | html %]!!
 <hr>
 [% RETURN %]
 

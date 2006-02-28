@@ -23,6 +23,7 @@ Jemplate.templateMap = {};
 Jemplate.process = function(template, data, output) {
     var context = new Jemplate.Context();
     context.stash = new Jemplate.Stash();
+    context._filter = new Jemplate.Filter();
     var result;
 
     var proc = function(input) {
@@ -69,7 +70,6 @@ Jemplate.process = function(template, data, output) {
     return proc(data);
 }
 
-
 //------------------------------------------------------------------------------
 // Jemplate.Context class
 //------------------------------------------------------------------------------
@@ -94,6 +94,90 @@ proto.process = function(template, args) {
 proto.set_error = function(error, output) {
     this._error = [error, output];
     return error;
+}
+
+proto.filter = function(name, args, text) {
+    if (name == 'null') 
+        return '';
+    if (typeof this._filter.filters[name] == "function") 
+        return this._filter.filters[name](args, text, this);  
+    else 
+        throw "Unknown filter name ':" + name + "'";
+}
+
+//------------------------------------------------------------------------------
+// Jemplate.Filter class
+//------------------------------------------------------------------------------
+if (typeof Jemplate.Filter == 'undefined') {
+    Jemplate.Filter = function() { };
+}
+
+proto = Jemplate.Filter.prototype;
+
+proto.filters = {};
+
+proto.filters.upper = function(text) {
+    return text.toUpperCase();
+}
+
+proto.filters.lower = function(text) {
+    return text.toLowerCase();
+}
+
+proto.filters.ucfirst = function(text) {
+    var first = text.charAt(0);
+    var rest = text.substr(1);
+    return first.toUpperCase() + rest;
+}
+
+proto.filters.lcfirst = function(text) {
+    var first = text.charAt(0);
+    var rest = text.substr(1);
+    return first.toLowerCase() + rest;
+}
+
+proto.filters.trim = function(text) {
+    return text.replace( /^\s+/g, "" ).replace( /\s+$/g, "" );
+}
+
+proto.filters.collapse = function(text) {
+    return text.replace( /^\s+/g, "" ).replace( /\s+$/g, "" ).replace(/\s+/, " ");
+}
+
+proto.filters.html = function(text) {
+    text = text.replace(/&/, '&amp;'); 
+    text = text.replace(/</, '&lt;');
+    text = text.replace(/>/, '&gt;');
+    text = text.replace(/"/, '&quot;');
+    return text;
+}
+
+proto.filters.html_para = function(text) {
+    var lines = text.split(/(?:\r?\n){2,}/);
+    return "<p>\n" + lines.join("\n</p>\n\n<p>\n") + "</p>\n";
+}
+
+proto.filters.html_break = function(test) {
+    return test.replace(/(\r?\n){2,}/g, "$1<br />$1<br />$1");
+}
+
+proto.filters.html_line_break = function(test) {
+    return test.replace(/(\r?\n)/g, "$1<br />$1");
+}
+
+proto.filters.uri = function(test) {
+    return encodeURI(test);
+}
+
+proto.filters.indent = function(pad, text) {
+    if (! pad) 
+        pad = 4;
+    var finalpad;
+    for (var i = 0; i< pad; i++) {
+        finalpad += ' '; // xxx check match \d 
+    }
+    var output = text.replace(/^/, finalpad);
+    return output;
 }
 
 //------------------------------------------------------------------------------
@@ -124,7 +208,8 @@ proto.get = function(key) {
             if (typeof value == 'undefined')
                 break;
             root = value;
-        }
+    
+    }
     }
     else {
         value = this._dotop(root, key);

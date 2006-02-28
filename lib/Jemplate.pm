@@ -338,7 +338,7 @@ Ingy döt Net <ingy@cpan.org>
 
 Tatsuhiko Miyagawa <miyagawa@bulknews.net>
 
-Yann Kerherve
+Yann Kerhervé <yannk@cpan.org>
 
 David Davis <xantus@xantus.org>
 

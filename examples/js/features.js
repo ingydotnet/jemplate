@@ -18,7 +18,7 @@ Jemplate.templateMap['body.html'] = function(context) {
 //line 1 "body.html"
 output += context.process('header.html');
 output += '\n\n';
-//line 6 "body.html"
+//line 7 "body.html"
 
 // FOREACH 
 (function() {
@@ -32,13 +32,16 @@ output += '\n\n';
     stash.set('loop', list);
     try {
         while (! done) {
-            stash['x'] = value;
+            stash.data['x'] = value;
 output += '\n';
 //line 4 "body.html"
 output += context.process('hacker.html', { 'name': 'miyagawa', 'number': 42 });
 output += '\n';
 //line 5 "body.html"
 output += context.process('hacker.html', { 'name': 'ingy', 'number': 69 });
+output += '\n';
+//line 6 "body.html"
+output += context.process('hacker.html', { 'name': '<yann>', 'number': 2 });
 output += '\n';;
             retval = list.get_next();
             var value = retval[0];
@@ -52,20 +55,20 @@ output += '\n';;
 })();
 
 output += '\n\n';
-//line 8 "body.html"
+//line 9 "body.html"
 stash.set('i', 3);
 output += '\n';
-//line 13 "body.html"
+//line 14 "body.html"
     
 // WHILE
 var failsafe = 1000;
 while (--failsafe && (stash.get('i'))) {
 output += '\n<h3>';
-//line 10 "body.html"
+//line 11 "body.html"
 output += stash.get('i');
 output += '</h3>\n';
 output += '\n';
-//line 12 "body.html"
+//line 13 "body.html"
 stash.set('i', stash.get('i') - 1);
 output += '\n';
 }
@@ -73,7 +76,22 @@ if (! failsafe)
     throw("WHILE loop terminated (> 1000 iterations)\n")
 
 output += '\n\n';
+//line 16 "body.html"
+stash.set('yann', '          sdfsdfsd ');
+output += '\n';
 //line 17 "body.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('yann');
+
+    return context.filter('trim', output);
+})();
+
+output += '\n';
+//line 20 "body.html"
 
 // WRAPPER
 output += (function() {
@@ -87,10 +105,10 @@ output += '\nLife is good\n';;
 })();
 
 output += '\n\n';
-//line 19 "body.html"
+//line 22 "body.html"
 output += context.process('footer.html');
 output += '\n\n';
-//line 21 "body.html"
+//line 24 "body.html"
 throw('Jemplate.STOP\n' + output);
 output += '\nPlease Make It Stop\n';
     }
@@ -134,7 +152,25 @@ output += 'Goodbye';
 
 output += ' ';
 //line 1 "hacker.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+
+// FILTER
+output += (function() {
+    var output = '';
+
 output += stash.get('name');
+
+    return context.filter('upper', output);
+})();
+
+
+    return context.filter('html', output);
+})();
+
 output += '!!\n<hr>\n';
 //line 3 "hacker.html"
 return output;

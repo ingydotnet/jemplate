@@ -479,8 +479,25 @@ sub stop {
 #------------------------------------------------------------------------
 
 sub filter {
-    return "throw('FILTER not yet supported in Jemplate');";
-}   
+    my ($class, $lnameargs, $block) = @_;
+    my ($name, $args, $alias) = @$lnameargs;
+    $name = shift @$name;
+    $args = &args($class, $args);
+    $args = $args ? "$args, $alias" : ", null, $alias"
+        if $alias;
+    $name .= ", $args" if $args;
+    return <<EOF;
+
+// FILTER
+$OUTPUT (function() {
+    var output = '';
+
+$block
+
+    return context.filter($name, output);
+})();
+EOF
+}
 
 sub quoted {
     my $class = shift;

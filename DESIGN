@@ -111,7 +111,7 @@ completion, the second is for the testing of the feature.
     ++ [% PROCESS template [var = value ...] %] 
     ++ [% WRAPPER template [var = value ...] %] text... [% END %] 
     ++ [% BLOCK [name] %] content... [% END %] 
-    -- [% FILTER filter %] text... [% END %] 
+    == [% FILTER filter %] text... [% END %] 
     -- [% MACRO name[(varlist)] directive %] 
     -- [% USE plugin[(param, ...)] %] 
     xx [% PERL %] code... [% END %] 
@@ -189,21 +189,21 @@ completion, the second is for the testing of the feature.
 
 === Standard filters 
 
-    -- collapse        collapses whitespace to a single space 
+    ++ collapse        collapses whitespace to a single space 
     -- eval(text)      evaluate as template text 
     -- evaltt(text)    evaluate as template text 
     -- evalperl(text)  evaluate text as Perl code 
     -- format(str)     format as per printf() 
-    -- html            performs HTML escaping on ‘<’, ‘>’, ‘&’ 
-    -- html_break      convert empty lines to HTML linebreaks 
-    -- html_entity     performs HTML escaping 
-    -- html_line_break     convert newlines to ‘<br>’ 
-    -- html_para convert   blank lines to HTML paras 
-    -- indent(pad)     indent by pad string or width 
+    ++ html            performs HTML escaping on ‘<’, ‘>’, ‘&’ 
+    ++ html_break      convert empty lines to HTML linebreaks 
+    ++ html_entity     performs HTML escaping 
+    ++ html_line_break     convert newlines to ‘<br>’ 
+    ++ html_para convert   blank lines to HTML paras 
+    ++ indent(pad)     indent by pad string or width 
     -- latex(outfmt)   process through LATEX 
-    -- lcfirst         lower case first character 
-    -- lower           convert to lower case 
-    -- null            output to the bit bucket 
+    ++ lcfirst         lower case first character 
+    ++ lower           convert to lower case 
+    ++ null            output to the bit bucket 
     -- perl(text)      evaluate text as Perl code 
     -- redirect(file)  redirect output to file 
     -- remove(re)      removes occurrences of re 
@@ -211,11 +211,11 @@ completion, the second is for the testing of the feature.
     -- replace(re, sub)    replace re with sub 
     -- stderr          redirect output to STDERR 
     -- stdout(binmode)     redirect output to STDERR in mode binmode 
-    -- trim            removes leading and trailing whitespace 
+    ++ trim            removes leading and trailing whitespace 
     -- truncate(len)   truncate to length len 
-    -- ucfirst         capitalize first character 
-    -- upper           convert to upper case 
-    -- uri             performs URI-escaping 
+    ++ ucfirst         capitalize first character 
+    ++ upper           convert to upper case 
+    ++ uri             performs URI-escaping 
 
 === Standard plugins 
 
