@@ -437,6 +437,22 @@ EOF
 
 
 #------------------------------------------------------------------------
+# throw(\@nameargs)                           [% THROW foo "bar error" %]
+#       # => [ [$type], \@args ]
+#------------------------------------------------------------------------
+
+sub throw {
+    my ($class, $nameargs) = @_;
+    my ($type, $args) = @$nameargs;
+    my $hash = shift(@$args);
+    my $info = shift(@$args);
+    $type = shift @$type;
+
+    return qq{throw([$type, $info]);};
+}
+
+
+#------------------------------------------------------------------------
 # clear()                                                     [% CLEAR %]
 #   
 # NOTE: this is redundant, being hard-coded (for now) into Parser.yp
