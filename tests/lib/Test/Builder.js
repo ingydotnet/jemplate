@@ -387,8 +387,8 @@ Test.Builder.prototype._isDiag = function (got, op, expect) {
     }
 
     return this.diag(
-        "         got: " + args[0] + Test.Builder.LF +
-        "    expected: " + args[1] + Test.Builder.LF
+        "         got: \"" + args[0] + "\"" + Test.Builder.LF +
+        "    expected: \"" + args[1] + "\"" + Test.Builder.LF
     );
 };
 
@@ -584,7 +584,7 @@ Test.Builder.prototype._setupOutput = function () {
             }
 
             // Default to the normal write and scroll down...
-            doc.write(msg);
+            doc.write("<pre style='margin: 0px'>"+msg+"</pre>");
             // IE 6 Service Pack 2 requires that we re-cache the object. Bill
             // Gates only knows why!
             body = doc.body || doc.getElementsByTagName("body")[0];
