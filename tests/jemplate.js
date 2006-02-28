@@ -221,6 +221,68 @@ output += '\n';;
     return output;
 }
 
+Jemplate.templateMap['filters_indent.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+//line 7 "filters_indent.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += '1\n2\n3\n4';
+
+    return context.filter('indent', output);
+})();
+
+output += '\n#\n';
+//line 15 "filters_indent.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += '1\n2\n3\n4';
+
+    return context.filter('indent', [ 3 ], output);
+})();
+
+output += '\n#\n';
+//line 23 "filters_indent.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += '1\n2\n3\n4';
+
+    return context.filter('indent', [ '2' ], output);
+})();
+
+output += '\n#\n';
+//line 31 "filters_indent.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += '1\n2\n3\n4';
+
+    return context.filter('indent', [ 'a' ], output);
+})();
+
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
 Jemplate.templateMap['hello.html'] = function(context) {
     if (! context) throw('Jemplate function called without context\n');
     var stash = context.stash;

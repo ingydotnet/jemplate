@@ -79,6 +79,8 @@ tests/bin/update-prereqs
 tests/config.yaml
 tests/directives.t.html
 tests/directives.t.js
+tests/filters.t.html
+tests/filters.t.js
 tests/index.html
 tests/jemplate.js
 tests/jemplate/basic_array1.html

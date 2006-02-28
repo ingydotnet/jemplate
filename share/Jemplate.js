@@ -165,14 +165,17 @@ proto.filters.uri = function(test) {
 }
 
 proto.filters.indent = function(pad, text) {
-    if (! pad) 
+    if (! text) {
+        text = pad;
         pad = 4;
-    var finalpad;
-    for (var i = 0; i< pad; i++) {
-        finalpad += ' '; // xxx check match \d 
     }
-    var output = text.replace(/^/, finalpad);
-    return output;
+    if (! text)
+        return;
+    var finalpad = '';
+    for (var i = 0; i < pad; i++) {
+        finalpad += ' '; // xxx check match \d
+    }
+    return finalpad + text.split(/\n/).join('\n'+finalpad);
 }
 
 //------------------------------------------------------------------------------
