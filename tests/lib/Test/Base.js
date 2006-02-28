@@ -263,14 +263,21 @@ Ajax.post = function(url, data, callback) {
 }
 
 Ajax._send = function(req, data, callback) {
-    if (callback)
-        req.onreadystatechange = callback;
+    if (callback) {
+        req.onreadystatechange = function() {
+            if (req.readyState == 4) {
+                if(req.status == 200)
+                    callback(req.responseText);
+            }
+        };
+    }
     req.send(data);
-    if (callback)
-        return req;
-    if (req.status != 200)
-        throw('Request for "' + url + '" failed with status: ' + req.status);
-    return req.responseText;
+    if (!callback) {
+        if (req.status != 200)
+            throw('Request for "' + url +
+                  '" failed with status: ' + req.status);
+        return req.responseText;
+    }
 }
 
 //------------------------------------------------------------------------------
