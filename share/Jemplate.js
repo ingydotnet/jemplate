@@ -367,7 +367,7 @@ if (typeof Jemplate.Iterator == 'undefined') {
             for( var key in object ) {
                 object_keys[object_keys.length] = key;
             }
-            this.object_keys = object_keys;
+            this.object_keys = object_keys.sort();
         }
     }
 }
