@@ -109,9 +109,11 @@ if (window.parent != window &&
         document.body.appendChild(node);
         // Brutal hack to make output linkable
         fixoutput = function(node) {
+            // Trailing space added and replaced to work around yet another
+            // Safari bug.
             node.innerHTML = node.innerHTML.replace(
-                /^([\w\.]+?)(?=\.\.\.)/m, '<a href="$1">$1</a>'
-            );
+                / ?(\w[\w\.]+?\w)(?=\.\.\.)/m, '<a href="$1">$1</a>'
+            ) + ' ';
         };
         return {
             pass: function (msg) {

@@ -311,16 +311,16 @@ in the distro for a list of all features and their progress.
 
 =head1 BROWSER SUPPORT
 
-Tested in:
+Tested successfully in:
 
     * Firefox Mac/Win32
     * IE 6.0
     * Safari
     * Opera
-
-Runtime tests are reportedly failing in:
-
     * Konqueror
+
+The top level test harness has a bug in Konqueror, but the individual tests
+all pass.
 
 =head1 DEVELOPMENT
 

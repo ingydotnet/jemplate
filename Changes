@@ -19,6 +19,8 @@ changes:
   html_line_break, html_para, indent, lcfirst, lower, null, trim, ucfirst,
   upper, uri
 - Ingy removed PERL and RAWPERL support
+- Cory made test output display nicely
+- Ingy made test index link to subtests
 
 ---
 version: 0.15

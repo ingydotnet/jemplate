@@ -194,16 +194,16 @@ CURRENT SUPPORT
     in the distro for a list of all features and their progress.
 
 BROWSER SUPPORT
-    Tested in:
+    Tested successfully in:
 
         * Firefox Mac/Win32
         * IE 6.0
         * Safari
         * Opera
-
-    Runtime tests are reportedly failing in:
-
         * Konqueror
+
+    The top level test harness has a bug in Konqueror, but the individual
+    tests all pass.
 
 DEVELOPMENT
     The bleeding edge code is available via Subversion at
