@@ -1,0 +1,5 @@
+[% "my file.html" FILTER uri %]
+[% "my<file & your>file.html" FILTER uri %]
+[% "my<file & your>file.html" | uri | html %]
+[% "guitar&amp;file.html" | uri %]
+[% "guitar&amp;file.html" | uri | html %]

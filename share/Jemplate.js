@@ -141,10 +141,10 @@ proto.filters.collapse = function(text) {
 }
 
 proto.filters.html = function(text) {
-    text = text.replace(/&/, '&amp;'); 
-    text = text.replace(/</, '&lt;');
-    text = text.replace(/>/, '&gt;');
-    text = text.replace(/"/, '&quot;');
+    text = text.replace(/&/g, '&amp;'); 
+    text = text.replace(/</g, '&lt;');
+    text = text.replace(/>/g, '&gt;');
+    text = text.replace(/"/g, '&quot;');
     return text;
 }
 

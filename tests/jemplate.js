@@ -221,6 +221,60 @@ output += '\n';;
     return output;
 }
 
+Jemplate.templateMap['filters_html.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+//line 3 "filters_html.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += 'This is some html text\nAll the <tags> should be escaped & protected\n';
+
+    return context.filter(output, 'html');
+})();
+
+output += '\n';
+//line 4 "filters_html.html"
+stash.set('text', 'The <cat> sat on the <mat>');
+output += '\n';
+//line 5 "filters_html.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('text');
+
+    return context.filter(output, 'html');
+})();
+
+output += '\n';
+//line 7 "filters_html.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += '\n"It isn\'t what I expected", he replied.';
+
+    return context.filter(output, 'html');
+})();
+
+output += '\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
 Jemplate.templateMap['filters_indent.html'] = function(context) {
     if (! context) throw('Jemplate function called without context\n');
     var stash = context.stash;
@@ -307,6 +361,32 @@ output += '\n';
     return output;
 }
 
+Jemplate.templateMap['filters_null.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+//line 1 "filters_null.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += 'Ils ont les chapeaux ronds, vive la bretagne';
+
+    return context.filter(output, 'null');
+})();
+
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
 Jemplate.templateMap['filters_truncate.html'] = function(context) {
     if (! context) throw('Jemplate function called without context\n');
     var stash = context.stash;
@@ -374,6 +454,99 @@ output += (function() {
 output += stash.get('a');
 
     return context.filter(output, 'truncate');
+})();
+
+output += '\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['filters_uri.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+//line 1 "filters_uri.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += 'my file.html';
+
+    return context.filter(output, 'uri');
+})();
+
+output += '\n';
+//line 2 "filters_uri.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += 'my<file & your>file.html';
+
+    return context.filter(output, 'uri');
+})();
+
+output += '\n';
+//line 3 "filters_uri.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += 'my<file & your>file.html';
+
+    return context.filter(output, 'uri');
+})();
+
+
+    return context.filter(output, 'html');
+})();
+
+output += '\n';
+//line 4 "filters_uri.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += 'guitar&amp;file.html';
+
+    return context.filter(output, 'uri');
+})();
+
+output += '\n';
+//line 5 "filters_uri.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += 'guitar&amp;file.html';
+
+    return context.filter(output, 'uri');
+})();
+
+
+    return context.filter(output, 'html');
 })();
 
 output += '\n';

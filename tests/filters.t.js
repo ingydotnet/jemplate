@@ -4,7 +4,7 @@ var filters = {
     jemplate: 'jemplate_process'
 };
 
-t.plan(2);
+t.plan(5);
 t.filters(filters);
 t.spec('filters.t.js'); 
 t.run_is('jemplate', 'output');
@@ -81,5 +81,44 @@ filters_truncate.html
 1234567890
 ...
 12345678901234567890123456789...
+
+=== Test null
+--- jemplate
+filters_null.html
+[%- "Ils ont les chapeaux ronds, vive la bretagne" | null -%]
+--- output
+=== Test uri
+--- jemplate
+filters_uri.html
+[% "my file.html" FILTER uri %]
+[% "my<file & your>file.html" FILTER uri %]
+[% "my<file & your>file.html" | uri | html %]
+[% "guitar&amp;file.html" | uri %]
+[% "guitar&amp;file.html" | uri | html %]
+--- output
+my%20file.html
+my%3Cfile%20&%20your%3Efile.html
+my%3Cfile%20&amp;%20your%3Efile.html
+guitar&amp;file.html
+guitar&amp;amp;file.html
+
+=== Test html 
+--- jemplate
+filters_html.html
+[% FILTER html %]This is some html text
+All the <tags> should be escaped & protected
+[% END %]
+[% text = "The <cat> sat on the <mat>" %]
+[% text FILTER html %]
+[% FILTER html %]
+"It isn't what I expected", he replied.[% END %]
+--- output
+This is some html text
+All the &lt;tags&gt; should be escaped &amp; protected
+
+
+The &lt;cat&gt; sat on the &lt;mat&gt;
+
+&quot;It isn't what I expected&quot;, he replied.
 
 */
