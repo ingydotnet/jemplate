@@ -313,14 +313,13 @@ in the distro for a list of all features and their progress.
 
 Tested successfully in:
 
-    * Firefox Mac/Win32
+    * Firefox Mac/Win32/Linux
     * IE 6.0
     * Safari
     * Opera
     * Konqueror
 
-The top level test harness has a bug in Konqueror, but the individual tests
-all pass.
+All tests run 100% successful in the above browsers.
 
 =head1 DEVELOPMENT
 

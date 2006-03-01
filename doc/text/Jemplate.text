@@ -196,14 +196,13 @@ CURRENT SUPPORT
 BROWSER SUPPORT
     Tested successfully in:
 
-        * Firefox Mac/Win32
+        * Firefox Mac/Win32/Linux
         * IE 6.0
         * Safari
         * Opera
         * Konqueror
 
-    The top level test harness has a bug in Konqueror, but the individual
-    tests all pass.
+    All tests run 100% successful in the above browsers.
 
 DEVELOPMENT
     The bleeding edge code is available via Subversion at
@@ -229,7 +228,7 @@ AUTHORS
 
     Tatsuhiko Miyagawa <miyagawa@bulknews.net>
 
-    Yann Kerhervé <yannk@cpan.org>
+    Yann Kerherve <yannk@cpan.org>
 
     David Davis <xantus@xantus.org>
 
