@@ -101,7 +101,7 @@ proto.set_error = function(error, output) {
 proto.filter = function(text, name, args) {
     if (name == 'null') 
         name = "null_filter";
-    if (typeof this._filter.filters[name] == "function") 
+    if (typeof this._filter.filters[name] == "function")
         return this._filter.filters[name](text, args, this);  
     else 
         throw "Unknown filter name ':" + name + "'";
@@ -214,6 +214,18 @@ proto.filters.repeat = function(text, iter) {
         output += text;
     } 
     return output;
+}
+
+proto.filters.replace = function(text, args) {
+    if (! text) return;
+    var re_search = args[0];
+    var text_replace = args[1];
+    if (! re_search)
+        re_search = '';
+    if (! text_replace)
+        text_replace = '';
+    var re = new RegExp(re_search, 'g');
+    return text.replace(re, text_replace);
 }
 
 //------------------------------------------------------------------------------

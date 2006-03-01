@@ -208,7 +208,7 @@ completion, the second is for the testing of the feature.
     xx redirect(file)  redirect output to file 
     -- remove(re)      removes occurrences of re 
     ++ repeat(n)       repeat n times 
-    -- replace(re, sub)    replace re with sub 
+    ++ replace(re, sub)    replace re with sub 
     xx stderr          redirect output to STDERR 
     xx stdout(binmode)     redirect output to STDERR in mode binmode 
     ++ trim            removes leading and trailing whitespace 

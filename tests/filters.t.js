@@ -4,7 +4,7 @@ var filters = {
     jemplate: 'jemplate_process'
 };
 
-t.plan(6);
+t.plan(7);
 t.filters(filters);
 t.spec('filters.t.js'); 
 t.run_is('jemplate', 'output');
@@ -127,5 +127,20 @@ filters_repeat.html
 [% "foo..." FILTER repeat(5) %]
 --- output
 foo...foo...foo...foo...foo...
+
+=== Test replace
+--- jemplate
+filters_replace.html
+[%- text = "The cat sat on the mat" %]
+[%- text FILTER replace(' ', '_') %]
+[% text FILTER replace('sat', 'shat') +%]
+[% text | replace('at', 'plat') +%]
+[% text = 'The <=> operator, blah, blah' %]
+[%- text | html | replace('blah', 'rhubarb') %]
+--- output
+The_cat_sat_on_the_mat
+The cat shat on the mat
+The cplat splat on the mplat
+The &lt;=&gt; operator, rhubarb, rhubarb
 
 */
