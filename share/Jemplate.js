@@ -91,11 +91,12 @@ proto.set_error = function(error, output) {
     return error;
 }
 
-proto.filter = function(name, args, text) {
+proto.filter = function(text, name, args) {
+    // this is the 'null' filter
     if (name == 'null') 
         return '';
     if (typeof this._filter.filters[name] == "function") 
-        return this._filter.filters[name](args, text, this);  
+        return this._filter.filters[name](text, args, this);  
     else 
         throw "Unknown filter name ':" + name + "'";
 }
@@ -152,39 +153,40 @@ proto.filters.html_para = function(text) {
     return "<p>\n" + lines.join("\n</p>\n\n<p>\n") + "</p>\n";
 }
 
-proto.filters.html_break = function(test) {
-    return test.replace(/(\r?\n){2,}/g, "$1<br />$1<br />$1");
+proto.filters.html_break = function(text) {
+    return text.replace(/(\r?\n){2,}/g, "$1<br />$1<br />$1");
 }
 
-proto.filters.html_line_break = function(test) {
-    return test.replace(/(\r?\n)/g, "$1<br />$1");
+proto.filters.html_line_break = function(text) {
+    return text.replace(/(\r?\n)/g, "$1<br />$1");
 }
 
-proto.filters.uri = function(test) {
-    return encodeURI(test);
+proto.filters.uri = function(text) {
+    return encodeURI(text);
 }
 
-proto.filters.indent = function(pad, text) {
-    if (! text) {
-        text = pad;
+proto.filters.indent = function(text, pad) {
+    if (! text) return;
+    if (! pad) 
         pad = 4;
-    }
-    if (! text)
-        return;
+
     var finalpad = '';
-    for (var i = 0; i < pad; i++) {
-        finalpad += ' '; // xxx check match \d
+    if (typeof pad == 'number' || String(pad).match(/^\d$/)) {
+        for (var i = 0; i < pad; i++) {
+            finalpad += ' '; 
+        }
+    } else {
+        finalpad = pad;
     }
-    return finalpad + text.split(/\n/).join('\n'+finalpad);
+    var output = text.replace(/^/gm, finalpad);
+//    return finalpad + text.split(/\n/).join('\n'+finalpad);
+    return output;
 }
 
-proto.filters.truncate = function(len, text) {
-    if (! text) {
-        text = len;
+proto.filters.truncate = function(text, len) {
+    if (! text) return;
+    if (! len) 
         len = 32;
-    }
-    if (! text)
-        return;
     // This should probably be <=, but TT just uses <
     if (text.length < len)
         return text;

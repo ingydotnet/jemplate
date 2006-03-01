@@ -34,12 +34,15 @@ filters_indent.html
 4
 [%- END %]
 #
-[% FILTER indent('a') -%]
+[% FILTER indent(0) -%]
 1
 2
 3
 4
 [%- END %]
+#
+[% text = 'The cat sat on the mat';
+   text | indent('> ') | indent('+') %]
 --- output
     1
     2
@@ -60,6 +63,8 @@ filters_indent.html
 2
 3
 4
+#
++> The cat sat on the mat
 === Test truncate
 --- jemplate
 filters_truncate.html

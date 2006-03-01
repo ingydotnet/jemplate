@@ -510,7 +510,7 @@ $OUTPUT (function() {
 
 $block
 
-    return context.filter($name, output);
+    return context.filter(output, $name);
 })();
 EOF
 }

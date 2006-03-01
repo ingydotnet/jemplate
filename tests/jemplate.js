@@ -235,7 +235,7 @@ output += (function() {
 
 output += '1\n2\n3\n4';
 
-    return context.filter('indent', output);
+    return context.filter(output, 'indent');
 })();
 
 output += '\n#\n';
@@ -247,7 +247,7 @@ output += (function() {
 
 output += '1\n2\n3\n4';
 
-    return context.filter('indent', [ 3 ], output);
+    return context.filter(output, 'indent', [ 3 ]);
 })();
 
 output += '\n#\n';
@@ -259,7 +259,7 @@ output += (function() {
 
 output += '1\n2\n3\n4';
 
-    return context.filter('indent', [ '2' ], output);
+    return context.filter(output, 'indent', [ '2' ]);
 })();
 
 output += '\n#\n';
@@ -271,7 +271,7 @@ output += (function() {
 
 output += '1\n2\n3\n4';
 
-    return context.filter('indent', [ 'a' ], output);
+    return context.filter(output, 'indent', [ 'a' ]);
 })();
 
 output += '\n';
@@ -300,7 +300,7 @@ output += (function() {
 
 output += stash.get('a');
 
-    return context.filter('truncate', [ 5 ], output);
+    return context.filter(output, 'truncate', [ 5 ]);
 })();
 
 output += '\n';
@@ -312,7 +312,7 @@ output += (function() {
 
 output += stash.get('a');
 
-    return context.filter('truncate', [ 10 ], output);
+    return context.filter(output, 'truncate', [ 10 ]);
 })();
 
 output += '\n';
@@ -324,7 +324,7 @@ output += (function() {
 
 output += stash.get('a');
 
-    return context.filter('truncate', [ 15 ], output);
+    return context.filter(output, 'truncate', [ 15 ]);
 })();
 
 output += '\n';
@@ -336,7 +336,7 @@ output += (function() {
 
 output += stash.get('a');
 
-    return context.filter('truncate', [ 2 ], output);
+    return context.filter(output, 'truncate', [ 2 ]);
 })();
 
 output += '\n';
@@ -350,7 +350,7 @@ output += (function() {
 
 output += stash.get('a');
 
-    return context.filter('truncate', output);
+    return context.filter(output, 'truncate');
 })();
 
 output += '\n';
