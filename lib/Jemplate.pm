@@ -353,6 +353,8 @@ David Davis <xantus@xantus.org>
 
 Cory Bennett <coryb@corybennett.org>
 
+Cees Hek <ceeshek@gmail.com>
+
 =head1 COPYRIGHT
 
 Copyright (c) 2006. Ingy döt Net. All rights reserved.
