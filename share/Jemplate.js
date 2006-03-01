@@ -38,19 +38,26 @@ Jemplate.process = function(template, data, output) {
 
         if (typeof output == 'undefined')
             return result;
-        else if (typeof output == 'function')
+        if (typeof output == 'function') {
             output(result);
-        else if (output instanceof HTMLElement)
-            output.innerHTML = result;
-        else if (output.match(/^#[\w\-]+$/)) {
-            var id = output.replace(/^#/, '');
-            var element = document.getElementById(id);
-            if (typeof element == 'undefined')
-                throw('No element found with id="' + id + '"');
-            element.innerHTML = result;
+            return;
         }
-        else
-            throw("Invalid arguments in call to Jemplate.process");
+        if (output instanceof String) {
+            if (output.match(/^#[\w\-]+$/)) {
+                var id = output.replace(/^#/, '');
+                var element = document.getElementById(id);
+                if (typeof element == 'undefined')
+                    throw('No element found with id="' + id + '"');
+                element.innerHTML = result;
+                return;
+            }
+        }
+        else {
+            output.innerHTML = result;
+            return;
+        }
+
+        throw("Invalid arguments in call to Jemplate.process");
 
         return 1;
     }
