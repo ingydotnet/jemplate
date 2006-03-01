@@ -17,4 +17,4 @@ jemplate: *.t.js
 	perl bin/pull-jemplates
 
 clean:
-	rm -fr jemplate $(ALL_TARGETS)
+	rm -fr jemplate/* $(ALL_TARGETS)
