@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use Template 2.14;
 
-our $VERSION = '0.16';
+our $VERSION = '0.17';
 
 use Jemplate::Parser;
 
@@ -228,15 +228,15 @@ Jemplate comes with builtin Ajax and JSON support.
 
 Does a GET operation to the url.
 
-If a callback is provided, the operation is asynchronous and the request
-object is returned. Otherwise, the operation is synchronous and the data
-is returned.
+If a callback is provided, the operation is asynchronous, and the data
+is passed to the callback. Otherwise, the operation is synchronous and
+the data is returned.
 
 =item Ajax.post(url, data, [callback]);
 
 Does a POST operation to the url.
 
-Same callback rules as GET apply.
+Same callback rules as C<get> apply.
 
 =item JSON.stringify(object);
 
@@ -280,31 +280,13 @@ Jemplate now supports the following directives:
   * [% CLEAR %]
   * [%# this is a comment %]
 
-All the array virtual functions are supported:
+ALL of the string virtual functions are supported.
 
-  * first           first item in list
-  * grep(re)        items matching re
-  * join(str)       items joined with str
-  * last            last item in list
-  * max             maximum index number (i.e. size - 1)
-  * merge(list [, list...])     combine lists
-  * nsort           items sorted numerically
-  * pop             remove first item from list
-  * push(item)      add item to end of list
-  * reverse         items in reverse order
-  * shift           remove last item from list
-  * size            number of elements
-  * slice(from, to)     subset of list
-  * sort            items sorted lexically
-  * splice(off, len [,list])    modifies list
-  * unique          unique items (retains order)
-  * unshift(item)   add item to start of list
+ALL of the array virtual functions are supported:
 
-Many of the standard filters are implemented.
+NONE of the hash virtual functions are supported yet. Very soon.
 
-None of the hash virtual functions are supported yet. Very soon.
-
-None of the string virtual functions are supported yet. Very soon.
+MANY of the standard filters are implemented.
 
 The remaining features will be added very soon. See the DESIGN document
 in the distro for a list of all features and their progress.
@@ -342,6 +324,8 @@ receive for this work. (As long as you are in the same room when I'm
 drinking them ;)
 
 =head1 AUTHORS
+
+Jemplate is truly a community authored project:
 
 Ingy döt Net <ingy@cpan.org>
 

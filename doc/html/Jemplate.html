@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>Jemplate - Javascript Templating with Template Toolkit</title>
-<link rev="made" href="mailto:root@localhost" />
+<link rev="made" href="mailto:ingy@bytes.local" />
 </head>
 
 <body style="background-color: white">
@@ -172,9 +172,9 @@ compile due to cache, undef if error.
 Does a GET operation to the url.
 </dd>
 <dd>
-<p>If a callback is provided, the operation is asynchronous and the request
-object is returned. Otherwise, the operation is synchronous and the data
-is returned.</p>
+<p>If a callback is provided, the operation is asynchronous, and the data
+is passed to the callback. Otherwise, the operation is synchronous and
+the data is returned.</p>
 </dd>
 <p></p>
 <dt><strong><a name="item_post">Ajax.post(url, data, [callback]);</a></strong><br />
@@ -183,7 +183,7 @@ is returned.</p>
 Does a POST operation to the url.
 </dd>
 <dd>
-<p>Same callback rules as GET apply.</p>
+<p>Same callback rules as <a href="#item_get"><code>get</code></a> apply.</p>
 </dd>
 <p></p>
 <dt><strong><a name="item_stringify">JSON.stringify(object);</a></strong><br />
@@ -230,28 +230,10 @@ that can possibly be supported.</p>
   * [% LAST %]
   * [% CLEAR %]
   * [%# this is a comment %]</pre>
-<p>All the array virtual functions are supported:</p>
-<pre>
-  * first           first item in list
-  * grep(re)        items matching re
-  * join(str)       items joined with str
-  * last            last item in list
-  * max             maximum index number (i.e. size - 1)
-  * merge(list [, list...])     combine lists
-  * nsort           items sorted numerically
-  * pop             remove first item from list
-  * push(item)      add item to end of list
-  * reverse         items in reverse order
-  * shift           remove last item from list
-  * size            number of elements
-  * slice(from, to)     subset of list
-  * sort            items sorted lexically
-  * splice(off, len [,list])    modifies list
-  * unique          unique items (retains order)
-  * unshift(item)   add item to start of list</pre>
-<p>Many of the standard filters are implemented.</p>
-<p>None of the hash virtual functions are supported yet. Very soon.</p>
-<p>None of the string virtual functions are supported yet. Very soon.</p>
+<p>ALL of the string virtual functions are supported.</p>
+<p>ALL of the array virtual functions are supported:</p>
+<p>NONE of the hash virtual functions are supported yet. Very soon.</p>
+<p>MANY of the standard filters are implemented.</p>
 <p>The remaining features will be added very soon. See the DESIGN document
 in the distro for a list of all features and their progress.</p>
 <p>
@@ -289,11 +271,13 @@ drinking them ;)</p>
 </p>
 <hr />
 <h1><a name="authors">AUTHORS</a></h1>
+<p>Jemplate is truly a community authored project:</p>
 <p>Ingy döt Net &lt;<a href="mailto:ingy@cpan.org">ingy@cpan.org</a>&gt;</p>
 <p>Tatsuhiko Miyagawa &lt;<a href="mailto:miyagawa@bulknews.net">miyagawa@bulknews.net</a>&gt;</p>
 <p>Yann Kerherve &lt;<a href="mailto:yannk@cpan.org">yannk@cpan.org</a>&gt;</p>
 <p>David Davis &lt;<a href="mailto:xantus@xantus.org">xantus@xantus.org</a>&gt;</p>
 <p>Cory Bennett &lt;<a href="mailto:coryb@corybennett.org">coryb@corybennett.org</a>&gt;</p>
+<p>Cees Hek &lt;<a href="mailto:ceeshek@gmail.com">ceeshek@gmail.com</a>&gt;</p>
 <p>
 </p>
 <hr />

@@ -207,7 +207,7 @@ completion, the second is for the testing of the feature.
     xx perl(text)      evaluate text as Perl code 
     xx redirect(file)  redirect output to file 
     -- remove(re)      removes occurrences of re 
-    -- repeat(n)       repeat n times 
+    ++ repeat(n)       repeat n times 
     -- replace(re, sub)    replace re with sub 
     xx stderr          redirect output to STDERR 
     xx stdout(binmode)     redirect output to STDERR in mode binmode 

@@ -1,4 +1,19 @@
 ---
+version: 0.17
+date:    Tue Feb 28 22:44:04 PST 2006
+changes:
+- Fixed ajax callback bugs
+- Fixed inserting result into a dom element in Safari
+- Cory Bennett fixed Test.Harness on Konqueror
+- Cory sorted keys in FOR i IN obj. This should give expected consistency to
+  users.
+- Cees Hek implemented all the string functions. With tests!!
+- Cees added the truncate filter.
+- Yann Kerhervé changed the position of arguments in filters
+- Yann fixed the indent and html filters and added repeat filter
+- Yann adapted some tests from the TT test suite!
+
+---
 version: 0.16
 date:    Mon Feb 27 22:14:37 PST 2006
 changes:

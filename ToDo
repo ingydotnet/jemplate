@@ -1,38 +1,46 @@
-+ Move XHR and JSON into Jemplate.js
-+ Move XXX and JJJ into Jemplate.js
-+ Jemplate.xhr_get(url);            // synchronous
-+ Jemplate.xhr_get(url, function);  // asynchronous
+This is a list of things for you to do. Feel free to do them or add to the
+list.
 
-+ Support `Jemplate.process('foo.html', 'bar.json', '#baz')`
-+ Support `Jemplate.process('foo.html', function, '#baz')`
+- Fix test harness output on IE. It currently shows up on one line.
 
-- Hash virtual methods
-- String virtual methods
-- Standard filters
+- Write tests to make sure all the `process` API variations work (on all
+  browsers. This has bit me already.
 
-+ fix [% foo _ bar %] concat
-+ fix [% FOREACH key IN obj %] ... iterate over keys where obj is Object/hash
-+ fix [% IF foo ne "bar" %]
-+ fix [% mylist.2 %] array index lookup
-+ fix [% "$foo/$bar" %] quoted strings
+- Implement the hash virtual methods
+- Finish implementing the standard filters
 
-- MACRO
-- TRY/CATCH/FINAL
-- THROW
-- DEFAULT
-- META
-- INSERT
-- FILTER
-- USE 
-+ JAVASCRIPT
-
-+ Write runtime tests for current directives
+- Finish the following directives:
+  - MACRO
+  - TRY/CATCH/FINAL
+  - THROW
+  - DEFAULT
+  - META
+  - INSERT
+  - FILTER
+  - USE 
 
 - Implement plugin support for javascript libraries.
 
+- Port popular TT plugin modules
+
 - Write a tutorial pod
 
-= Research/Questions
+- TT supports stash localization within a template. Jemplate should do this.
 
-- How does Javascript handle truth (cross implementation)? What is/are the
-  best ways to test for truth?
+=== Add Experimental Ajax/Json/Stash support
+
+If a template says:
+
+[% JSON foo.bar -> 'data/bar.json' %]
+
+then access to foo.bar will trigger a synchronous call to the uri
+'data/bar.json'. Even access to foo.bar.baz would trigger it before baz was
+looked up in the result.
+
+The idea is that this allows some client side templates to use serverside
+logic. And conditionally at that.
+
+Any subsequent calls to foo.bar.* should use the cached data.
+
+It is likely that the stash should be localized. So that other templates
+access to foo.bar did not use this.
