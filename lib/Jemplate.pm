@@ -284,7 +284,7 @@ ALL of the string virtual functions are supported.
 
 ALL of the array virtual functions are supported:
 
-NONE of the hash virtual functions are supported yet. Very soon.
+ALL of the hash virtual functions are supported (except for import):
 
 MANY of the standard filters are implemented.
 

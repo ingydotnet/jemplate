@@ -156,16 +156,16 @@ completion, the second is for the testing of the feature.
 
 ==== Hash variables 
 
-    -- each            list of alternating keys/values 
-    -- exists(key)     does key exist? 
+    ++ each            list of alternating keys/values 
+    ++ exists(key)     does key exist? 
     -- import(hash2)   import contents of hash2 
     -- import          import into current namespace hash 
-    -- keys            list of keys 
-    -- list            returns alternating key, value 
-    -- nsort           keys sorted numerically 
-    -- size            number of pairs 
-    -- sort            keys sorted alphabetically 
-    -- values          list of values 
+    ++ keys            list of keys 
+    ++ list            returns alternating key, value 
+    ++ nsort           keys sorted numerically 
+    ++ size            number of pairs 
+    ++ sort            keys sorted alphabetically 
+    ++ values          list of values 
 
 ==== List variables 
 

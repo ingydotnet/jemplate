@@ -414,6 +414,82 @@ output += '\n';
     return output;
 }
 
+Jemplate.templateMap['filters_replace.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+//line 1 "filters_replace.html"
+stash.set('text', 'The cat sat on the mat');
+//line 1 "filters_replace.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('text');
+
+    return context.filter(output, 'replace', [ ' ', '_' ]);
+})();
+
+output += '\n';
+//line 2 "filters_replace.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('text');
+
+    return context.filter(output, 'replace', [ 'sat', 'shat' ]);
+})();
+
+output += '\n';
+//line 3 "filters_replace.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('text');
+
+    return context.filter(output, 'replace', [ 'at', 'plat' ]);
+})();
+
+output += '\n';
+//line 4 "filters_replace.html"
+stash.set('text', 'The <=> operator, blah, blah');
+//line 4 "filters_replace.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('text');
+
+    return context.filter(output, 'html');
+})();
+
+
+    return context.filter(output, 'replace', [ 'blah', 'rhubarb' ]);
+})();
+
+output += '\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
 Jemplate.templateMap['filters_truncate.html'] = function(context) {
     if (! context) throw('Jemplate function called without context\n');
     var stash = context.stash;
@@ -576,6 +652,297 @@ output += 'guitar&amp;file.html';
     return context.filter(output, 'html');
 })();
 
+output += '\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['hash_each.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+//line 4 "hash_each.html"
+stash.set('hash', { 'a': 1, 'b': 2, 'c': 3  });
+//line 4 "hash_each.html"
+stash.set('list', stash.get(['hash', 0, 'each', 0]));
+//line 4 "hash_each.html"
+
+// FOREACH 
+(function() {
+    var list = [ 0, 2, 4 ];
+    list = new Jemplate.Iterator(list);
+    var retval = list.get_first();
+    var value = retval[0];
+    var done = retval[1];
+    var oldloop;
+    try { oldloop = stash.get('loop') } finally {}
+    stash.set('loop', list);
+    try {
+        while (! done) {
+            stash.data['kindex'] = value;
+//line 4 "hash_each.html"
+stash.set('vindex', stash.get('kindex') + 1);
+//line 4 "hash_each.html"
+stash.set('key', stash.get(['list', 0, stash.get('kindex'), 0]));
+//line 4 "hash_each.html"
+stash.set('value', stash.get(['list', 0, stash.get('vindex'), 0]));
+//line 4 "hash_each.html"
+output += (stash.get('key') && stash.get(['hash', 0, stash.get('key'), 0]) == stash.get('value')) ? 1 : 0;;
+            retval = list.get_next();
+            var value = retval[0];
+            var done = retval[1];
+        }
+    }
+    catch(e) {
+        throw(context.set_error(e, output));
+    }
+    stash.set('loop', oldloop);
+})();
+
+output += '\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['hash_exists.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+//line 1 "hash_exists.html"
+stash.set('a', { 'a': 1, 'b': 2, 'c': 3  });
+//line 2 "hash_exists.html"
+output += stash.get(['a', 0, 'exists', [ 'b' ]]) ? 1 : 0;
+output += '\n';
+//line 3 "hash_exists.html"
+output += stash.get(['a', 0, 'exists', [ 'z' ]]) ? 1 : 0;
+output += '\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['hash_import.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '1\n';
+output += '1\n';
+output += '2\n';
+output += '5\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['hash_keys.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+//line 1 "hash_keys.html"
+stash.set('a', { 'a': 1, 'b': 2, 'c': 3  });
+//line 2 "hash_keys.html"
+output += stash.get(['a', 0, 'keys', 0, 'sort', 0, 'join', [ ' ' ]]);
+output += '\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['hash_list.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+//line 1 "hash_list.html"
+stash.set('hash', { 'a': 1, 'b': 2, 'c': 3  });
+//line 2 "hash_list.html"
+output += stash.get(['hash', 0, 'list', [ 'keys' ], 'sort', 0, 'join', [ ' ' ]]);
+output += '\n';
+//line 3 "hash_list.html"
+output += stash.get(['hash', 0, 'list', [ 'values' ], 'sort', 0, 'join', [ ' ' ]]);
+output += '\n';
+//line 4 "hash_list.html"
+stash.set('list', stash.get(['hash', 0, 'list', [ 'each' ]]));
+//line 4 "hash_list.html"
+
+// FOREACH 
+(function() {
+    var list = [ 0, 2, 4 ];
+    list = new Jemplate.Iterator(list);
+    var retval = list.get_first();
+    var value = retval[0];
+    var done = retval[1];
+    var oldloop;
+    try { oldloop = stash.get('loop') } finally {}
+    stash.set('loop', list);
+    try {
+        while (! done) {
+            stash.data['kindex'] = value;
+//line 4 "hash_list.html"
+stash.set('vindex', stash.get('kindex') + 1);
+//line 4 "hash_list.html"
+stash.set('key', stash.get(['list', 0, stash.get('kindex'), 0]));
+//line 4 "hash_list.html"
+stash.set('value', stash.get(['list', 0, stash.get('vindex'), 0]));
+//line 4 "hash_list.html"
+output += (stash.get('key') && stash.get(['hash', 0, stash.get('key'), 0]) == stash.get('value')) ? 1 : 0;;
+            retval = list.get_next();
+            var value = retval[0];
+            var done = retval[1];
+        }
+    }
+    catch(e) {
+        throw(context.set_error(e, output));
+    }
+    stash.set('loop', oldloop);
+})();
+
+output += '\n';
+//line 11 "hash_list.html"
+stash.set('list', stash.get(['hash', 0, 'list', 0]));
+//line 11 "hash_list.html"
+
+// FOREACH 
+(function() {
+    var list = stash.get('list');
+    list = new Jemplate.Iterator(list);
+    var retval = list.get_first();
+    var value = retval[0];
+    var done = retval[1];
+    var oldloop;
+    try { oldloop = stash.get('loop') } finally {}
+    stash.set('loop', list);
+    try {
+        while (! done) {
+            stash.data['entry'] = value;
+//line 11 "hash_list.html"
+stash.set('key', stash.get(['entry', 0, 'key', 0]));
+//line 11 "hash_list.html"
+stash.set('value', stash.get(['entry', 0, 'value', 0]));
+//line 11 "hash_list.html"
+output += (stash.get(['hash', 0, stash.get('key'), 0]) == stash.get('value')) ? 1 : 0;;
+            retval = list.get_next();
+            var value = retval[0];
+            var done = retval[1];
+        }
+    }
+    catch(e) {
+        throw(context.set_error(e, output));
+    }
+    stash.set('loop', oldloop);
+})();
+
+output += '\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['hash_nsort.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+//line 1 "hash_nsort.html"
+stash.set('a', { '499': 'c', '5': 'a', '50': 'b'  });
+//line 2 "hash_nsort.html"
+output += stash.get(['a', 0, 'nsort', 0, 'join', [ ' ' ]]);
+output += '\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['hash_size.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+//line 1 "hash_size.html"
+stash.set('a', { 'a': 1, 'b': 2, 'c': 3  });
+//line 2 "hash_size.html"
+output += stash.get(['a', 0, 'size', 0]);
+output += '\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['hash_sort.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+//line 1 "hash_sort.html"
+stash.set('a', { 'ac': 1, 'b': 2, 'aa': 3  });
+//line 2 "hash_sort.html"
+output += stash.get(['a', 0, 'sort', 0, 'join', [ ' ' ]]);
+output += '\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['hash_values.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+//line 1 "hash_values.html"
+stash.set('a', { 'a': 1, 'b': 2, 'c': 3  });
+//line 2 "hash_values.html"
+output += stash.get(['a', 0, 'values', 0, 'nsort', 0, 'join', [ ' ' ]]);
 output += '\n';
     }
     catch(e) {

@@ -487,6 +487,97 @@ proto.list_functions.last = function(list) {
 
 proto.hash_functions = {};
 
+
+// each            list of alternating keys/values 
+proto.hash_functions.each = function(hash) {
+    var list = new Array();
+    for ( var key in hash )
+        list.push(key, hash[key]);
+    return list;
+}
+
+// exists(key)     does key exist? 
+proto.hash_functions.exists = function(hash, args) {
+    return ( typeof( hash[args[0]] ) == "undefined" ) ? 0 : 1;
+}
+
+// FIXME proto.hash_functions.import blows everything up
+//
+// import(hash2)   import contents of hash2 
+// import          import into current namespace hash 
+//proto.hash_functions.import = function(hash, args) {
+//    var hash2 = args[0];
+//    for ( var key in hash2 )
+//        hash[key] = hash2[key];
+//    return '';
+//}
+
+// keys            list of keys 
+proto.hash_functions.keys = function(hash) {
+    var list = new Array();
+    for ( var key in hash )
+        list.push(key);
+    return list;
+}
+
+// list            returns alternating key, value 
+proto.hash_functions.list = function(hash, args) {
+    var what = '';
+    if ( args )
+        var what = args[0];
+        
+    var list = new Array();
+    if (what == 'keys')
+        for ( var key in hash )
+            list.push(key);
+    else if (what == 'values')
+        for ( var key in hash )
+            list.push(hash[key]);
+    else if (what == 'each')
+        for ( var key in hash )
+            list.push(key, hash[key]);
+    else
+        for ( var key in hash )
+            list.push({ 'key': key, 'value': hash[key] });
+
+    return list;
+}
+
+// nsort           keys sorted numerically 
+proto.hash_functions.nsort = function(hash) {
+    var list = new Array();
+    for (var key in hash)
+        list.push(key);
+    return list.sort(function(a, b) { return (a-b) });
+}
+
+// size            number of pairs 
+proto.hash_functions.size = function(hash) {
+    var size = 0;
+    for (var key in hash)
+        size++;
+    return size;
+}
+
+
+// sort            keys sorted alphabetically 
+proto.hash_functions.sort = function(hash) {
+    var list = new Array();
+    for (var key in hash)
+        list.push(key);
+    return list.sort();
+}
+
+// values          list of values 
+proto.hash_functions.values = function(hash) {
+    var list = new Array();
+    for ( var key in hash )
+        list.push(hash[key]);
+    return list;
+}
+
+
+
 //------------------------------------------------------------------------------
 // Jemplate.Iterator class
 //------------------------------------------------------------------------------
