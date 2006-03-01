@@ -387,6 +387,33 @@ output += 'Ils ont les chapeaux ronds, vive la bretagne';
     return output;
 }
 
+Jemplate.templateMap['filters_repeat.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+//line 1 "filters_repeat.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += 'foo...';
+
+    return context.filter(output, 'repeat', [ 5 ]);
+})();
+
+output += '\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
 Jemplate.templateMap['filters_truncate.html'] = function(context) {
     if (! context) throw('Jemplate function called without context\n');
     var stash = context.stash;

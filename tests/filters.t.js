@@ -4,7 +4,7 @@ var filters = {
     jemplate: 'jemplate_process'
 };
 
-t.plan(5);
+t.plan(6);
 t.filters(filters);
 t.spec('filters.t.js'); 
 t.run_is('jemplate', 'output');
@@ -120,5 +120,12 @@ All the &lt;tags&gt; should be escaped &amp; protected
 The &lt;cat&gt; sat on the &lt;mat&gt;
 
 &quot;It isn't what I expected&quot;, he replied.
+
+=== Test repeat
+--- jemplate
+filters_repeat.html
+[% "foo..." FILTER repeat(5) %]
+--- output
+foo...foo...foo...foo...foo...
 
 */

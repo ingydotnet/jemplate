@@ -92,9 +92,8 @@ proto.set_error = function(error, output) {
 }
 
 proto.filter = function(text, name, args) {
-    // this is the 'null' filter
     if (name == 'null') 
-        return '';
+        name = "null_filter";
     if (typeof this._filter.filters[name] == "function") 
         return this._filter.filters[name](text, args, this);  
     else 
@@ -111,6 +110,10 @@ if (typeof Jemplate.Filter == 'undefined') {
 proto = Jemplate.Filter.prototype;
 
 proto.filters = {};
+
+proto.filters.null_filter = function(text) {
+    return ''; 
+}
 
 proto.filters.upper = function(text) {
     return text.toUpperCase();
@@ -179,7 +182,6 @@ proto.filters.indent = function(text, pad) {
         finalpad = pad;
     }
     var output = text.replace(/^/gm, finalpad);
-//    return finalpad + text.split(/\n/).join('\n'+finalpad);
     return output;
 }
 
@@ -192,6 +194,19 @@ proto.filters.truncate = function(text, len) {
         return text;
     var newlen = len - 3;
     return text.substr(0,newlen) + '...';
+}
+
+proto.filters.repeat = function(text, iter) {
+    if (! text) return;
+    if (! iter || iter == 0) 
+        iter = 1;
+    if (iter == 1) return text
+    
+    var output = text;
+    for (var i = 1; i < iter; i++) {
+        output += text;
+    } 
+    return output;
 }
 
 //------------------------------------------------------------------------------
