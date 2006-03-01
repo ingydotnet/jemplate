@@ -142,17 +142,17 @@ completion, the second is for the testing of the feature.
 
 ==== Scalar variables 
 
-    -- chunk(size)     negative size chunks from end 
-    -- defined         is value defined? 
-    -- hash            treat as single-element hash with key value 
-    -- length          length of string representation 
-    -- list            treat as single-item list 
-    -- match(re)       true if value matches re 
-    -- repeat(n)       repeated n times 
-    -- replace(re, sub)    replace instances of re with sub 
-    -- search(re)      returns list of matching subpatterns 
-    -- size            returns 1, as if a single-item list 
-    -- split(re)       split string on re 
+    ++ chunk(size)     negative size chunks from end 
+    ++ defined         is value defined? 
+    ++ hash            treat as single-element hash with key value 
+    ++ length          length of string representation 
+    ++ list            treat as single-item list 
+    ++ match(re)       true if value matches re 
+    ++ repeat(n)       repeated n times 
+    ++ replace(re, sub)    replace instances of re with sub 
+    ++ search(re)      returns list of matching subpatterns 
+    ++ size            returns 1, as if a single-item list 
+    ++ split(re)       split string on re 
 
 ==== Hash variables 
 

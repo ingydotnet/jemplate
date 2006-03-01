@@ -277,6 +277,92 @@ proto._dotop = function(root, item, args) {
 
 proto.string_functions = {};
 
+// chunk(size)     negative size chunks from end 
+proto.string_functions.chunk = function(string, args) {
+    var size = args[0];
+    var list = new Array();
+    if (! size)
+        size = 1;
+    if (size < 0) {
+        size = 0 - size;
+        for (i = string.length - size; i >= 0; i = i - size)
+            list.unshift(string.substr(i, size));
+        if (string.length % size)
+            list.unshift(string.substr(0, string.length % size));
+    }
+    else
+        for (i = 0; i < string.length; i = i + size)
+            list.push(string.substr(i, size));
+    return list;
+}
+
+// defined         is value defined? 
+proto.string_functions.defined = function(string) {
+    return 1;
+}
+
+// hash            treat as single-element hash with key value 
+proto.string_functions.hash = function(string) {
+    return { 'value': string };
+}
+
+// length          length of string representation 
+proto.string_functions.length = function(string) {
+    return string.length;
+}
+
+// list            treat as single-item list 
+proto.string_functions.list = function(string) {
+    return [ string ];
+}
+
+// match(re)       get list of matches
+proto.string_functions.match = function(string, args) {
+    var regexp = new RegExp(args[0], 'gm');
+    var list = string.match(regexp);
+    return list;
+}
+
+// repeat(n)       repeated n times 
+proto.string_functions.repeat = function(string, args) {
+    var n = args[0] || 1;
+    var output = '';
+    for (var i = 0; i < n; i++) {
+        output += string;
+    }
+    return output;
+}
+
+// replace(re, sub)    replace instances of re with sub 
+proto.string_functions.replace = function(string, args) {
+    var regexp = new RegExp(args[0], 'gm');
+    var sub = args[1];
+    if (! sub)
+        sub  = '';
+    var output = string.replace(regexp, sub);
+    return output;
+}
+
+// search(re)      true if value matches re
+proto.string_functions.search = function(string, args) {
+    var regexp = new RegExp(args[0]);
+    return (string.search(regexp) >= 0) ? 1 : 0;
+}
+
+// size            returns 1, as if a single-item list 
+proto.string_functions.size = function(string) {
+    return 1;
+}
+
+// split(re)       split string on re 
+proto.string_functions.split = function(string, args) {
+    var regexp = new RegExp(args[0]);
+    var list = string.split(regexp);
+    return list;
+}
+
+
+
 proto.list_functions = {};
 
 proto.list_functions.join = function(list, args) {
