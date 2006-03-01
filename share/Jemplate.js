@@ -278,7 +278,7 @@ proto._dotop = function(root, item, args) {
         return this.string_functions[item](root, args);
     if (root instanceof Array && this.list_functions[item])
         return this.list_functions[item](root, args);
-    if (typeof root == 'object' && this.hash_functions[item])
+    if (typeof root == 'object' && typeof root[item] == 'undefined' && this.hash_functions[item])
         return this.hash_functions[item](root, args);
 
     var value = root[item];
