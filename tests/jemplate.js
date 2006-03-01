@@ -271,7 +271,30 @@ output += (function() {
 
 output += '1\n2\n3\n4';
 
-    return context.filter(output, 'indent', [ 'a' ]);
+    return context.filter(output, 'indent', [ 0 ]);
+})();
+
+output += '\n#\n';
+//line 33 "filters_indent.html"
+stash.set('text', 'The cat sat on the mat');
+//line 33 "filters_indent.html"
+
+// FILTER
+output += (function() {
+    var output = '';
+
+
+// FILTER
+output += (function() {
+    var output = '';
+
+output += stash.get('text');
+
+    return context.filter(output, 'indent', [ '> ' ]);
+})();
+
+
+    return context.filter(output, 'indent', [ '+' ]);
 })();
 
 output += '\n';
