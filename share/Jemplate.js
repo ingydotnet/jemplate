@@ -42,7 +42,7 @@ Jemplate.process = function(template, data, output) {
             output(result);
             return;
         }
-        if (output instanceof String) {
+        if (typeof(output) == 'string' || output instanceof String) {
             if (output.match(/^#[\w\-]+$/)) {
                 var id = output.replace(/^#/, '');
                 var element = document.getElementById(id);
@@ -154,7 +154,7 @@ proto.filters.html = function(text) {
     text = text.replace(/&/g, '&amp;'); 
     text = text.replace(/</g, '&lt;');
     text = text.replace(/>/g, '&gt;');
-    text = text.replace(/"/g, '&quot;');
+    text = text.replace(/"/g, '&quot;'); // " end quote for emacs
     return text;
 }
 
