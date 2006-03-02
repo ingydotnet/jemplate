@@ -1,8 +1,11 @@
 proto = Subclass('Test.Base');
 
+Test.Base.VERSION = '0.11';
+
 proto.init = function() {
     this.builder = Test.Builder.instance();
     this.builder.reset();
+    this.block_class = 'Test.Base.Block';
     this.state = {};
     this.state.compiled = false;
     this.state.spec_url = null;
@@ -97,7 +100,7 @@ proto.create_blocks = function() {
 }
 
 proto.make_block = function(hunk) {
-    var block = new Test.Base.Block();
+    var block = eval('new ' + this.block_class + '()');
     if (! hunk.match(/^===/)) throw("Invalid Hunk");
 
     var index = hunk.indexOf('\n') + 1;
@@ -156,7 +159,7 @@ proto.init = function() {
     this.sections = [];
     this.data = {};
     this.filters = {};
-    this.filter_object = new Test.Jemplate.Filter();
+    this.filter_object = new Test.Base.Filter();
 }
 
 proto.add_section = function(name, filters, data) {
@@ -193,10 +196,9 @@ proto.filter_section = function(section, filters) {
     for (var i = 0; i < filters.length; i++) {
         var filter = filters[i];
         if (typeof window[filter] == 'function')
-            data = (window[filter]).call(data, this);
-        else if (typeof this.filter_object[filter] == 'function') {
+            data = (window[filter]).call(this, data, this);
+        else if (typeof this.filter_object[filter] == 'function')
             data = (this.filter_object[filter]).call(this, data, this);
-        }
         else
             throw('No function for filter: ' + filter);
     }

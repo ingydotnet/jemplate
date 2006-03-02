@@ -1,5 +1,16 @@
 proto = new Subclass('Test.Jemplate', 'Test.Base');
 
+proto.init = function() {
+    Test.Base.prototype.init.call(this);
+    this.block_class = 'Test.Jemplate.Block';
+}
+
+proto = Subclass('Test.Jemplate.Block', 'Test.Base.Block');
+
+proto.init = function() {
+    Test.Base.Block.prototype.init.call(this);
+    this.filter_object = new Test.Jemplate.Filter();
+}
 
 proto = new Subclass('Test.Jemplate.Filter', 'Test.Base.Filter');
 
