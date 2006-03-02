@@ -76,22 +76,7 @@ if (! failsafe)
     throw("WHILE loop terminated (> 1000 iterations)\n")
 
 output += '\n\n';
-//line 16 "body.html"
-stash.set('yann', '          sdfsdfsd ');
-output += '\n';
-//line 17 "body.html"
-
-// FILTER
-output += (function() {
-    var output = '';
-
-output += stash.get('yann');
-
-    return context.filter('trim', output);
-})();
-
-output += '\n';
-//line 20 "body.html"
+//line 18 "body.html"
 
 // WRAPPER
 output += (function() {
@@ -105,10 +90,10 @@ output += '\nLife is good\n';;
 })();
 
 output += '\n\n';
-//line 22 "body.html"
+//line 20 "body.html"
 output += context.process('footer.html');
 output += '\n\n';
-//line 24 "body.html"
+//line 22 "body.html"
 throw('Jemplate.STOP\n' + output);
 output += '\nPlease Make It Stop\n';
     }
@@ -164,11 +149,11 @@ output += (function() {
 
 output += stash.get('name');
 
-    return context.filter('upper', output);
+    return context.filter(output, 'upper', []);
 })();
 
 
-    return context.filter('html', output);
+    return context.filter(output, 'html', []);
 })();
 
 output += '!!\n<hr>\n';
@@ -200,25 +185,6 @@ output += '<h1>Enter the Dragons</h1>\n<hr>\n';
     return output;
 }
 
-Jemplate.templateMap['wrapper.html'] = function(context) {
-    if (! context) throw('Jemplate function called without context\n');
-    var stash = context.stash;
-    var output = '';
-
-    try {
-output += 'And Yann added: \n<blockquote>';
-//line 2 "wrapper.html"
-output += stash.get('content');
-output += '</blockquote>\nAnd everyone agreed\n\n';
-    }
-    catch(e) {
-        var error = context.set_error(e, output);
-        throw(error);
-    }
-
-    return output;
-}
-
 Jemplate.templateMap['wrapper2.html'] = function(context) {
     if (! context) throw('Jemplate function called without context\n');
     var stash = context.stash;
@@ -229,6 +195,25 @@ output += '<em>';
 //line 1 "wrapper2.html"
 output += stash.get('content');
 output += '</em>\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['wrapper.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += 'And Yann added: \n<blockquote>';
+//line 2 "wrapper.html"
+output += stash.get('content');
+output += '</blockquote>\nAnd everyone agreed\n\n';
     }
     catch(e) {
         var error = context.set_error(e, output);
