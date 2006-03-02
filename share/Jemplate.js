@@ -175,9 +175,10 @@ proto.filters.uri = function(text) {
     return encodeURI(text);
 }
 
-proto.filters.indent = function(text, pad) {
+proto.filters.indent = function(text, args) {
+    var pad = args[0];
     if (! text) return;
-    if (! pad) 
+    if (typeof pad == 'undefined') 
         pad = 4;
 
     var finalpad = '';
@@ -192,7 +193,8 @@ proto.filters.indent = function(text, pad) {
     return output;
 }
 
-proto.filters.truncate = function(text, len) {
+proto.filters.truncate = function(text, args) {
+    var len = args[0];
     if (! text) return;
     if (! len) 
         len = 32;
