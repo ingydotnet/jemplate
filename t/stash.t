@@ -1,4 +1,4 @@
-use t::TestJemplate tests => 1;
+use t::TestJemplate tests => 2;
 
 filters { 'tt' => 'parse_lite' };
 no_diff;
@@ -31,3 +31,10 @@ stash.get(['foo', [ 'bar' ], 'baz', [ stash.get(['quux', 0, 'fox', 0]) ]]);
 stash.set(['foo', 0, 'bar', 0], stash.get(['baz', 0, 'quux', 0]));
 //line 7 "(unknown template)"
 stash.set(['foo', 0, 'bar', 0], { 'Foo': 'Bar'  });
+
+=== Empty Parameter List Function Call
+--- tt
+[% CALL foo.bar() -%]
+--- js
+//line 1 "(unknown template)"
+stash.get(['foo', 0, 'bar', []]);

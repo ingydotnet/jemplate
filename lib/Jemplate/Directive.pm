@@ -116,7 +116,7 @@ sub args {
     push(@$args, '{ ' . join(', ', @$hash) . ' }')
         if @$hash;
 
-    return '0' unless @$args;
+    return '[]' unless @$args;
     return '[ ' . join(', ', @$args) . ' ]';
 }
 
@@ -530,6 +530,25 @@ sub macro {
 sub capture {
     return "throw('CAPTURE not yet supported in Jemplate');";
 }   
+
+BEGIN {
+    return;  # Comment out this line to get callback traces
+    no strict 'refs';
+    my $pkg = __PACKAGE__ . '::';
+    my $stash = \ %$pkg;
+    use strict 'refs';
+    for my $name (keys %$stash) {
+        my $glob = $stash->{$name};
+        if (*$glob{CODE}) {
+            my $code = *$glob{CODE};    
+            no warnings 'redefine';
+            $stash->{$name} = sub {
+                warn "Calling $name(@_)\n";
+                &$code(@_);
+            };
+        }
+    } 
+}
 
     
 1;
