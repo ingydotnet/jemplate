@@ -1,4 +1,4 @@
-This is a list of things for you to do. Feel free to do them or add to the
+=== This is a list of things for you to do. Feel free to do them or add to the
 list.
 
 - Fix test harness output on IE. It currently shows up on one line.
@@ -8,6 +8,9 @@ list.
 
 - Implement the hash virtual methods
 - Finish implementing the standard filters
+
++ Make foo.bar() compile to stash.get('foo', 0, 'bar', [])
+- Make sure stash calls some function in that case.
 
 - Finish the following directives:
   - MACRO
