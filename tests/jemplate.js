@@ -235,7 +235,7 @@ output += (function() {
 
 output += 'This is some html text\nAll the <tags> should be escaped & protected\n';
 
-    return context.filter(output, 'html');
+    return context.filter(output, 'html', []);
 })();
 
 output += '\n';
@@ -250,7 +250,7 @@ output += (function() {
 
 output += stash.get('text');
 
-    return context.filter(output, 'html');
+    return context.filter(output, 'html', []);
 })();
 
 output += '\n';
@@ -262,7 +262,7 @@ output += (function() {
 
 output += '\n"It isn\'t what I expected", he replied.';
 
-    return context.filter(output, 'html');
+    return context.filter(output, 'html', []);
 })();
 
 output += '\n';
@@ -289,7 +289,7 @@ output += (function() {
 
 output += '1\n2\n3\n4';
 
-    return context.filter(output, 'indent');
+    return context.filter(output, 'indent', []);
 })();
 
 output += '\n#\n';
@@ -375,7 +375,7 @@ output += (function() {
 
 output += 'Ils ont les chapeaux ronds, vive la bretagne';
 
-    return context.filter(output, 'null');
+    return context.filter(output, 'null', []);
 })();
 
     }
@@ -473,7 +473,7 @@ output += (function() {
 
 output += stash.get('text');
 
-    return context.filter(output, 'html');
+    return context.filter(output, 'html', []);
 })();
 
 
@@ -556,7 +556,7 @@ output += (function() {
 
 output += stash.get('a');
 
-    return context.filter(output, 'truncate');
+    return context.filter(output, 'truncate', []);
 })();
 
 output += '\n';
@@ -583,7 +583,7 @@ output += (function() {
 
 output += 'my file.html';
 
-    return context.filter(output, 'uri');
+    return context.filter(output, 'uri', []);
 })();
 
 output += '\n';
@@ -595,7 +595,7 @@ output += (function() {
 
 output += 'my<file & your>file.html';
 
-    return context.filter(output, 'uri');
+    return context.filter(output, 'uri', []);
 })();
 
 output += '\n';
@@ -612,11 +612,11 @@ output += (function() {
 
 output += 'my<file & your>file.html';
 
-    return context.filter(output, 'uri');
+    return context.filter(output, 'uri', []);
 })();
 
 
-    return context.filter(output, 'html');
+    return context.filter(output, 'html', []);
 })();
 
 output += '\n';
@@ -628,7 +628,7 @@ output += (function() {
 
 output += 'guitar&amp;file.html';
 
-    return context.filter(output, 'uri');
+    return context.filter(output, 'uri', []);
 })();
 
 output += '\n';
@@ -645,11 +645,11 @@ output += (function() {
 
 output += 'guitar&amp;file.html';
 
-    return context.filter(output, 'uri');
+    return context.filter(output, 'uri', []);
 })();
 
 
-    return context.filter(output, 'html');
+    return context.filter(output, 'html', []);
 })();
 
 output += '\n';
@@ -830,7 +830,7 @@ output += (stash.get('key') && stash.get(['hash', 0, stash.get('key'), 0]) == st
 
 output += '\n';
 //line 11 "hash_list.html"
-stash.set('list', stash.get(['hash', 0, 'list', 0]));
+stash.set('list', stash.get(['hash', 0, 'list', []]));
 //line 11 "hash_list.html"
 
 // FOREACH 
@@ -1002,19 +1002,19 @@ stash.set('a1', [ 'one', 'two', 'three' ]);
 //line 2 "list.html"
 stash.get(['a1', 0, 'push', [ 'four' ]]);
 //line 3 "list.html"
-output += stash.get(['a1', 0, 'first', 0]);
+output += stash.get(['a1', 0, 'first', []]);
 output += ' - ';
 //line 3 "list.html"
-output += stash.get(['a1', 0, 'last', 0]);
+output += stash.get(['a1', 0, 'last', []]);
 output += '\n';
 //line 4 "list.html"
 output += stash.get(['a1', 0, 'grep', [ 'o' ], 'join', [ '/' ]]);
 output += '\n';
 //line 5 "list.html"
-output += stash.get(['a1', 0, 'max', 0]);
+output += stash.get(['a1', 0, 'max', []]);
 output += '+';
 //line 5 "list.html"
-output += stash.get(['a1', 0, 'size', 0]);
+output += stash.get(['a1', 0, 'size', []]);
 output += '\n';
 //line 6 "list.html"
 stash.set('a2', stash.get(['a1', 0, 'reverse', 0]));
@@ -1027,15 +1027,15 @@ output += '\n';
 //line 9 "list.html"
 stash.set('a3', [ 5, 9, 'x', 17, 9, 33, 12, 'x', 5 ]);
 //line 10 "list.html"
-output += stash.get(['a3', 0, 'unique', 0, 'join', [ ',' ]]);
+output += stash.get(['a3', 0, 'unique', [], 'join', [ ',' ]]);
 output += '\n';
 //line 11 "list.html"
-output += stash.get(['a1', 0, 'unshift', [ 'zero' ], 'sort', 0, 'join', [ '!' ]]);
+output += stash.get(['a1', 0, 'unshift', [ 'zero' ], 'sort', [], 'join', [ '!' ]]);
 output += '\n';
 //line 12 "list.html"
-stash.get(['a1', 0, 'shift', 0]);
+stash.get(['a1', 0, 'shift', []]);
 //line 12 "list.html"
-stash.get(['a1', 0, 'pop', 0]);
+stash.get(['a1', 0, 'pop', []]);
 //line 12 "list.html"
 output += stash.get(['a1', 0, 'join', [ '_' ]]);
 output += '\n';
@@ -1290,7 +1290,7 @@ stash.set('a', 'aaa');
 output += stash.get(['a', 0, 'repeat', [ 3 ]]);
 output += '\n';
 //line 3 "string_repeat.html"
-output += stash.get(['a', 0, 'repeat', 0]);
+output += stash.get(['a', 0, 'repeat', []]);
 output += '\n';
     }
     catch(e) {
