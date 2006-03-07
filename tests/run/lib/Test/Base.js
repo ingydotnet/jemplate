@@ -1,6 +1,6 @@
 proto = Subclass('Test.Base');
 
-Test.Base.VERSION = '0.11';
+Test.Base.VERSION = '0.13';
 
 proto.init = function() {
     this.builder = Test.Builder.instance();
@@ -8,7 +8,7 @@ proto.init = function() {
     this.block_class = 'Test.Base.Block';
     this.state = {};
     this.state.compiled = false;
-    this.state.spec_url = null;
+    this.state.spec_url = testBaseCurrentScript;
     this.state.spec_content = null;
     this.state.filters_map = {};
     this.state.blocks = [];
@@ -251,7 +251,7 @@ if (! this.Ajax) Ajax = {};
 Ajax.get = function(url, callback) {
     var req = new XMLHttpRequest();
     req.open('GET', url, Boolean(callback));
-    return Ajax._send(req, null, callback);
+    return Ajax._send(req, null, callback, url);
 }
 
 Ajax.post = function(url, data, callback) {
@@ -261,10 +261,10 @@ Ajax.post = function(url, data, callback) {
         'Content-Type', 
         'application/x-www-form-urlencoded'
     );
-    return Ajax._send(req, data, callback);
+    return Ajax._send(req, data, callback, url);
 }
 
-Ajax._send = function(req, data, callback) {
+Ajax._send = function(req, data, callback, url) {
     if (callback) {
         req.onreadystatechange = function() {
             if (req.readyState == 4) {

@@ -5,12 +5,12 @@ use warnings;
 use Template;
 use IO::All;
 use YAML;
-use XXX;
 
 my ($template_path, $output_path) = @ARGV;
-my $output_name = $output_path;
-$output_name =~ s/\.html$// or die;
-my $js_name = "$output_name.js";
+
+my $test_file_name = $output_path;
+$test_file_name =~ s/^/..\// or die;
+$test_file_name =~ s/\.html$/.js/ or die;
 
 my $t = Template->new(
     {
@@ -18,10 +18,10 @@ my $t = Template->new(
     }
 );
 
-my $config = YAML::LoadFile('config.yaml');
+my $config = YAML::LoadFile('../config.yaml');
 my $data = {
     %$config,
-    javascript_test_file => $js_name,
+    test_file => $test_file_name,
     all_test_files => [ glob('*.t.html') ],
 };
 my $result;

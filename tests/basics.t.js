@@ -7,7 +7,6 @@ var filters = {
 
 t.plan(6);
 t.filters(filters);
-t.spec('basics.t.js'); 
 t.run_is('jemplate', 'output');
 
 /* Test

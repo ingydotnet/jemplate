@@ -1,8 +1,6 @@
 <html>
 <head>
-    <title>[% test_harness_title %]</title>
-    <script type="text/javascript" src="lib/JSON.js"></script>
-    <script type="text/javascript" src="lib/Debug.js"></script>
+    <title>Jemplate Testing</title>
     <script type="text/javascript" src="lib/Test/Harness.js"></script>
     <script type="text/javascript" src="lib/Test/Harness/Browser.js"></script>
 </head>
@@ -11,7 +9,13 @@
     var t = new Test.Harness.Browser();
     
     t.runTests(
-        "[% all_test_files.join("\",\n        \"") %]"
+        "basics.t.html",
+        "directives.t.html",
+        "filters.t.html",
+        "hash.t.html",
+        "join.t.html",
+        "list.t.html",
+        "string.t.html"
     );
 </script>
 </body>

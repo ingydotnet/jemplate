@@ -6,7 +6,6 @@ var filters = {
 
 t.plan(9);
 t.filters(filters);
-t.spec('hash.t.js'); 
 t.run_is('jemplate', 'output');
 
 /* Test

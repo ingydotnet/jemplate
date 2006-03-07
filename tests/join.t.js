@@ -6,7 +6,6 @@ var filters = {
 
 t.plan(1);
 t.filters(filters);
-t.spec('join.t.js'); 
 t.run_is('jemplate', 'output');
 
 /* Test

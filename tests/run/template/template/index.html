@@ -1,0 +1,16 @@
+<html>
+<head>
+    <title>[% index_title %]</title>
+    <script type="text/javascript" src="lib/Test/Harness.js"></script>
+    <script type="text/javascript" src="lib/Test/Harness/Browser.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+    var t = new Test.Harness.Browser();
+    
+    t.runTests(
+        "[% all_test_files.join("\",\n        \"") %]"
+    );
+</script>
+</body>
+</html>

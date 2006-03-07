@@ -7,7 +7,6 @@ var filters = {
 
 t.plan(4);
 t.filters(filters);
-t.spec('directives.t.js'); 
 t.run_is('jemplate', 'output');
 
 /* Test

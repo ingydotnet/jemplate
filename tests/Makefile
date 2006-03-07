@@ -1,20 +1,14 @@
-ALL_T_HTML:=$(shell ls -1 *.t.js | perl -pe 's/js$$/html/')
+.PHONY: deps run-files
 
-ALL_TARGETS:=$(ALL_T_HTML) index.html jemplate.js
+all: deps run-files
 
-all: $(ALL_T_HTML) index.html jemplate.js
+deps: run
+	cp -r ../../jsan/Test-Base/sample/run/lib run/lib
+	cp -r ../../jsan/Test-Base/sample/run/bin run/bin
+	cp -r ../../jsan/Test-Base/sample/run/template run/template
 
-%.t.html: template/test.html bin/render-template
-	perl bin/render-template $< $@
+run:
+	mkdir $@
 
-index.html: template/index.html bin/render-template *.t.js
-	perl bin/render-template $< $@
-
-jemplate.js: jemplate *.t.js
-	perl -I../lib ../jemplate --compile jemplate/* > $@
-
-jemplate: *.t.js
-	perl bin/pull-jemplates
-
-clean:
-	rm -fr jemplate $(ALL_TARGETS)
+run-files:
+	make -C run clean all
