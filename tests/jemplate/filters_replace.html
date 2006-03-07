@@ -1,0 +1,6 @@
+[%- text = "The cat sat on the mat" %]
+[%- text FILTER replace(' ', '_') %]
+[% text FILTER replace('sat', 'shat') +%]
+[% text | replace('at', 'plat') +%]
+[% text = 'The <=> operator, blah, blah' %]
+[%- text | html | replace('blah', 'rhubarb') %]
