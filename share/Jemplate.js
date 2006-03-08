@@ -81,16 +81,21 @@ if (typeof Jemplate.Context == 'undefined')
 proto = Jemplate.Context.prototype;
 
 proto.include = function(template, args) {
-    return this.process(template, args);
+    return this.process(template, args, true);
 }
 
-proto.process = function(template, args) {
-    if (typeof args != 'undefined')
-        this.stash.add(args);
+proto.process = function(template, args, localise) {
+    if (localise)
+        this.stash.clone(args);
+    else
+        this.stash.update(args);
     var func = Jemplate.templateMap[template];
     if (typeof func == 'undefined')
         throw('No Jemplate template named "' + template + '" available');
-    return func(this);
+    var output = func(this);
+    if (localise)
+        this.stash.declone();
+    return output;
 }
 
 proto.set_error = function(error, output) {
@@ -241,9 +246,22 @@ if (typeof Jemplate.Stash == 'undefined') {
 
 proto = Jemplate.Stash.prototype;
 
-proto.add = function(object) {
-    for (var key in object) {
-        var value = object[key];
+proto.clone = function(args) {
+    var data = this.data;
+    this.data = {};
+    this.update(data);
+    this.update(args);
+    this.data._PARENT = data;
+}
+
+proto.declone = function(args) {
+    this.data = this.data._PARENT || this.data;
+}
+
+proto.update = function(args) {
+    if (typeof args == 'undefined') return;
+    for (var key in args) {
+        var value = args[key];
         this.set(key, value);
     }
 }

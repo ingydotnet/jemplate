@@ -1,0 +1,8 @@
+[% thing %]
+[% SET thing = 'bar' -%]
+[% thing %]
+[% PROCESS myblock -%]
+[% thing %]
+[% BLOCK myblock -%]
+[% SET thing = 'baz' -%]
+[% END -%]

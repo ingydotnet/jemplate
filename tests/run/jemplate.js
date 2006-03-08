@@ -1066,6 +1066,98 @@ output += '\n';
     return output;
 }
 
+Jemplate.templateMap['localise1.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+//line 1 "localise1.html"
+output += stash.get('thing');
+output += '\n';
+//line 2 "localise1.html"
+stash.set('thing', 'bar');
+//line 3 "localise1.html"
+output += stash.get('thing');
+output += '\n';
+//line 4 "localise1.html"
+output += context.include('myblock');
+//line 5 "localise1.html"
+output += stash.get('thing');
+output += '\n';
+
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['myblock'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+//line 7 "localise1.html"
+stash.set('thing', 'baz');
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['localise2.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+//line 1 "localise2.html"
+output += stash.get('thing');
+output += '\n';
+//line 2 "localise2.html"
+stash.set('thing', 'bar');
+//line 3 "localise2.html"
+output += stash.get('thing');
+output += '\n';
+//line 4 "localise2.html"
+output += context.process('myblock');
+//line 5 "localise2.html"
+output += stash.get('thing');
+output += '\n';
+
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['myblock'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+//line 7 "localise2.html"
+stash.set('thing', 'baz');
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
 Jemplate.templateMap['operator1.html'] = function(context) {
     if (! context) throw('Jemplate function called without context\n');
     var stash = context.stash;
