@@ -291,20 +291,31 @@ proto.set = function(key, value) {
 }
 
 proto._dotop = function(root, item, args) {
-    if (typeof item == 'undefined' || typeof item == 'string' && item.match(/^[\._]/))
+    if (typeof item == 'undefined' ||
+        typeof item == 'string' && item.match(/^[\._]/)) {
         return undefined;
+    }
+
+    if ((! args) &&
+        (typeof root == 'object') &&
+        (!(root instanceof Array) || (typeof item == 'number')) &&
+        (typeof root[item] != 'undefined')) {
+        var value = root[item];
+        if (typeof value == 'function')
+            value = value();
+        return value;
+    }
 
     if (typeof root == 'string' && this.string_functions[item])
         return this.string_functions[item](root, args);
     if (root instanceof Array && this.list_functions[item])
         return this.list_functions[item](root, args);
-    if (typeof root == 'object' && typeof root[item] == 'undefined' && this.hash_functions[item])
+    if (typeof root == 'object' && this.hash_functions[item])
         return this.hash_functions[item](root, args);
+    if (typeof root[item] == 'function')
+        return root[item].apply(args);
 
-    var value = root[item];
-    if (typeof value == 'function')
-        value = value();
-    return value;
+    return undefined;
 }
 
 proto.string_functions = {};

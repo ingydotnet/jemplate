@@ -1218,6 +1218,48 @@ output += '\n';
     return output;
 }
 
+Jemplate.templateMap['stash-functions1.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+//line 1 "stash-functions1.html"
+output += stash.get(['hash', 0, 'keys', 0, 'join', [ '+' ]]);
+output += '\n';
+//line 2 "stash-functions1.html"
+output += stash.get(['hash', 0, 'keys', [], 'join', [ '+' ]]);
+output += '\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['stash-functions2.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+//line 1 "stash-functions2.html"
+output += stash.get(['hash', 0, 'keys', 0]);
+output += '\n';
+//line 2 "stash-functions2.html"
+output += stash.get(['hash', 0, 'keys', [], 'join', [ '+' ]]);
+output += '\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
 Jemplate.templateMap['string_chunk.html'] = function(context) {
     if (! context) throw('Jemplate function called without context\n');
     var stash = context.stash;
