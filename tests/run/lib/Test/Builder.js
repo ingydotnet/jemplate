@@ -383,8 +383,14 @@ Test.Builder.prototype._isDiag = function (got, op, expect) {
     for (var i = 0; i < args.length; i++) {
         if (args[i] != null) {
             args[i] = op == 'eq' ? "'" + args[i].toString() + "'" : args[i].valueOf();
+
+            args[i] = args[i].replace(/&/g, '&amp;'); 
+            args[i] = args[i].replace(/</g, '&lt;');
+            args[i] = args[i].replace(/>/g, '&gt;');
+            args[i] = args[i].replace(/"/g, '&quot;'); // " end quote for emacs
         }
     }
+
 
     return this.diag(
         "         got: \"" + args[0] + "\"" + Test.Builder.LF +

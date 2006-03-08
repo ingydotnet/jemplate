@@ -43,6 +43,32 @@ output += '\n';
     return output;
 }
 
+Jemplate.templateMap['default.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+//line 1 "default.html"
+stash.set('foo', 'two', 1);
+stash.set('bar', 'three', 1);
+//line 2 "default.html"
+stash.set('bar', 'four', 1);
+//line 3 "default.html"
+output += stash.get('foo');
+output += ' | ';
+//line 3 "default.html"
+output += stash.get('bar');
+output += '\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
 Jemplate.templateMap['directives1.html'] = function(context) {
     if (! context) throw('Jemplate function called without context\n');
     var stash = context.stash;
