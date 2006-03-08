@@ -1,20 +1,36 @@
-mundus:~/svn/Jemplate chansen$ cat tests/bin/daemon 
 #!/usr/bin/env perl
 
 use strict;
 use warnings;
 
+use Getopt::Long    qw[];
 use HTTP::Daemon    qw[];
 use HTTP::Response  qw[];
 use HTTP::Status    qw[RC_FORBIDDEN];
 use LWP::MediaTypes qw[guess_media_type];
 use Path::Class     qw[];
+use Pod::Usage      qw[];
 
 $SIG{'PIPE'} = 'IGNORE';
 
+Getopt::Long::Configure( 'no_ignore_case' );
+Getopt::Long::Configure( 'bundling' );
+Getopt::Long::GetOptions(
+    'p|port=i' => \( my $port = 8080 ),
+    'H|host=s' => \( my $host ),
+    'h|help|?' => sub { Pod::Usage::pod2usage( { -verbose => 1, -exitval => 0 } ) },
+    'm|man'    => sub { Pod::Usage::pod2usage( { -verbose => 2, -exitval => 0 } ) },
+) or exit 1;
+
 my $base = Path::Class::File->new($0)->parent->parent->absolute;
-my $daemon = HTTP::Daemon->new( LocalPort => 8080, ReuseAddr => 1 )
-  or die("Can't create daemon: $!");
+my %args = ( LocalPort => $port, ReuseAddr => 1 );
+
+if ( defined $host ) {
+    $args{LocalHost} = $host;
+}
+
+my $daemon = HTTP::Daemon->new(%args)
+  or die("Failed to create daemon: $!\n");
 
 print "Please contact me at: <URL:", $daemon->url, ">\n";
 
@@ -24,7 +40,7 @@ while ( my $connection = $daemon->accept ) {
 
         my $file = $request->url->path =~ m|^/share|
           ? $base->parent->file( $request->url->path )
-          : $request->url->path =~ m|^/$| 
+          : $request->url->path eq '/'
               ? $base->file('index.html')
               : $base->file( $request->url->path );
 
@@ -57,3 +73,31 @@ while ( my $connection = $daemon->accept ) {
         }
     }
 }
+
+__END__
+
+=head1 NAME
+
+daemon - Jemplate test daemon
+
+=head1 SYNOPSIS
+
+daemon [-p]
+
+ Options:
+   -H --host   Host to listen to
+   -p --port   Port to listen to
+   -m --man    Displays manpage
+   -h --help   Displays this help
+
+=head1 COMMAND LINE OPTIONS
+
+=head2 --host
+
+Host to listen to. Defaults to listen to the given port on all interfaces.
+
+=head2 --port
+
+Port to listen to. Defaults to listen to 8080.
+
+=cut
