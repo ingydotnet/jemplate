@@ -286,8 +286,9 @@ proto.get = function(key) {
     return value;
 }
 
-proto.set = function(key, value) {
-    this.data[key] = value;
+proto.set = function(key, value, set_default) {
+    if (! (set_default && (typeof this.data[key] != 'undefined')))
+        this.data[key] = value;
 }
 
 proto._dotop = function(root, item, args) {

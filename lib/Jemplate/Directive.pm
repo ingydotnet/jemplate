@@ -181,6 +181,21 @@ sub set {
 
 
 #------------------------------------------------------------------------
+# default(\@setlist)                   [% DEFAULT foo = bar, baz = qux %]
+#------------------------------------------------------------------------
+
+sub default {
+    my ($class, $setlist) = @_;
+    my $output;
+    while (my ($var, $val) = splice(@$setlist, 0, 2)) {
+        $output .= &assign($class, $var, $val, 1) . ";\n";
+    }
+    chomp $output;
+    return $output;
+}
+
+
+#------------------------------------------------------------------------
 # include(\@nameargs)                    [% INCLUDE template foo = bar %] 
 #         # => [ [ $file, ... ], \@args ]
 #------------------------------------------------------------------------

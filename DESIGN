@@ -103,7 +103,7 @@ completion, the second is for the testing of the feature.
     ++ [% [GET] var %]
     ++ [% CALL var %]
     ++ [% [SET] var = value ... %] 
-    -- [% DEFAULT var = value ... %] 
+    ++ [% DEFAULT var = value ... %] 
     -- [% META attr = value ... %] 
 
     -- [% INSERT filename %] 
