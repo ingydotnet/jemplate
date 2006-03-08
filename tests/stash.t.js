@@ -15,11 +15,11 @@ t.run_is('jemplate', 'output');
 {"hash":{"foo":"FOO","bar":"BAR"}}
 --- jemplate
 stash-functions1.html
-[% hash.keys.join('+') %]
-[% hash.keys().join('+') %]
+[% hash.keys.sort.join('+') %]
+[% hash.keys().sort().join('+') %]
 --- output
-foo+bar
-foo+bar
+bar+foo
+bar+foo
 
 === Disambiguatation of .keys and .keys()
 --- context

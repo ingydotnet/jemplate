@@ -1225,10 +1225,10 @@ Jemplate.templateMap['stash-functions1.html'] = function(context) {
 
     try {
 //line 1 "stash-functions1.html"
-output += stash.get(['hash', 0, 'keys', 0, 'join', [ '+' ]]);
+output += stash.get(['hash', 0, 'keys', 0, 'sort', 0, 'join', [ '+' ]]);
 output += '\n';
 //line 2 "stash-functions1.html"
-output += stash.get(['hash', 0, 'keys', [], 'join', [ '+' ]]);
+output += stash.get(['hash', 0, 'keys', [], 'sort', [], 'join', [ '+' ]]);
 output += '\n';
     }
     catch(e) {
