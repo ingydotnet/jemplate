@@ -1,22 +1,22 @@
 === This is a list of things for you to do. Feel free to do them or add to the
 list.
 
-- Fix test harness output on IE. It currently shows up on one line.
++ Fix test harness output on IE. It currently shows up on one line.
 
 - Write tests to make sure all the `process` API variations work (on all
   browsers. This has bit me already.
 
-- Implement the hash virtual methods
++ Implement the hash virtual methods
 - Finish implementing the standard filters
 
 + Make foo.bar() compile to stash.get('foo', 0, 'bar', [])
-- Make sure stash calls some function in that case.
++ Make sure stash calls some function in that case.
 
 - Finish the following directives:
   - MACRO
   - TRY/CATCH/FINAL
   - THROW
-  - DEFAULT
+  + DEFAULT
   - META
   - INSERT
   - FILTER
@@ -28,7 +28,7 @@ list.
 
 - Write a tutorial pod
 
-- TT supports stash localization within a template. Jemplate should do this.
++ TT supports stash localization within a template. Jemplate should do this.
 
 === Add Experimental Ajax/Json/Stash support
 

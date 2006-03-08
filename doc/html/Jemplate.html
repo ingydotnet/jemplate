@@ -204,12 +204,13 @@ Turns a JSON string into an object and returns the object.
 <h1><a name="current_support">CURRENT SUPPORT</a></h1>
 <p>The goal of Jemplate is to support all of the Template Toolkit features
 that can possibly be supported.</p>
-<p>Jemplate now supports the following directives:</p>
+<p>Jemplate now supports almost all the TT directives, including:</p>
 <pre>
   * Plain text
   * [% [GET] variable %]
   * [% CALL variable %]
   * [% [SET] variable = value %]
+  * [% DEFAULT variable = value ... %] 
   * [% INCLUDE [arguments] %]
   * [% PROCESS [arguments] %]
   * [% BLOCK name %]
@@ -232,7 +233,7 @@ that can possibly be supported.</p>
   * [%# this is a comment %]</pre>
 <p>ALL of the string virtual functions are supported.</p>
 <p>ALL of the array virtual functions are supported:</p>
-<p>NONE of the hash virtual functions are supported yet. Very soon.</p>
+<p>ALL of the hash virtual functions are supported (except for import):</p>
 <p>MANY of the standard filters are implemented.</p>
 <p>The remaining features will be added very soon. See the DESIGN document
 in the distro for a list of all features and their progress.</p>
@@ -255,8 +256,8 @@ in the distro for a list of all features and their progress.</p>
 <p>The bleeding edge code is available via Subversion at
 <a href="http://svn.kwiki.org/ingy/Jemplate/">http://svn.kwiki.org/ingy/Jemplate/</a></p>
 <p>You can run the runtime tests directly from
-<a href="http://svn.kwiki.org/ingy/Jemplate/tests">http://svn.kwiki.org/ingy/Jemplate/tests</a> or from the corresponding CPAN
-or JSAN directories.</p>
+<a href="http://svn.kwiki.org/ingy/Jemplate/tests/run/index.html">http://svn.kwiki.org/ingy/Jemplate/tests/run/index.html</a> or from the
+corresponding CPAN or JSAN directories.</p>
 <p>Jemplate development is being discussed at <a href="irc://irc.freenode.net/#jemplate">irc://irc.freenode.net/#jemplate</a></p>
 <p>If you want a committer bit, just ask ingy on the irc channel.</p>
 <p>
@@ -278,6 +279,7 @@ drinking them ;)</p>
 <p>David Davis &lt;<a href="mailto:xantus@xantus.org">xantus@xantus.org</a>&gt;</p>
 <p>Cory Bennett &lt;<a href="mailto:coryb@corybennett.org">coryb@corybennett.org</a>&gt;</p>
 <p>Cees Hek &lt;<a href="mailto:ceeshek@gmail.com">ceeshek@gmail.com</a>&gt;</p>
+<p>Christian Hansen</p>
 <p>
 </p>
 <hr />

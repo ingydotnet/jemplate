@@ -1,4 +1,28 @@
 ---
+version: 0.18
+date:    Wed Mar  8 02:06:47 PST 2006
+changes:
+- Made Test.Base stuff its own module. Now Jemplate relies on that module.
+- Christian Hansen added a simple daemon for running tests.
+- Cees Hek added all hash virtual methods (except `import` which caused
+  major grief)
+- Cees monkeyed around in the Stash lookup code
+- Yann K implemented the `replace` filter
+- Ingy made `foo.bar()` always call a method `bar`.
+- Ingy completely refactored Test.Base and then proceeded to refactor the
+  Jemplate test suite in kind.
+- gugod pulled over some uri escaping code from Kwiki
+- chansen tweaked the daemon to honor caching rules
+- Cory Bennett fixed some bug having to do with a Javascript String object.
+- Cees fixed the defaults for the `indent` and `truncate` filters.
+- Stephen Howard reported that Jemplate was not localising the stash for
+  the INCLUDE directive, and he even supplied a patch, but Ingy had
+  already made the fix.
+- Ingy played with the Stash lookup code and hopefully got it just perfect.
+- Ingy added support for the DEFAULT directive.
+- Lots more tests in this release.
+
+---
 version: 0.17
 date:    Tue Feb 28 22:44:04 PST 2006
 changes:

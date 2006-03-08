@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use Template 2.14;
 
-our $VERSION = '0.17';
+our $VERSION = '0.18';
 
 use Jemplate::Parser;
 
@@ -253,12 +253,13 @@ Turns a JSON string into an object and returns the object.
 The goal of Jemplate is to support all of the Template Toolkit features
 that can possibly be supported.
 
-Jemplate now supports the following directives:
+Jemplate now supports almost all the TT directives, including:
 
   * Plain text
   * [% [GET] variable %]
   * [% CALL variable %]
   * [% [SET] variable = value %]
+  * [% DEFAULT variable = value ... %] 
   * [% INCLUDE [arguments] %]
   * [% PROCESS [arguments] %]
   * [% BLOCK name %]
@@ -309,8 +310,8 @@ The bleeding edge code is available via Subversion at
 http://svn.kwiki.org/ingy/Jemplate/
 
 You can run the runtime tests directly from
-http://svn.kwiki.org/ingy/Jemplate/tests or from the corresponding CPAN
-or JSAN directories.
+http://svn.kwiki.org/ingy/Jemplate/tests/run/index.html or from the
+corresponding CPAN or JSAN directories.
 
 Jemplate development is being discussed at irc://irc.freenode.net/#jemplate
 
@@ -338,6 +339,8 @@ David Davis <xantus@xantus.org>
 Cory Bennett <coryb@corybennett.org>
 
 Cees Hek <ceeshek@gmail.com>
+
+Christian Hansen
 
 =head1 COPYRIGHT
 

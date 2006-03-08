@@ -137,12 +137,13 @@ CURRENT SUPPORT
     The goal of Jemplate is to support all of the Template Toolkit features
     that can possibly be supported.
 
-    Jemplate now supports the following directives:
+    Jemplate now supports almost all the TT directives, including:
 
       * Plain text
       * [% [GET] variable %]
       * [% CALL variable %]
       * [% [SET] variable = value %]
+      * [% DEFAULT variable = value ... %] 
       * [% INCLUDE [arguments] %]
       * [% PROCESS [arguments] %]
       * [% BLOCK name %]
@@ -168,7 +169,7 @@ CURRENT SUPPORT
 
     ALL of the array virtual functions are supported:
 
-    NONE of the hash virtual functions are supported yet. Very soon.
+    ALL of the hash virtual functions are supported (except for import):
 
     MANY of the standard filters are implemented.
 
@@ -191,8 +192,8 @@ DEVELOPMENT
     http://svn.kwiki.org/ingy/Jemplate/
 
     You can run the runtime tests directly from
-    http://svn.kwiki.org/ingy/Jemplate/tests or from the corresponding CPAN
-    or JSAN directories.
+    http://svn.kwiki.org/ingy/Jemplate/tests/run/index.html or from the
+    corresponding CPAN or JSAN directories.
 
     Jemplate development is being discussed at
     irc://irc.freenode.net/#jemplate
@@ -219,6 +220,8 @@ AUTHORS
     Cory Bennett <coryb@corybennett.org>
 
     Cees Hek <ceeshek@gmail.com>
+
+    Christian Hansen
 
 COPYRIGHT
     Copyright (c) 2006. Ingy döt Net. All rights reserved.
