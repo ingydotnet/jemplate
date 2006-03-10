@@ -5,7 +5,7 @@ var filters = {
     jemplate: 'jemplate_process'
 };
 
-t.plan(4);
+t.plan(5);
 t.filters(filters);
 t.run_is('jemplate', 'output');
 
@@ -62,5 +62,13 @@ stash.set("obj", {"key1": "val1", "key2": "val2"});
 --- output
 key1: val1
 key2: val2
-
+=== Test NEXT
+--- jemplate
+directives5.html
+[%- FOR i IN [1,2,3,4,5,6] -%]
+[%- NEXT IF i % 2 == 0 -%]
+I = [% i %];
+[%- END -%]
+--- output
+I = 1;I = 3;I = 5;
 */

@@ -96,8 +96,8 @@ stash.set('list', [ 3, 4, 5 ]);
 //line 6 "directives1.html"
 output += context.process('foo');;
             retval = list.get_next();
-            var value = retval[0];
-            var done = retval[1];
+            value = retval[0];
+            done = retval[1];
         }
     }
     catch(e) {
@@ -228,8 +228,62 @@ output += ': ';
 output += stash.get(['obj', 0, stash.get('key'), 0]);
 output += '\n';;
             retval = list.get_next();
-            var value = retval[0];
-            var done = retval[1];
+            value = retval[0];
+            done = retval[1];
+        }
+    }
+    catch(e) {
+        throw(context.set_error(e, output));
+    }
+    stash.set('loop', oldloop);
+})();
+
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['directives5.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+//line 5 "directives5.html"
+
+// FOREACH 
+(function() {
+    var list = [ 1, 2, 3, 4, 5, 6 ];
+    list = new Jemplate.Iterator(list);
+    var retval = list.get_first();
+    var value = retval[0];
+    var done = retval[1];
+    var oldloop;
+    try { oldloop = stash.get('loop') } finally {}
+    stash.set('loop', list);
+    try {
+        while (! done) {
+            stash.data['i'] = value;
+//line 2 "directives5.html"
+if (stash.get('i') % 2 == 0) {
+  retval = list.get_next();
+  value = retval[0];
+  done = retval[1];
+  continue;
+
+}
+
+output += 'I = ';
+//line 3 "directives5.html"
+output += stash.get('i');
+output += ';';;
+            retval = list.get_next();
+            value = retval[0];
+            done = retval[1];
         }
     }
     catch(e) {
@@ -722,8 +776,8 @@ stash.set('value', stash.get(['list', 0, stash.get('vindex'), 0]));
 //line 4 "hash_each.html"
 output += (stash.get('key') && stash.get(['hash', 0, stash.get('key'), 0]) == stash.get('value')) ? 1 : 0;;
             retval = list.get_next();
-            var value = retval[0];
-            var done = retval[1];
+            value = retval[0];
+            done = retval[1];
         }
     }
     catch(e) {
@@ -844,8 +898,8 @@ stash.set('value', stash.get(['list', 0, stash.get('vindex'), 0]));
 //line 4 "hash_list.html"
 output += (stash.get('key') && stash.get(['hash', 0, stash.get('key'), 0]) == stash.get('value')) ? 1 : 0;;
             retval = list.get_next();
-            var value = retval[0];
-            var done = retval[1];
+            value = retval[0];
+            done = retval[1];
         }
     }
     catch(e) {
@@ -879,8 +933,8 @@ stash.set('value', stash.get(['entry', 0, 'value', 0]));
 //line 11 "hash_list.html"
 output += (stash.get(['hash', 0, stash.get('key'), 0]) == stash.get('value')) ? 1 : 0;;
             retval = list.get_next();
-            var value = retval[0];
-            var done = retval[1];
+            value = retval[0];
+            done = retval[1];
         }
     }
     catch(e) {

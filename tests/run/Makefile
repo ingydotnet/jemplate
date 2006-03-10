@@ -1,4 +1,4 @@
-.PHONY: all clean
+.PHONY: all clean jemplate
 
 ALL_T_HTML:=$(shell ls -1 ../*.t.js | perl -pe 's/js$$/html/;s/^\.\.\///')
 
@@ -19,7 +19,7 @@ jemplate: ../*.t.js
 	perl bin/pull-jemplates
 
 clean:
-	rm -fr $(ALL_TARGETS) jemplate
+	rm -fr $(ALL_TARGETS) jemplate/*
 
 html:
 	mkdir html

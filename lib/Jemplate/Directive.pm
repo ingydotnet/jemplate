@@ -294,8 +294,8 @@ sub foreach {
             $loop_set;
 $block;
             retval = list.get_next();
-            var value = retval[0];
-            var done = retval[1];
+            value = retval[0];
+            done = retval[1];
         }
     }
     catch(e) {
@@ -314,7 +314,12 @@ EOF
 #------------------------------------------------------------------------
 
 sub next {
-    return "continue;";
+  return <<EOF;
+  retval = list.get_next();
+  value = retval[0];
+  done = retval[1];
+  continue;
+EOF
 }
 
 #------------------------------------------------------------------------
