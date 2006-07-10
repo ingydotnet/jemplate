@@ -314,7 +314,7 @@ proto._dotop = function(root, item, args) {
     if (typeof root == 'object' && this.hash_functions[item])
         return this.hash_functions[item](root, args);
     if (typeof root[item] == 'function')
-        return root[item].apply(args);
+        return root[item].apply(this, args);
 
     return undefined;
 }

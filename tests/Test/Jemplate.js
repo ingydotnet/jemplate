@@ -26,3 +26,12 @@ proto.jemplate_process = function(content, block) {
     var result = Jemplate.process(template, data);
     return result;
 }
+
+proto.raw_context = function( content, block ) {
+    try {
+        var context = eval("("+content+")");
+        block.data.context = context;
+    } catch(e) {
+        alert(e);
+    }
+}

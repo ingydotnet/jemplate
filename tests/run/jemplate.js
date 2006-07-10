@@ -1386,6 +1386,30 @@ output += '\n';
     return output;
 }
 
+Jemplate.templateMap['stash-functions3.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+//line 1 "stash-functions3.html"
+output += stash.get(['hash', 0, 'noarg', 0]);
+output += '\n';
+//line 2 "stash-functions3.html"
+output += stash.get(['hash', 0, 'noarg', []]);
+output += '\n';
+//line 3 "stash-functions3.html"
+output += stash.get(['hash', 0, 'arg', [ 'abc' ]]);
+output += '\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
 Jemplate.templateMap['string_chunk.html'] = function(context) {
     if (! context) throw('Jemplate function called without context\n');
     var stash = context.stash;

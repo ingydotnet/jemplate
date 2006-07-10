@@ -2,10 +2,11 @@ var t = new Test.Jemplate();
 
 var filters = {
     jemplate: 'jemplate_process',
-    context: 'evaluate'
+    context: 'evaluate',
+    raw_context: 'raw_context',
 };
 
-t.plan(2);
+t.plan(3);
 t.filters(filters);
 t.run_is('jemplate', 'output');
 
@@ -31,5 +32,21 @@ stash-functions2.html
 --- output
 foo
 keys+values
+
+=== Stashed Function
+--- raw_context
+{ hash: { 
+    noarg: function() { return "noarg" },
+    arg:   function(arg) { return "arg: " + arg }
+} }
+--- jemplate
+stash-functions3.html
+[% hash.noarg %]
+[% hash.noarg() %]
+[% hash.arg("abc") %]
+--- output
+noarg
+noarg
+arg: abc
 
 */
