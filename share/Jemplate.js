@@ -413,7 +413,24 @@ proto.list_functions.join = function(list, args) {
     return list.join(args[0]);
 };
 
-proto.list_functions.sort = function(list) {
+proto.list_functions.sort = function(list,key) {
+    if( typeof(key) != 'undefined' && key != "" ) {
+        // we probably have a list of hashes
+        // and need to sort based on hash key
+        return list.sort( 
+            function(a,b) { 
+                if( a[key] == b[key] ) {
+                    return 0;
+                }
+                else if( a[key] > b[key] ) {
+                    return 1;
+                }
+                else {
+                    return -1;
+                }
+            }
+        );
+    }
     return list.sort();
 }
 

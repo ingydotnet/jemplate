@@ -4,7 +4,7 @@ var filters = {
     jemplate: 'jemplate_process'
 };
 
-t.plan(1);
+t.plan(2);
 t.filters(filters);
 t.run_is('jemplate', 'output');
 
@@ -41,5 +41,13 @@ four!one!three!two!zero
 one_three_two
 5~5~9~9~12~17~33
 11'22'33'44'55'66'foo'77'88'99
-
+=== Test sort of hash
+--- jemplate
+list_of_hash.html
+[% SET ll = [ {'a' => 9}, {'a' =>  1}, {'a' => 3} ] -%]
+[%- FOR hash = ll.sort('a') -%]
+[%- hash.a -%]:
+[%- END -%]
+--- output
+1:3:9:
 */

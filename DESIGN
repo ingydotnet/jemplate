@@ -183,6 +183,7 @@ completion, the second is for the testing of the feature.
     ++ size            number of elements 
     ++ slice(from, to)     subset of list 
     ++ sort            items sorted lexically 
+    ++ sort(key)       list of hashes sorted lexically by key "key"
     ++ splice(off, len [,list])    modifies list 
     ++ unique          unique items (retains order) 
     ++ unshift(item)   add item to start of list 

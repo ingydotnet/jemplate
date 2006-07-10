@@ -1146,6 +1146,52 @@ output += '\n';
     return output;
 }
 
+Jemplate.templateMap['list_of_hash.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+//line 1 "list_of_hash.html"
+stash.set('ll', [ { 'a': 9  }, { 'a': 1  }, { 'a': 3  } ]);
+//line 5 "list_of_hash.html"
+
+// FOREACH 
+(function() {
+    var list = stash.get(['ll', 0, 'sort', [ 'a' ]]);
+    list = new Jemplate.Iterator(list);
+    var retval = list.get_first();
+    var value = retval[0];
+    var done = retval[1];
+    var oldloop;
+    try { oldloop = stash.get('loop') } finally {}
+    stash.set('loop', list);
+    try {
+        while (! done) {
+            stash.data['hash'] = value;
+//line 3 "list_of_hash.html"
+output += stash.get(['hash', 0, 'a', 0]);
+output += ':';;
+            retval = list.get_next();
+            value = retval[0];
+            done = retval[1];
+        }
+    }
+    catch(e) {
+        throw(context.set_error(e, output));
+    }
+    stash.set('loop', oldloop);
+})();
+
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
 Jemplate.templateMap['localise1.html'] = function(context) {
     if (! context) throw('Jemplate function called without context\n');
     var stash = context.stash;
