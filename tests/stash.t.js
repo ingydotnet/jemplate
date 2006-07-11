@@ -3,7 +3,7 @@ var t = new Test.Jemplate();
 var filters = {
     jemplate: 'jemplate_process',
     context: 'evaluate',
-    raw_context: 'raw_context',
+    raw_context: 'raw_context'
 };
 
 t.plan(3);
