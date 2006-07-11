@@ -133,7 +133,7 @@ completion, the second is for the testing of the feature.
 
     -- template    outermost template being processed - methods: name, modtime 
     -- component   innermost template being processed - methods: name, modtime 
-    -- loop        loop iterator - methods: count, first, last, max 
+    ++ loop        loop iterator - methods: count, first, last, max, prev, next
     -- error       exception object 
     -- content     captured output for WRAPPER 
     -- global      top level namespace 

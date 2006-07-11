@@ -634,6 +634,8 @@ if (typeof Jemplate.Iterator == 'undefined') {
     Jemplate.Iterator = function(object) {
         if( object instanceof Array ) {
             this.object = object;
+            this.size = object.length;
+            this.max  = this.size -1;
         }
         else if ( object instanceof Object ) {
             this.object = object;
@@ -642,6 +644,8 @@ if (typeof Jemplate.Iterator == 'undefined') {
                 object_keys[object_keys.length] = key;
             }
             this.object_keys = object_keys.sort();
+            this.size = object_keys.length;
+            this.max  = this.size -1;
         }
     }
 }
@@ -650,20 +654,39 @@ proto = Jemplate.Iterator.prototype;
 
 proto.get_first = function() {
     this.index = 0;
-    return this.get_next();
+    this.first = 1;
+    this.last  = 0;
+    this.count = 1;
+    return this.get_next(1);
 }
 
-proto.get_next = function() {
+proto.get_next = function(should_init) {
     var object = this.object;
-    var index = this.index++;
+    var index;
+    if( typeof(should_init) != 'undefined' && should_init ) {
+        index = this.index; 
+    } else {
+        index = ++this.index;
+        this.first = 0;
+        this.count = this.index + 1;
+        if( this.index == this.size -1 ) {
+            this.last = 1;
+        }
+    }
     if (typeof object == 'undefined')
         throw('No object to iterate');
     if( this.object_keys ) {
-        if (index < this.object_keys.length)
+        if (index < this.object_keys.length) {
+            this.prev = index > 0 ? this.object_keys[index - 1] : "";
+            this.next = index < this.max ? this.object_keys[index + 1] : "";
             return [this.object_keys[index], false];
+        }
     } else {
-        if (index < object.length)
+        if (index < object.length) {
+            this.prev = index > 0 ? object[index - 1] : "";
+            this.next = index < this.max ? object[index +1] : "";
             return [object[index], false];
+        }
     }
     return [null, true];
 }

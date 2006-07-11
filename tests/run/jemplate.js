@@ -1284,6 +1284,289 @@ stash.set('thing', 'baz');
     return output;
 }
 
+Jemplate.templateMap['loop1.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+//line 3 "loop1.html"
+
+// FOREACH 
+(function() {
+    var list = [ 0, 1, 2, 3 ];
+    list = new Jemplate.Iterator(list);
+    var retval = list.get_first();
+    var value = retval[0];
+    var done = retval[1];
+    var oldloop;
+    try { oldloop = stash.get('loop') } finally {}
+    stash.set('loop', list);
+    try {
+        while (! done) {
+            stash.data['i'] = value;
+//line 2 "loop1.html"
+output += stash.get('i');
+output += ':';
+//line 2 "loop1.html"
+output += stash.get(['loop', 0, 'index', 0]);
+output += '\n';;
+            retval = list.get_next();
+            value = retval[0];
+            done = retval[1];
+        }
+    }
+    catch(e) {
+        throw(context.set_error(e, output));
+    }
+    stash.set('loop', oldloop);
+})();
+
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['loop2.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+//line 11 "loop2.html"
+
+// FOREACH 
+(function() {
+    var list = [ 0, 1, 2, 3 ];
+    list = new Jemplate.Iterator(list);
+    var retval = list.get_first();
+    var value = retval[0];
+    var done = retval[1];
+    var oldloop;
+    try { oldloop = stash.get('loop') } finally {}
+    stash.set('loop', list);
+    try {
+        while (! done) {
+            stash.data['i'] = value;
+//line 5 "loop2.html"
+if (stash.get(['loop', 0, 'first', 0])) {
+output += '[start]';
+}
+
+//line 6 "loop2.html"
+output += stash.get('i');
+//line 10 "loop2.html"
+if (stash.get(['loop', 0, 'last', 0])) {
+output += '[end]';
+}
+;
+            retval = list.get_next();
+            value = retval[0];
+            done = retval[1];
+        }
+    }
+    catch(e) {
+        throw(context.set_error(e, output));
+    }
+    stash.set('loop', oldloop);
+})();
+
+output += '\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['loop3.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+//line 3 "loop3.html"
+
+// FOREACH 
+(function() {
+    var list = [ 0, 1, 2, 3 ];
+    list = new Jemplate.Iterator(list);
+    var retval = list.get_first();
+    var value = retval[0];
+    var done = retval[1];
+    var oldloop;
+    try { oldloop = stash.get('loop') } finally {}
+    stash.set('loop', list);
+    try {
+        while (! done) {
+            stash.data['i'] = value;
+//line 2 "loop3.html"
+output += stash.get('i');
+output += ':';
+//line 2 "loop3.html"
+output += stash.get(['loop', 0, 'count', 0]);
+output += '\n';;
+            retval = list.get_next();
+            value = retval[0];
+            done = retval[1];
+        }
+    }
+    catch(e) {
+        throw(context.set_error(e, output));
+    }
+    stash.set('loop', oldloop);
+})();
+
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['loop4.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+//line 3 "loop4.html"
+
+// FOREACH 
+(function() {
+    var list = [ 0, 1, 2, 3 ];
+    list = new Jemplate.Iterator(list);
+    var retval = list.get_first();
+    var value = retval[0];
+    var done = retval[1];
+    var oldloop;
+    try { oldloop = stash.get('loop') } finally {}
+    stash.set('loop', list);
+    try {
+        while (! done) {
+            stash.data['i'] = value;
+//line 2 "loop4.html"
+output += stash.get('i');
+output += ':';
+//line 2 "loop4.html"
+output += stash.get(['loop', 0, 'size', 0]);
+output += ':';
+//line 2 "loop4.html"
+output += stash.get(['loop', 0, 'max', 0]);
+output += '\n';;
+            retval = list.get_next();
+            value = retval[0];
+            done = retval[1];
+        }
+    }
+    catch(e) {
+        throw(context.set_error(e, output));
+    }
+    stash.set('loop', oldloop);
+})();
+
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['loop5.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+//line 3 "loop5.html"
+
+// FOREACH 
+(function() {
+    var list = [ 0, 1, 2, 3 ];
+    list = new Jemplate.Iterator(list);
+    var retval = list.get_first();
+    var value = retval[0];
+    var done = retval[1];
+    var oldloop;
+    try { oldloop = stash.get('loop') } finally {}
+    stash.set('loop', list);
+    try {
+        while (! done) {
+            stash.data['i'] = value;
+//line 2 "loop5.html"
+output += stash.get('i');
+output += ':';
+//line 2 "loop5.html"
+output += stash.get(['loop', 0, 'prev', 0]);
+output += ':';
+//line 2 "loop5.html"
+output += stash.get(['loop', 0, 'next', 0]);
+output += '\n';;
+            retval = list.get_next();
+            value = retval[0];
+            done = retval[1];
+        }
+    }
+    catch(e) {
+        throw(context.set_error(e, output));
+    }
+    stash.set('loop', oldloop);
+})();
+
+//line 6 "loop5.html"
+
+// FOREACH 
+(function() {
+    var list = { 'a': 0, 'b': 1, 'c': 3, 'd': 4  };
+    list = new Jemplate.Iterator(list);
+    var retval = list.get_first();
+    var value = retval[0];
+    var done = retval[1];
+    var oldloop;
+    try { oldloop = stash.get('loop') } finally {}
+    stash.set('loop', list);
+    try {
+        while (! done) {
+            stash.data['i'] = value;
+//line 5 "loop5.html"
+output += stash.get('i');
+output += ':';
+//line 5 "loop5.html"
+output += stash.get(['loop', 0, 'prev', 0]);
+output += ':';
+//line 5 "loop5.html"
+output += stash.get(['loop', 0, 'next', 0]);
+output += '\n';;
+            retval = list.get_next();
+            value = retval[0];
+            done = retval[1];
+        }
+    }
+    catch(e) {
+        throw(context.set_error(e, output));
+    }
+    stash.set('loop', oldloop);
+})();
+
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
 Jemplate.templateMap['operator1.html'] = function(context) {
     if (! context) throw('Jemplate function called without context\n');
     var stash = context.stash;
