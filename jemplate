@@ -1,14 +1,53 @@
 #!/usr/bin/perl
 
 use lib 'lib';
-use Jemplate 0.10;
+use Jemplate 0.11;
 use Getopt::Long;
 
 sub usage {
     warn <<'...';
 
 Usage:
-    jemplate -c|--compile -nojs|--nojavascript template-file-list > output.js
+    jemplate -c|-l [options] template-list
+
+Example:
+    jemplate --compile --runtime templates/* > jemplate.js
+        Compile all the template files in the templates/ directory and
+        put the output in jemplate.js. Also include the Jemplate runtime
+        code in the output.
+
+template-list:
+    The template-list is the list of template files that will be
+    compiled. If something in the list is a file, then the template name
+    will be just the filename. If it is a directory, then all the files
+    under that directory will be found, and the relative paths to those
+    files will be the template name.
+
+    So 'template/foo/bar.tt2' will be named 'bar.tt2', but 'template/'
+    will find a template named 'foo/bar.tt2'.
+
+    It is important to know what Jemplate thinks the template name will
+    be when you are writing templates or code that refers to other
+    templates. Use the --list option to check this.
+
+Commands:
+
+    -c, --compile
+        The --compile flag tells Jemplate to actually compile templates.
+        The output is written to STDOUT.
+
+    -l, --list
+        Just list the template names that Jemplate would use from the
+        template-list.
+
+Options:
+    -r, --runtime
+        Include the Jemplate runtime code in the compilation output. (So
+        you can have all your Jemplate related code in one file.
+
+    -e, --exec (--noexec)
+        Allow the execution of raw Javascript. This option is on by
+        default. Use --noexec to disallow it.
 
 ...
     exit;

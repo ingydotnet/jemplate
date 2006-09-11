@@ -287,8 +287,15 @@ proto.get = function(key) {
 }
 
 proto.set = function(key, value, set_default) {
-    if (! (set_default && (typeof this.data[key] != 'undefined')))
-        this.data[key] = value;
+    if (key instanceof Array) {                                            
+        var data = this.get(key[0]) || {};                                 
+        key = key[2];                                                      
+    }                                                                      
+    else {                                                                 
+        data = this.data;                                                  
+    }                                                                      
+    if (! (set_default && (typeof data[key] != 'undefined')))              
+        data[key] = value;                                                 
 }
 
 proto._dotop = function(root, item, args) {

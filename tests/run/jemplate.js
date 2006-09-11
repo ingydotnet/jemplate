@@ -1959,3 +1959,28 @@ output += '\n';
     return output;
 }
 
+Jemplate.templateMap['test.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+//line 1 "test.html"
+stash.set('testhash', {   });
+//line 2 "test.html"
+stash.set('testkey', 'bob');
+//line 3 "test.html"
+stash.set(['testhash', 0, stash.get('testkey'), 0], 'bozo');
+output += 'Value: ';
+//line 4 "test.html"
+output += stash.get(['testhash', 0, stash.get('testkey'), 0]);
+output += '<br />\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+

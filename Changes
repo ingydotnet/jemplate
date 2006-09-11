@@ -1,4 +1,10 @@
 ---
+version: 0.19
+date:    Sat Sep  9 23:01:21 PDT 2006
+changes:
+- Fixed setting a hash value. Reported by Theo Petersen. Thanks.
+
+---
 version: 0.18
 date:    Wed Mar  8 02:06:47 PST 2006
 changes:
