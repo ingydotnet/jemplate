@@ -1,8 +1,9 @@
 === 0.19
 
+- Better Getopt::Long processing
 - Option to preserve template paths.
 - Option to bundle Jemplate.js runtime
-- Better Getopt::Long processing
+- Option to include template source as comments
 
 === This is a list of things for you to do. Feel free to do them or add to the
 list.
