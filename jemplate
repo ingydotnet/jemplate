@@ -120,7 +120,7 @@ sub make_file_list {
 
         if (-d $arg) {
             foreach my $full ( recurse_dir($arg) ) {
-                $full =~ /$arg(|\/)(.*)/;
+                $full =~ /$arg(\/|)(.*)/;
                 my $short = $2;
                 push(@list, {full=>$full, short=>$short} );
             }
