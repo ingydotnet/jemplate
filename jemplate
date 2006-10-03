@@ -60,28 +60,28 @@ Options:
     GetOptions(
         "compile|c"      => \$compile,
         "javascript|js!" => \$javascript,
-		"list|l"         => \$list,
+        "list|l"         => \$list,
         "help"           => \&usage,
     ) || usage();
 
-	my $jemplate = Jemplate->new(EVAL_JAVASCRIPT => $javascript);
+    my $jemplate = Jemplate->new(EVAL_JAVASCRIPT => $javascript);
 
-	my $templates = $jemplate->make_file_list(@ARGV);
+    my $templates = $jemplate->make_file_list(@ARGV);
 
-	if ($list) {
-		foreach (@$templates) { print $_->{full} . ' => ' . $_->{short} . "\n"; }
-	}
+    if ($list) {
+        foreach (@$templates) { print $_->{full} . ' => ' . $_->{short} . "\n"; }
+    }
     elsif ($compile) {
         usage() unless @$templates;
 
-		print $jemplate->_preamble;
+        print $jemplate->_preamble;
 
-		foreach my $template (@$templates) {
-			my $content = slurp($template->{full});
-			if ($content) {
-				print $jemplate->compile_template_content($content, $template->{short});
-			}
-		}
+        foreach my $template (@$templates) {
+            my $content = slurp($template->{full});
+            if ($content) {
+                print $jemplate->compile_template_content($content, $template->{short});
+            }
+        }
     }
     else {
         usage();
@@ -90,9 +90,9 @@ Options:
 
 
 sub slurp {
-	my $filename = shift;
-	open(F, '<', $filename) or die "Can't open '$filepath' for input:\n$!";
-	my $contents = do {local $/; <F>};
-	close(F);
-	return $contents;
+    my $filename = shift;
+    open(F, '<', $filename) or die "Can't open '$filepath' for input:\n$!";
+    my $contents = do {local $/; <F>};
+    close(F);
+    return $contents;
 }
