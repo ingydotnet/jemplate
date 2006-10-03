@@ -13,46 +13,6 @@ sub new {
     return bless { @_ }, $class;
 }
 
-sub recurse_dir {
-    use File::Find::Rule;
-
-    my $dir = shift;
-    my @files;
-    foreach ( File::Find::Rule->file->in( $dir ) ) {
-        # don't include .hidden files
-        unless ($_ =~ '\/\.') { push(@files, $_); }
-    }
-    return @files;
-}
-
-sub make_file_list {
-    my $self = shift;
-    my @args = @_;
-
-    my @list;
-
-    foreach my $arg (@args) {
-        unless (-e $arg) { next; } # file exists
-        unless (-s $arg) { next; } # file size > 0
-
-        if (-d $arg) {
-            foreach my $full ( recurse_dir($arg) ) {
-                $full =~ /$arg(|\/)(.*)/;
-                my $short = $2;
-                push(@list, {full=>$full, short=>$short} );
-            }
-        }
-        else {
-            my $full = $arg;
-            my $short = $full;
-            $short =~ s/.*[\/\\]//;
-            push(@list, {full=>$arg, short=>$short} );
-        }
-    }
-
-    return \@list;
-}
-
 sub compile_module {
     my ($self, $module_path, $template_file_paths) = @_;
     my $result = $self->compile_template_files(@$template_file_paths)
