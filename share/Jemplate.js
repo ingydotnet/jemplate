@@ -27,7 +27,7 @@ Jemplate.process = function(template, data, output) {
     var result;
 
     var proc = function(input) {
-        try { 
+        try {
             result = context.process(template, input);
         }
         catch(e) {
@@ -104,11 +104,11 @@ proto.set_error = function(error, output) {
 }
 
 proto.filter = function(text, name, args) {
-    if (name == 'null') 
+    if (name == 'null')
         name = "null_filter";
     if (typeof this._filter.filters[name] == "function")
-        return this._filter.filters[name](text, args, this);  
-    else 
+        return this._filter.filters[name](text, args, this);
+    else
         throw "Unknown filter name ':" + name + "'";
 }
 
@@ -124,7 +124,7 @@ proto = Jemplate.Filter.prototype;
 proto.filters = {};
 
 proto.filters.null_filter = function(text) {
-    return ''; 
+    return '';
 }
 
 proto.filters.upper = function(text) {
@@ -156,7 +156,7 @@ proto.filters.collapse = function(text) {
 }
 
 proto.filters.html = function(text) {
-    text = text.replace(/&/g, '&amp;'); 
+    text = text.replace(/&/g, '&amp;');
     text = text.replace(/</g, '&lt;');
     text = text.replace(/>/g, '&gt;');
     text = text.replace(/"/g, '&quot;'); // " end quote for emacs
@@ -183,13 +183,13 @@ proto.filters.uri = function(text) {
 proto.filters.indent = function(text, args) {
     var pad = args[0];
     if (! text) return;
-    if (typeof pad == 'undefined') 
+    if (typeof pad == 'undefined')
         pad = 4;
 
     var finalpad = '';
     if (typeof pad == 'number' || String(pad).match(/^\d$/)) {
         for (var i = 0; i < pad; i++) {
-            finalpad += ' '; 
+            finalpad += ' ';
         }
     } else {
         finalpad = pad;
@@ -201,7 +201,7 @@ proto.filters.indent = function(text, args) {
 proto.filters.truncate = function(text, args) {
     var len = args[0];
     if (! text) return;
-    if (! len) 
+    if (! len)
         len = 32;
     // This should probably be <=, but TT just uses <
     if (text.length < len)
@@ -212,14 +212,14 @@ proto.filters.truncate = function(text, args) {
 
 proto.filters.repeat = function(text, iter) {
     if (! text) return;
-    if (! iter || iter == 0) 
+    if (! iter || iter == 0)
         iter = 1;
     if (iter == 1) return text
-    
+
     var output = text;
     for (var i = 1; i < iter; i++) {
         output += text;
-    } 
+    }
     return output;
 }
 
@@ -276,7 +276,7 @@ proto.get = function(key) {
             if (typeof value == 'undefined')
                 break;
             root = value;
-    
+
     }
     }
     else {
@@ -287,15 +287,15 @@ proto.get = function(key) {
 }
 
 proto.set = function(key, value, set_default) {
-    if (key instanceof Array) {                                            
-        var data = this.get(key[0]) || {};                                 
-        key = key[2];                                                      
-    }                                                                      
-    else {                                                                 
-        data = this.data;                                                  
-    }                                                                      
-    if (! (set_default && (typeof data[key] != 'undefined')))              
-        data[key] = value;                                                 
+    if (key instanceof Array) {
+        var data = this.get(key[0]) || {};
+        key = key[2];
+    }
+    else {
+        data = this.data;
+    }
+    if (! (set_default && (typeof data[key] != 'undefined')))
+        data[key] = value;
 }
 
 proto._dotop = function(root, item, args) {
@@ -321,14 +321,14 @@ proto._dotop = function(root, item, args) {
     if (typeof root == 'object' && this.hash_functions[item])
         return this.hash_functions[item](root, args);
     if (typeof root[item] == 'function')
-        return root[item].apply(this, args);
+        return root[item].apply(root, args);
 
     return undefined;
 }
 
 proto.string_functions = {};
 
-// chunk(size)     negative size chunks from end 
+// chunk(size)     negative size chunks from end
 proto.string_functions.chunk = function(string, args) {
     var size = args[0];
     var list = new Array();
@@ -347,22 +347,22 @@ proto.string_functions.chunk = function(string, args) {
     return list;
 }
 
-// defined         is value defined? 
+// defined         is value defined?
 proto.string_functions.defined = function(string) {
     return 1;
 }
 
-// hash            treat as single-element hash with key value 
+// hash            treat as single-element hash with key value
 proto.string_functions.hash = function(string) {
     return { 'value': string };
 }
 
-// length          length of string representation 
+// length          length of string representation
 proto.string_functions.length = function(string) {
     return string.length;
 }
 
-// list            treat as single-item list 
+// list            treat as single-item list
 proto.string_functions.list = function(string) {
     return [ string ];
 }
@@ -374,7 +374,7 @@ proto.string_functions.match = function(string, args) {
     return list;
 }
 
-// repeat(n)       repeated n times 
+// repeat(n)       repeated n times
 proto.string_functions.repeat = function(string, args) {
     var n = args[0] || 1;
     var output = '';
@@ -384,7 +384,7 @@ proto.string_functions.repeat = function(string, args) {
     return output;
 }
 
-// replace(re, sub)    replace instances of re with sub 
+// replace(re, sub)    replace instances of re with sub
 proto.string_functions.replace = function(string, args) {
     var regexp = new RegExp(args[0], 'gm');
     var sub = args[1];
@@ -400,12 +400,12 @@ proto.string_functions.search = function(string, args) {
     return (string.search(regexp) >= 0) ? 1 : 0;
 }
 
-// size            returns 1, as if a single-item list 
+// size            returns 1, as if a single-item list
 proto.string_functions.size = function(string) {
     return 1;
 }
 
-// split(re)       split string on re 
+// split(re)       split string on re
 proto.string_functions.split = function(string, args) {
     var regexp = new RegExp(args[0]);
     var list = string.split(regexp);
@@ -424,8 +424,8 @@ proto.list_functions.sort = function(list,key) {
     if( typeof(key) != 'undefined' && key != "" ) {
         // we probably have a list of hashes
         // and need to sort based on hash key
-        return list.sort( 
-            function(a,b) { 
+        return list.sort(
+            function(a,b) {
                 if( a[key] == b[key] ) {
                     return 0;
                 }
@@ -509,7 +509,7 @@ proto.list_functions.splice = function(list, args) {
 
 proto.list_functions.push = function(list, args) {
     list.push(args[0]);
-    return list;        
+    return list;
 }
 
 proto.list_functions.pop = function(list) {
@@ -518,7 +518,7 @@ proto.list_functions.pop = function(list) {
 
 proto.list_functions.unshift = function(list, args) {
     list.unshift(args[0]);
-    return list;        
+    return list;
 }
 
 proto.list_functions.shift = function(list) {
@@ -526,7 +526,7 @@ proto.list_functions.shift = function(list) {
 }
 
 proto.list_functions.first = function(list) {
-    return list[0];        
+    return list[0];
 }
 
 proto.list_functions.size = function(list) {
@@ -538,13 +538,13 @@ proto.list_functions.max = function(list) {
 }
 
 proto.list_functions.last = function(list) {
-    return list.slice(-1);        
+    return list.slice(-1);
 }
 
 proto.hash_functions = {};
 
 
-// each            list of alternating keys/values 
+// each            list of alternating keys/values
 proto.hash_functions.each = function(hash) {
     var list = new Array();
     for ( var key in hash )
@@ -552,15 +552,15 @@ proto.hash_functions.each = function(hash) {
     return list;
 }
 
-// exists(key)     does key exist? 
+// exists(key)     does key exist?
 proto.hash_functions.exists = function(hash, args) {
     return ( typeof( hash[args[0]] ) == "undefined" ) ? 0 : 1;
 }
 
 // FIXME proto.hash_functions.import blows everything up
 //
-// import(hash2)   import contents of hash2 
-// import          import into current namespace hash 
+// import(hash2)   import contents of hash2
+// import          import into current namespace hash
 //proto.hash_functions.import = function(hash, args) {
 //    var hash2 = args[0];
 //    for ( var key in hash2 )
@@ -568,7 +568,7 @@ proto.hash_functions.exists = function(hash, args) {
 //    return '';
 //}
 
-// keys            list of keys 
+// keys            list of keys
 proto.hash_functions.keys = function(hash) {
     var list = new Array();
     for ( var key in hash )
@@ -576,12 +576,12 @@ proto.hash_functions.keys = function(hash) {
     return list;
 }
 
-// list            returns alternating key, value 
+// list            returns alternating key, value
 proto.hash_functions.list = function(hash, args) {
     var what = '';
     if ( args )
         var what = args[0];
-        
+
     var list = new Array();
     if (what == 'keys')
         for ( var key in hash )
@@ -599,7 +599,7 @@ proto.hash_functions.list = function(hash, args) {
     return list;
 }
 
-// nsort           keys sorted numerically 
+// nsort           keys sorted numerically
 proto.hash_functions.nsort = function(hash) {
     var list = new Array();
     for (var key in hash)
@@ -607,7 +607,7 @@ proto.hash_functions.nsort = function(hash) {
     return list.sort(function(a, b) { return (a-b) });
 }
 
-// size            number of pairs 
+// size            number of pairs
 proto.hash_functions.size = function(hash) {
     var size = 0;
     for (var key in hash)
@@ -616,7 +616,7 @@ proto.hash_functions.size = function(hash) {
 }
 
 
-// sort            keys sorted alphabetically 
+// sort            keys sorted alphabetically
 proto.hash_functions.sort = function(hash) {
     var list = new Array();
     for (var key in hash)
@@ -624,7 +624,7 @@ proto.hash_functions.sort = function(hash) {
     return list.sort();
 }
 
-// values          list of values 
+// values          list of values
 proto.hash_functions.values = function(hash) {
     var list = new Array();
     for ( var key in hash )
@@ -671,7 +671,7 @@ proto.get_next = function(should_init) {
     var object = this.object;
     var index;
     if( typeof(should_init) != 'undefined' && should_init ) {
-        index = this.index; 
+        index = this.index;
     } else {
         index = ++this.index;
         this.first = 0;
@@ -726,7 +726,7 @@ Ajax.post = function(url, data, callback) {
     var req = new XMLHttpRequest();
     req.open('POST', url, Boolean(callback));
     req.setRequestHeader(
-        'Content-Type', 
+        'Content-Type',
         'application/x-www-form-urlencoded'
     );
     return Ajax._send(req, data, callback);
