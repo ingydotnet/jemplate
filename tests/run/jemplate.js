@@ -15,23 +15,23 @@ Jemplate.templateMap['basic_array1.html'] = function(context) {
     var output = '';
 
     try {
-//line 4 "basic_array1.html"
+//line 5 "basic_array1.html"
 stash.set( "simple_list", ["a","b","c"] );
 stash.set( "mylist", [["a","b","c"],["d","e","f"],["h","i","j"]] );
 output += 'a = ';
-//line 5 "basic_array1.html"
+//line 6 "basic_array1.html"
 output += stash.get(['simple_list', 0, 0, 0]);
 output += '\na = ';
-//line 6 "basic_array1.html"
+//line 7 "basic_array1.html"
 output += stash.get(['mylist', 0, 0, 0, 0, 0]);
 output += '\nc = ';
-//line 7 "basic_array1.html"
+//line 8 "basic_array1.html"
 output += stash.get(['mylist', 0, 0, 0, 2, 0]);
 output += '\ne = ';
-//line 8 "basic_array1.html"
+//line 9 "basic_array1.html"
 output += stash.get(['mylist', 0, 1, 0, 1, 0]);
 output += '\nj = ';
-//line 9 "basic_array1.html"
+//line 10 "basic_array1.html"
 output += stash.get(['mylist', 0, 2, 0, 2, 0]);
 output += '\n';
     }
@@ -96,8 +96,8 @@ stash.set('list', [ 3, 4, 5 ]);
 //line 6 "directives1.html"
 output += context.process('foo');;
             retval = list.get_next();
-            var value = retval[0];
-            var done = retval[1];
+            value = retval[0];
+            done = retval[1];
         }
     }
     catch(e) {
@@ -180,13 +180,13 @@ Jemplate.templateMap['directives3.html'] = function(context) {
     var output = '';
 
     try {
-//line 3 "directives3.html"
+//line 4 "directives3.html"
 stash.set("obj", {"key1": "val1", "key2": "val2"});
 output += 'Key1: ';
-//line 4 "directives3.html"
+//line 5 "directives3.html"
 output += stash.get(['obj', 0, 'key1', 0]);
 output += '\nKey2: ';
-//line 5 "directives3.html"
+//line 6 "directives3.html"
 output += stash.get(['obj', 0, 'key2', 0]);
 output += '\n';
     }
@@ -204,9 +204,9 @@ Jemplate.templateMap['directives4.html'] = function(context) {
     var output = '';
 
     try {
-//line 3 "directives4.html"
+//line 4 "directives4.html"
 stash.set("obj", {"key1": "val1", "key2": "val2"});
-//line 6 "directives4.html"
+//line 7 "directives4.html"
 
 // FOREACH 
 (function() {
@@ -221,15 +221,15 @@ stash.set("obj", {"key1": "val1", "key2": "val2"});
     try {
         while (! done) {
             stash.data['key'] = value;
-//line 5 "directives4.html"
+//line 6 "directives4.html"
 output += stash.get('key');
 output += ': ';
-//line 5 "directives4.html"
+//line 6 "directives4.html"
 output += stash.get(['obj', 0, stash.get('key'), 0]);
 output += '\n';;
             retval = list.get_next();
-            var value = retval[0];
-            var done = retval[1];
+            value = retval[0];
+            done = retval[1];
         }
     }
     catch(e) {
@@ -253,7 +253,7 @@ Jemplate.templateMap['directives5.html'] = function(context) {
     var output = '';
 
     try {
-//line 4 "directives5.html"
+//line 5 "directives5.html"
 
 // FOREACH 
 (function() {
@@ -270,7 +270,11 @@ Jemplate.templateMap['directives5.html'] = function(context) {
             stash.data['i'] = value;
 //line 2 "directives5.html"
 if (stash.get('i') % 2 == 0) {
-continue;
+  retval = list.get_next();
+  value = retval[0];
+  done = retval[1];
+  continue;
+
 }
 
 output += 'I = ';
@@ -278,8 +282,8 @@ output += 'I = ';
 output += stash.get('i');
 output += ';';;
             retval = list.get_next();
-            var value = retval[0];
-            var done = retval[1];
+            value = retval[0];
+            done = retval[1];
         }
     }
     catch(e) {
@@ -357,7 +361,7 @@ Jemplate.templateMap['filters_indent.html'] = function(context) {
     var output = '';
 
     try {
-//line 6 "filters_indent.html"
+//line 7 "filters_indent.html"
 
 // FILTER
 output += (function() {
@@ -369,7 +373,7 @@ output += '1\n2\n3\n4';
 })();
 
 output += '\n#\n';
-//line 13 "filters_indent.html"
+//line 15 "filters_indent.html"
 
 // FILTER
 output += (function() {
@@ -381,7 +385,7 @@ output += '1\n2\n3\n4';
 })();
 
 output += '\n#\n';
-//line 20 "filters_indent.html"
+//line 23 "filters_indent.html"
 
 // FILTER
 output += (function() {
@@ -393,7 +397,7 @@ output += '1\n2\n3\n4';
 })();
 
 output += '\n#\n';
-//line 27 "filters_indent.html"
+//line 31 "filters_indent.html"
 
 // FILTER
 output += (function() {
@@ -405,9 +409,9 @@ output += '1\n2\n3\n4';
 })();
 
 output += '\n#\n';
-//line 29 "filters_indent.html"
+//line 33 "filters_indent.html"
 stash.set('text', 'The cat sat on the mat');
-//line 29 "filters_indent.html"
+//line 33 "filters_indent.html"
 
 // FILTER
 output += (function() {
@@ -498,7 +502,7 @@ Jemplate.templateMap['filters_replace.html'] = function(context) {
     try {
 //line 1 "filters_replace.html"
 stash.set('text', 'The cat sat on the mat');
-//line 2 "filters_replace.html"
+//line 1 "filters_replace.html"
 
 // FILTER
 output += (function() {
@@ -510,7 +514,7 @@ output += stash.get('text');
 })();
 
 output += '\n';
-//line 3 "filters_replace.html"
+//line 2 "filters_replace.html"
 
 // FILTER
 output += (function() {
@@ -522,7 +526,7 @@ output += stash.get('text');
 })();
 
 output += '\n';
-//line 4 "filters_replace.html"
+//line 3 "filters_replace.html"
 
 // FILTER
 output += (function() {
@@ -534,9 +538,9 @@ output += stash.get('text');
 })();
 
 output += '\n';
-//line 5 "filters_replace.html"
+//line 4 "filters_replace.html"
 stash.set('text', 'The <=> operator, blah, blah');
-//line 6 "filters_replace.html"
+//line 4 "filters_replace.html"
 
 // FILTER
 output += (function() {
@@ -772,8 +776,8 @@ stash.set('value', stash.get(['list', 0, stash.get('vindex'), 0]));
 //line 4 "hash_each.html"
 output += (stash.get('key') && stash.get(['hash', 0, stash.get('key'), 0]) == stash.get('value')) ? 1 : 0;;
             retval = list.get_next();
-            var value = retval[0];
-            var done = retval[1];
+            value = retval[0];
+            done = retval[1];
         }
     }
     catch(e) {
@@ -894,8 +898,8 @@ stash.set('value', stash.get(['list', 0, stash.get('vindex'), 0]));
 //line 4 "hash_list.html"
 output += (stash.get('key') && stash.get(['hash', 0, stash.get('key'), 0]) == stash.get('value')) ? 1 : 0;;
             retval = list.get_next();
-            var value = retval[0];
-            var done = retval[1];
+            value = retval[0];
+            done = retval[1];
         }
     }
     catch(e) {
@@ -929,8 +933,8 @@ stash.set('value', stash.get(['entry', 0, 'value', 0]));
 //line 11 "hash_list.html"
 output += (stash.get(['hash', 0, stash.get('key'), 0]) == stash.get('value')) ? 1 : 0;;
             retval = list.get_next();
-            var value = retval[0];
-            var done = retval[1];
+            value = retval[0];
+            done = retval[1];
         }
     }
     catch(e) {
@@ -1056,7 +1060,7 @@ Jemplate.templateMap['join.html'] = function(context) {
     try {
 //line 1 "join.html"
 stash.set('a', [ 'foo', 'bar', 'baz' ]);
-//line 2 "join.html"
+//line 1 "join.html"
 output += stash.get(['a', 0, 'join', [ '::' ]]);
     }
     catch(e) {
@@ -1150,7 +1154,7 @@ Jemplate.templateMap['list_of_hash.html'] = function(context) {
     try {
 //line 1 "list_of_hash.html"
 stash.set('ll', [ { 'a': 9  }, { 'a': 1  }, { 'a': 3  } ]);
-//line 4 "list_of_hash.html"
+//line 5 "list_of_hash.html"
 
 // FOREACH 
 (function() {
@@ -1169,8 +1173,8 @@ stash.set('ll', [ { 'a': 9  }, { 'a': 1  }, { 'a': 3  } ]);
 output += stash.get(['hash', 0, 'a', 0]);
 output += ':';;
             retval = list.get_next();
-            var value = retval[0];
-            var done = retval[1];
+            value = retval[0];
+            done = retval[1];
         }
     }
     catch(e) {
@@ -1308,8 +1312,8 @@ output += ':';
 output += stash.get(['loop', 0, 'index', 0]);
 output += '\n';;
             retval = list.get_next();
-            var value = retval[0];
-            var done = retval[1];
+            value = retval[0];
+            done = retval[1];
         }
     }
     catch(e) {
@@ -1333,7 +1337,7 @@ Jemplate.templateMap['loop2.html'] = function(context) {
     var output = '';
 
     try {
-//line 9 "loop2.html"
+//line 11 "loop2.html"
 
 // FOREACH 
 (function() {
@@ -1348,21 +1352,21 @@ Jemplate.templateMap['loop2.html'] = function(context) {
     try {
         while (! done) {
             stash.data['i'] = value;
-//line 4 "loop2.html"
+//line 5 "loop2.html"
 if (stash.get(['loop', 0, 'first', 0])) {
 output += '[start]';
 }
 
-//line 5 "loop2.html"
+//line 6 "loop2.html"
 output += stash.get('i');
-//line 8 "loop2.html"
+//line 10 "loop2.html"
 if (stash.get(['loop', 0, 'last', 0])) {
 output += '[end]';
 }
 ;
             retval = list.get_next();
-            var value = retval[0];
-            var done = retval[1];
+            value = retval[0];
+            done = retval[1];
         }
     }
     catch(e) {
@@ -1409,8 +1413,8 @@ output += ':';
 output += stash.get(['loop', 0, 'count', 0]);
 output += '\n';;
             retval = list.get_next();
-            var value = retval[0];
-            var done = retval[1];
+            value = retval[0];
+            done = retval[1];
         }
     }
     catch(e) {
@@ -1459,8 +1463,8 @@ output += ':';
 output += stash.get(['loop', 0, 'max', 0]);
 output += '\n';;
             retval = list.get_next();
-            var value = retval[0];
-            var done = retval[1];
+            value = retval[0];
+            done = retval[1];
         }
     }
     catch(e) {
@@ -1509,8 +1513,8 @@ output += ':';
 output += stash.get(['loop', 0, 'next', 0]);
 output += '\n';;
             retval = list.get_next();
-            var value = retval[0];
-            var done = retval[1];
+            value = retval[0];
+            done = retval[1];
         }
     }
     catch(e) {
@@ -1544,8 +1548,8 @@ output += ':';
 output += stash.get(['loop', 0, 'next', 0]);
 output += '\n';;
             retval = list.get_next();
-            var value = retval[0];
-            var done = retval[1];
+            value = retval[0];
+            done = retval[1];
         }
     }
     catch(e) {
@@ -1569,32 +1573,10 @@ Jemplate.templateMap['myhashname.html'] = function(context) {
     var output = '';
 
     try {
-//line 3 "myhashname.html"
-stash.set( "object", { name: 'Wally' } );
-output += 'Hello, ';
 //line 4 "myhashname.html"
-output += stash.get(['object', 0, 'name', 0]);
-output += '\n';
-    }
-    catch(e) {
-        var error = context.set_error(e, output);
-        throw(error);
-    }
-
-    return output;
-}
-
-Jemplate.templateMap['myname.html'] = function(context) {
-    if (! context) throw('Jemplate function called without context\n');
-    var stash = context.stash;
-    var output = '';
-
-    try {
-//line 4 "myname.html"
 stash.set( "object", { name: 'Wally' } );
-stash.set( "mylist", [["a","b","c"],["d","e","f"],["h","i","j"]] );
 output += 'Hello, ';
-//line 5 "myname.html"
+//line 5 "myhashname.html"
 output += stash.get(['object', 0, 'name', 0]);
 output += '\n';
     }
@@ -1612,11 +1594,11 @@ Jemplate.templateMap['myobjectnameac.html'] = function(context) {
     var output = '';
 
     try {
-//line 4 "myobjectnameac.html"
+//line 5 "myobjectnameac.html"
 var obj = new TheName('Bally');
 stash.set( "objectName", obj.getName() );
 output += 'Hello, ';
-//line 5 "myobjectnameac.html"
+//line 6 "myobjectnameac.html"
 output += stash.get('objectName');
 output += '\n';
     }
@@ -1634,10 +1616,10 @@ Jemplate.templateMap['myobjectnameac2.html'] = function(context) {
     var output = '';
 
     try {
-//line 3 "myobjectnameac2.html"
+//line 4 "myobjectnameac2.html"
 stash.set( "object", new TheName('Mally') );
 output += 'Hello, ';
-//line 4 "myobjectnameac2.html"
+//line 5 "myobjectnameac2.html"
 output += stash.get(['object', 0, 'getName', []]);
 output += '\n';
     }
@@ -1655,10 +1637,10 @@ Jemplate.templateMap['myobjectnameattr.html'] = function(context) {
     var output = '';
 
     try {
-//line 3 "myobjectnameattr.html"
+//line 4 "myobjectnameattr.html"
 stash.set( "object", new TheName('Larry') );
 output += 'Hello, ';
-//line 4 "myobjectnameattr.html"
+//line 5 "myobjectnameattr.html"
 output += stash.get(['object', 0, 'name', 0]);
 output += '\n';
     }
@@ -1676,7 +1658,7 @@ Jemplate.templateMap['operator1.html'] = function(context) {
     var output = '';
 
     try {
-//line 3 "operator1.html"
+//line 4 "operator1.html"
 if ('abc' == 'abc') {
 output += 'same';
 }
@@ -1697,7 +1679,7 @@ Jemplate.templateMap['operator2.html'] = function(context) {
     var output = '';
 
     try {
-//line 3 "operator2.html"
+//line 4 "operator2.html"
 if ('abc' != 'def') {
 output += 'not same';
 }
