@@ -342,6 +342,8 @@ Cees Hek <ceeshek@gmail.com>
 
 Christian Hansen
 
+David A. Coffey <dacoffey@cogsmith.com>
+
 =head1 COPYRIGHT
 
 Copyright (c) 2006. Ingy döt Net. All rights reserved.
