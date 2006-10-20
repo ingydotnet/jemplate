@@ -16,7 +16,15 @@ modify it under the same terms as Perl itself.
 // Main Jemplate class
 //------------------------------------------------------------------------------
 if (typeof Jemplate == 'undefined')
-    Jemplate = function() {};
+    Jemplate = function(config) {
+		if (config) { Jemplate.config = config; }
+		else {
+			// Default Config
+			Jemplate.config = {
+				DEBUG_UNDEF: false
+			};
+		}
+	};
 
 Jemplate.templateMap = {};
 
@@ -282,6 +290,11 @@ proto.get = function(key) {
     else {
         value = this._dotop(root, key);
     }
+
+	if ((value == null) || (value == undefined)) {
+		if (Jemplate.config.DEBUG_UNDEF) { throw 'undef'; }
+		else { value = ''; }
+	}
 
     return value;
 }
