@@ -1,0 +1,16 @@
+> sub compile_template_files_withpath {
+>     my $self = shift;
+>     my $output = $self->_preamble;
+>     for my $filepath (@_) {
+>         my $filename = $filepath;
+>         $filename =~ s/.*[\/\\]//;
+>         open FILE, $filepath
+>           or die "Can't open '$filepath' for input:\n$!";
+>         my $template_input = do {local $/; <FILE>};
+>         close FILE;
+>         $output .=
+>             $self->compile_template_content($template_input, $filepath);
+>     }
+>     return $output;
+> }
+>
