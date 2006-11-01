@@ -291,10 +291,12 @@ proto.get = function(key) {
         value = this._dotop(root, key);
     }
 
+	/*
 	if ((value == null) || (value == undefined)) {
-		if (Jemplate.config.DEBUG_UNDEF) { throw 'undef'; }
+		if (Jemplate.config && Jemplate.config.DEBUG_UNDEF) { throw 'undef'; }
 		else { value = ''; }
 	}
+	*/
 
     return value;
 }
