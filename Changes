@@ -3,6 +3,7 @@ version: 0.19
 date:    Sat Sep  9 23:01:21 PDT 2006
 changes:
 - Fixed setting a hash value. Reported by Theo Petersen. Thanks.
+- David added ability to compile path names by passing directory to recurse
 
 ---
 version: 0.18
