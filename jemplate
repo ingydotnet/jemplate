@@ -1,7 +1,8 @@
 #!/usr/bin/perl
 
 use lib 'lib';
-use Jemplate 0.11;
+
+use Jemplate 0.18;
 use Getopt::Long;
 
 sub usage {
@@ -61,7 +62,8 @@ Options:
         "compile|c"      => \$compile,
         "javascript|js!" => \$javascript,
         "list|l"         => \$list,
-        "help"           => \&usage,
+        "source|s"       => \$source,
+        "help|?"         => \&usage,
     ) || usage();
 
     my $jemplate = Jemplate->new(EVAL_JAVASCRIPT => $javascript);
@@ -135,3 +137,8 @@ sub make_file_list {
 
     return \@list;
 }
+
+__DATA__
+
+#include Getopt::Long
+#include Jemplate

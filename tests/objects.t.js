@@ -1,3 +1,18 @@
+function TheName(name) {
+    this.name = name;
+}
+
+TheName.prototype.getName = function() {
+   return this.name;
+}
+
+TheName.prototype.setName = function(name) {
+   this.name = name;
+}
+
+var theName = new TheName('larry');
+
+// Begin test
 var t = new Test.Jemplate();
 
 var filters = {

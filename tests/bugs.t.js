@@ -1,3 +1,13 @@
+var t = new Test.Jemplate();
+t.plan(1);
+t.pass('XXX - Finish writing this test file');
+
+/* Test
+=== Foo
+--- xxx
+yyy
+
+*/
 // NODE CLASS
 
 /*
@@ -8,7 +18,9 @@ This returns the name assigned to this object by the serverside code.
 If no name has been set, then this will return "E<lt>no nameE<gt>".
 
 */
- ,getName: function () { return this.name ? this.name : '<no name>'; }
+
+/*
+,getName: function () { return this.name ? this.name : '<no name>'; } */
 
 /*
 
@@ -40,3 +52,5 @@ this.viewer.innerHTML += tableBody;
 -------------------------------------------
 
 // node.getName() outputs nothing, but node.name outputs correctly. the getName() method definitely works.
+
+*/
