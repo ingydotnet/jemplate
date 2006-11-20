@@ -13,8 +13,8 @@
 x Option to bundle Jemplate.js runtime
 
 + Test --runtime == share/Jemplate.js
-- Test --list
-- Test --start-tag and JEMPLATE_START_TAG etc
++ Test --list
++ Test --start-tag and JEMPLATE_START_TAG etc
 - Test multiple compile files
 - Test INCLUDE_PATH
 - Test DEBUG_UNDEF

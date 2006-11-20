@@ -75,6 +75,7 @@ t/quoted.t
 t/runtime.t
 t/stash.t
 t/switch.t
+t/tags.t
 t/test.t
 t/TestJemplate.pm
 t/throw.t

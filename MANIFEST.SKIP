@@ -1,3 +1,4 @@
+^svn$
 ^MANIFEST.SKIP$
 ^Makefile$
 ^blib/
