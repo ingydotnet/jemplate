@@ -1,5 +1,5 @@
 /*==============================================================================
-Subclass - Define a Class potentially as a Subclass in Javascript
+Subclass - Define a Class potentially as a Subclass in JavaScript
 
 DESCRIPTION:
 

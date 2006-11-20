@@ -1,11 +1,12 @@
-Jemplate is Perl's Template Toolkit framework made to work for Javascript.
+Jemplate is a full featured framework for JavaScript Templating. It is a
+port of Perl's Template Toolkit framework made to work for JavaScript.
 
 See 'Changes' file for recent changes.
 
 INSTALLATION
 ============
 
-Jemplate consists of both Perl and Javascript components.
+Jemplate consists of both Perl and JavaScript components.
 
 For the Perl side of things you'll need Perl 5.6.1 or higher and the
 latest version of the Template module (aka Template Toolkit).
@@ -17,14 +18,14 @@ Just install this like any CPAN module:
     > make test
     > make install
 
-For the Javascript side, you need to copy `share/Jemplate.js` to your
-project, and then use the `jemplate` command line tool to compile your
-templates. Something like this:
+For the JavaScript side, you need to generate the `Jemplate.js` runtime
+and then use the `jemplate` command line tool to compile your templates.
+Something like this:
 
-    > cp ~/downloads/Jemplate-x.xx/share/Jemplate.js js/Jemplate.js
+    > jemplate --runtime > js/Jemplate.js
     > jemplate --compile templates/* > js/jemplates.js
 
-Then just import those two Javascript files into your html document:
+Then just import those two JavaScript files into your html document:
 
     <script type="text/javascript" src="js/Jemplate.js"></script>
     <script type="text/javascript" src="js/jemplates.js"></script>
@@ -45,4 +46,3 @@ Additional contributors include:
     - David A. Coffey
 
 Template Toolkit was written by Andy Wardley.
-

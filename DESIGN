@@ -11,10 +11,10 @@
 
 Jemplate leverages TT2 by using Template::Parser, but replacing the
 backend (Template::Directive) with Jemplate::Directive to produce
-Javascript code instead of Perl code.
+JavaScript code instead of Perl code.
 
 The typical usage envisioned is that you compile your templates into one
-big Javascript file. Then you import this document and the Jemplate.js
+big JavaScript file. Then you import this document and the Jemplate.js
 runtime support module in your html.
 
 
@@ -22,7 +22,7 @@ runtime support module in your html.
 
 - Jemplate::Parser->new->parse($template_text);
 
-Parse a single template and return a Javascript function (as a
+Parse a single template and return a JavaScript function (as a
 string scalar).
 
 - Jemplate->compile_template_files(@template_file_paths);
@@ -46,13 +46,13 @@ is newer than the module. Returns 1 if sucessful compile, 0 if no
 compile due to cache, undef if error.
 
 
-= Javascript API
+= JavaScript API
 
 - Jemplate.process(templateFileName[, dataObject][, outputTarget]);
 
 Returns a string containing the rendering of the template.
 templateFileName is something like `my-widget.tt` and dataObject is just
-a Javascript "hash" of data values.
+a JavaScript "hash" of data values.
 
 The optional outputTarget can be a string or a function. If it is a
 function, the function is called with the result, and `true` is returned.
@@ -70,9 +70,9 @@ Currently we have automated tests in the `t/` directory that prove that
 compilation is correct. These tests use Perl's Test::Base data driven
 test framework.
 
-There is also a Javascript runtime testing suite in the `tests/`
+There is also a JavaScript runtime testing suite in the `tests/`
 directory that you can run by simply loading the index.html file into
-any supported browser. These tests use a Javascript port of the
+any supported browser. These tests use a JavaScript port of the
 Test.Base framework.
 
 We also have a more adhoc `examples/` directory with stuff that you need to
@@ -247,21 +247,21 @@ Refer to documentation for details of individual plugins.
 
 == Configuration Options
 
-    -- START_TAG       start of directive token ([%) 
-    -- END_TAG         end of directive token (%]) 
-    -- TAG_STYLE       set pre-defined START_TAG/END_TAG style 
-    -- PRE_CHOMP       remove whitespace before directives (0) 
-    -- POST_CHOMP      remove whitespace after directives (0) 
-    -- TRIM remove     leading and trailing whitespace (0) 
+    ++ START_TAG       start of directive token ([%) 
+    ++ END_TAG         end of directive token (%]) 
+    xx TAG_STYLE       set pre-defined START_TAG/END_TAG style 
+    ++ PRE_CHOMP       remove whitespace before directives (0) 
+    ++ POST_CHOMP      remove whitespace after directives (0) 
+    ++ TRIM remove     leading and trailing whitespace (0) 
     -- INTERPOLATE     interpolate embedded variables (0) 
-    -- ANYCASE         allow lower case directive keywords (0) 
+    ++ ANYCASE         allow lower case directive keywords (0) 
 
 === Template files and blocks 
 
     -- INCLUDE_PATH    search path for templates 
-    -- DELIMITER       delimiter for separating paths (:) 
-    -- ABSOLUTE        allow absolute file names (0) 
-    -- RELATIVE        allow relative filenames (0) 
+    xx DELIMITER       delimiter for separating paths (:) 
+    xx ABSOLUTE        allow absolute file names (0) 
+    xx RELATIVE        allow relative filenames (0) 
     -- DEFAULT         default template 
     -- BLOCKS          hash array pre-defining template blocks 
     -- AUTO_RESET      reset BLOCK definitions each time (1) 
@@ -282,13 +282,13 @@ Refer to documentation for details of individual plugins.
                        array mapping error types to templates 
     -- OUTPUT          default output location or handler 
     -- OUTPUT_PATH     directory into which output files can be written 
-    -- DEBUG           raise 'undef' error on access to undefined variables 
+    == DEBUG           raise 'undef' error on access to undefined variables 
 
 === Caching and Compiling Options 
 
-    -- CACHE_SIZE      max compiled templates to cache (undef, i.e. cache all) 
-    -- COMPILE_EXT     extension for compiled template files (undef) 
-    -- COMPILE_DIR     directory for compiled template files (undef) 
+    xx CACHE_SIZE      max compiled templates to cache (undef, i.e. cache all) 
+    xx COMPILE_EXT     extension for compiled template files (undef) 
+    xx COMPILE_DIR     directory for compiled template files (undef) 
 
 === Plugins and Filters 
 
@@ -301,14 +301,14 @@ Refer to documentation for details of individual plugins.
 
 === Compatibility, Customisation and Extension 
 
-    -- V1DOLLAR        backwards compatibility flag 
+    xx V1DOLLAR        backwards compatibility flag 
     -- LOAD_TEMPLATES  list of template providers 
     -- LOAD_PLUGINS    list of plugin providers 
     -- LOAD_FILTERS    list of filter providers 
     -- TOLERANT        set providers to tolerate errors as declinations (0) 
     -- SERVICE         custom service obj (Template::Service) 
-    -- CONTEXT         custom context obj (Template::Context) 
-    -- STASH           custom stash object (Template::Stash) 
+    ++ CONTEXT         custom context obj (Template::Context) 
+    ++ STASH           custom stash object (Template::Stash) 
     -- PARSER          custom parser object (Template::Parser) 
     -- GRAMMAR         custom grammar obj(Template::Grammar) 
 

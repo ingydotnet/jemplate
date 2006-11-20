@@ -1,5 +1,5 @@
 NAME
-    Jemplate - Javascript Templating with Template Toolkit
+    Jemplate - JavaScript Templating with Template Toolkit
 
 SYNOPSIS
         var data = Ajax.get('url/data.json');
@@ -26,15 +26,15 @@ SYNOPSIS
         );
 
 DESCRIPTION
-    Jemplate is a templating framework for Javascript that is built over
+    Jemplate is a templating framework for JavaScript that is built over
     Perl's Template Toolkit (TT2).
 
     Jemplate parses TT2 templates using the TT2 Perl framework, but with a
     twist. Instead of compiling the templates into Perl code, it compiles
-    them into Javascript.
+    them into JavaScript.
 
-    Jemplate then provides a Javascript runtime module for processing the
-    template code. Presto, we have full featured Javascript templating
+    Jemplate then provides a JavaScript runtime module for processing the
+    template code. Presto, we have full featured JavaScript templating
     language!
 
     Combined with JSON and xmlHttpRequest, Jemplate provides a really simple
@@ -42,7 +42,7 @@ DESCRIPTION
 
 HOWTO
     Jemplate comes with a command line tool call "jemplate" that you use to
-    precompile your templates into a javascript file. For example if you
+    precompile your templates into a JavaScript file. For example if you
     have a template directory called "templates" that contains:
 
         > ls templates/
@@ -54,11 +54,11 @@ HOWTO
 
         > jemplate --compile template/* > js/jemplates.js
 
-    This will compile all the templates into one Javascript file.
+    This will compile all the templates into one JavaScript file.
 
-    You also need to get the Jemplate runtime.
+    You also need to generate the Jemplate runtime.
 
-        > cp ~/Jemplate-x.xx/share/Jemplate.js js/Jemplate.js
+        > jemplate --runtime > js/Jemplate.js
 
     Now all you need to do is include these two files in the HEAD of your
     html:
@@ -69,7 +69,7 @@ HOWTO
     Now you have Jemplate support for these templates in your html document.
 
 PUBLIC API
-    The Jemplate.js Javascript runtime module has the following API method:
+    The Jemplate.js JavaScript runtime module has the following API method:
 
     Jemplate.process(template-name, data, [target]);
         The "template-name" is a string like 'body.html' that is the name of
@@ -100,7 +100,7 @@ PUBLIC API
 
     Jemplate->compile_template_content($content, $template_name);
         Compile one template whose content is in memory. You must provide a
-        unique template name. Returns the Javascript text result of the
+        unique template name. Returns the JavaScript text result of the
         compilation.
 
     Jemplate->compile_module($module_path, \@template_file_paths);
@@ -143,7 +143,7 @@ CURRENT SUPPORT
       * [% [GET] variable %]
       * [% CALL variable %]
       * [% [SET] variable = value %]
-      * [% DEFAULT variable = value ... %] 
+      * [% DEFAULT variable = value ... %]
       * [% INCLUDE [arguments] %]
       * [% PROCESS [arguments] %]
       * [% BLOCK name %]
@@ -222,6 +222,8 @@ AUTHORS
     Cees Hek <ceeshek@gmail.com>
 
     Christian Hansen
+
+    David A. Coffey <dacoffey@cogsmith.com>
 
 COPYRIGHT
     Copyright (c) 2006. Ingy döt Net. All rights reserved.

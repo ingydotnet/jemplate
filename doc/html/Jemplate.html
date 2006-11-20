@@ -1,8 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Jemplate - Javascript Templating with Template Toolkit</title>
-<link rev="made" href="mailto:ingy@bytes.local" />
+<title>Jemplate - JavaScript Templating with Template Toolkit</title>
+<link rev="made" href="mailto:root@b01.apple.com" />
 </head>
 
 <body style="background-color: white">
@@ -31,7 +31,7 @@
 <p>
 </p>
 <h1><a name="name">NAME</a></h1>
-<p>Jemplate - Javascript Templating with Template Toolkit</p>
+<p>Jemplate - JavaScript Templating with Template Toolkit</p>
 <p>
 </p>
 <hr />
@@ -60,13 +60,13 @@
 </p>
 <hr />
 <h1><a name="description">DESCRIPTION</a></h1>
-<p>Jemplate is a templating framework for Javascript that is built over
+<p>Jemplate is a templating framework for JavaScript that is built over
 Perl's Template Toolkit (TT2).</p>
 <p>Jemplate parses TT2 templates using the TT2 Perl framework, but with a
 twist. Instead of compiling the templates into Perl code, it compiles
-them into Javascript.</p>
-<p>Jemplate then provides a Javascript runtime module for processing
-the template code. Presto, we have full featured Javascript
+them into JavaScript.</p>
+<p>Jemplate then provides a JavaScript runtime module for processing
+the template code. Presto, we have full featured JavaScript
 templating language!</p>
 <p>Combined with JSON and xmlHttpRequest, Jemplate provides a really simple
 and powerful way to do Ajax stuff.</p>
@@ -75,7 +75,7 @@ and powerful way to do Ajax stuff.</p>
 <hr />
 <h1><a name="howto">HOWTO</a></h1>
 <p>Jemplate comes with a command line tool call <code>jemplate</code> that you use to
-precompile your templates into a javascript file. For example if you have
+precompile your templates into a JavaScript file. For example if you have
 a template directory called <code>templates</code> that contains:</p>
 <pre>
     &gt; ls templates/
@@ -85,10 +85,10 @@ a template directory called <code>templates</code> that contains:</p>
 <p>You might run this command:</p>
 <pre>
     &gt; jemplate --compile template/* &gt; js/jemplates.js</pre>
-<p>This will compile all the templates into one Javascript file.</p>
-<p>You also need to get the Jemplate runtime.</p>
+<p>This will compile all the templates into one JavaScript file.</p>
+<p>You also need to generate the Jemplate runtime.</p>
 <pre>
-    &gt; cp ~/Jemplate-x.xx/share/Jemplate.js js/Jemplate.js</pre>
+    &gt; jemplate --runtime &gt; js/Jemplate.js</pre>
 <p>Now all you need to do is include these two files in the HEAD of
 your html:</p>
 <pre>
@@ -99,7 +99,7 @@ your html:</p>
 </p>
 <hr />
 <h1><a name="public_api">PUBLIC API</a></h1>
-<p>The Jemplate.js Javascript runtime module has the following API method:</p>
+<p>The Jemplate.js JavaScript runtime module has the following API method:</p>
 <dl>
 <dt><strong><a name="item_process">Jemplate.process(template-name, data, [target]);</a></strong><br />
 </dt>
@@ -141,7 +141,7 @@ functions. Returns the text of the module.
 </dt>
 <dd>
 Compile one template whose content is in memory. You must provide a
-unique template name. Returns the Javascript text result of the
+unique template name. Returns the JavaScript text result of the
 compilation.
 </dd>
 <p></p>
@@ -210,7 +210,7 @@ that can possibly be supported.</p>
   * [% [GET] variable %]
   * [% CALL variable %]
   * [% [SET] variable = value %]
-  * [% DEFAULT variable = value ... %] 
+  * [% DEFAULT variable = value ... %]
   * [% INCLUDE [arguments] %]
   * [% PROCESS [arguments] %]
   * [% BLOCK name %]
@@ -280,6 +280,7 @@ drinking them ;)</p>
 <p>Cory Bennett &lt;<a href="mailto:coryb@corybennett.org">coryb@corybennett.org</a>&gt;</p>
 <p>Cees Hek &lt;<a href="mailto:ceeshek@gmail.com">ceeshek@gmail.com</a>&gt;</p>
 <p>Christian Hansen</p>
+<p>David A. Coffey &lt;<a href="mailto:dacoffey@cogsmith.com">dacoffey@cogsmith.com</a>&gt;</p>
 <p>
 </p>
 <hr />

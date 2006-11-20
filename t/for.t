@@ -35,8 +35,8 @@ output += 'Top\n';
             stash.data['x'] = value;
 output += 'Middle\n';;
             retval = list.get_next();
-            var value = retval[0];
-            var done = retval[1];
+            value = retval[0];
+            done = retval[1];
         }
     }
     catch(e) {

@@ -59,7 +59,11 @@ while (--failsafe && ((stash.get('foo') == 'bar'))) {
 //line 8 "(unknown template)"
 if (1 == 2) {
 //line 5 "(unknown template)"
-continue;
+  retval = list.get_next();
+  value = retval[0];
+  done = retval[1];
+  continue;
+
 }
 else {
 //line 7 "(unknown template)"

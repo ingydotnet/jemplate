@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------------
-Jemplate - Template Toolkit for Javascript
+Jemplate - Template Toolkit for JavaScript
 
-DESCRIPTION - This module provides the runtime Javascript support for
+DESCRIPTION - This module provides the runtime JavaScript support for
 compiled Jemplate templates.
 
 AUTHOR - Ingy döt Net <ingy@cpan.org>
@@ -15,23 +15,71 @@ modify it under the same terms as Perl itself.
 //------------------------------------------------------------------------------
 // Main Jemplate class
 //------------------------------------------------------------------------------
-if (typeof Jemplate == 'undefined')
-    Jemplate = function(config) {
-		if (config) { Jemplate.config = config; }
-		else {
-			// Default Config
-			Jemplate.config = {
-				DEBUG_UNDEF: false
-			};
-		}
-	};
 
-Jemplate.templateMap = {};
+//if (typeof Jemplate == 'undefined')
+//    Jemplate = function(config) {
+//		if (config) { Jemplate.config = config; }
+//		else {
+//			// Default Config
+//			Jemplate.config = {
+//				DEBUG_UNDEF: false
+//			};
+//		}
+//	};
 
-Jemplate.process = function(template, data, output) {
-    var context = new Jemplate.Context();
-    context.stash = new Jemplate.Stash();
-    context._filter = new Jemplate.Filter();
+
+if (typeof Jemplate == 'undefined') {
+    Jemplate = function() {
+        this.init.apply(this, arguments);
+    };
+}
+
+if (! Jemplate.templateMap)
+    Jemplate.templateMap = {};
+
+Jemplate.process = function() {
+    var jemplate = new Jemplate();
+    return jemplate.process.apply(jemplate, arguments);
+}
+
+proto = Jemplate.prototype;
+
+proto.init = function(config) {
+    this.config = config ||
+    {
+        AUTO_RESET: true,
+        BLOCKS: {},
+        CONTEXT: null,
+        DEBUG_UNDEF: false,
+        DEFAULT: null,
+        ERROR: null,
+        EVAL_JAVASCRIPT: false,
+        FILTERS: {},
+        INCLUDE_PATH: [''],
+        INTERPOLATE: false,
+        OUTPUT: null,
+        PLUGINS: {},
+        POST_PROCESS: [],
+        PRE_PROCESS: [],
+        PROCESS: null,
+        RECURSION: false,
+        STASH: null,
+        TOLERANT: null,
+        VARIABLES: {},
+        WRAPPER: []
+    };
+}
+
+proto.process = function(template, data, output) {
+    var context = this.config.CONTEXT || new Jemplate.Context();
+    context.config = this.config;
+
+    context.stash = this.config.STASH || new Jemplate.Stash();
+    context.stash.__config__ = this.config;
+
+    context.__filter__ = new Jemplate.Filter();
+    context.__filter__.config = this.config;
+
     var result;
 
     var proc = function(input) {
@@ -41,7 +89,7 @@ Jemplate.process = function(template, data, output) {
         catch(e) {
             if (! String(e).match(/Jemplate\.STOP\n/))
                 throw(e);
-            result = e.toString().replace(/Jemplate\.STOP\n/, '')
+            result = e.toString().replace(/Jemplate\.STOP\n/, '');
         }
 
         if (typeof output == 'undefined')
@@ -114,8 +162,8 @@ proto.set_error = function(error, output) {
 proto.filter = function(text, name, args) {
     if (name == 'null')
         name = "null_filter";
-    if (typeof this._filter.filters[name] == "function")
-        return this._filter.filters[name](text, args, this);
+    if (typeof this.__filter__.filters[name] == "function")
+        return this.__filter__.filters[name](text, args, this);
     else
         throw "Unknown filter name ':" + name + "'";
 }
@@ -720,10 +768,11 @@ proto.get_next = function(should_init) {
 function XXX(msg) {
     if (! confirm(msg))
         throw("terminated...");
+    return msg;
 }
 
 function JJJ(obj) {
-    XXX(JSON.stringify(obj));
+    return XXX(JSON.stringify(obj));
 }
 
 //------------------------------------------------------------------------------
