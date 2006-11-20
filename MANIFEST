@@ -62,6 +62,14 @@ t/hello.t
 t/if-else.t
 t/if-variations.t
 t/javascript.t
+t/list.t
+t/list/bar/one
+t/list/bar/two
+t/list/foo/one
+t/list/foo/two
+t/list/one
+t/list/three
+t/list/two
 t/process.t
 t/quoted.t
 t/runtime.t
