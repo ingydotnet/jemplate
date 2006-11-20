@@ -1,11 +1,13 @@
 .PHONY: deps run-files
 
+INGY_JSAN_CODE=../../../ingy/jsan
+
 all: deps run-files
 
 deps: run
-	cp -r ../../jsan/Test-Base/sample/run/lib/ run/lib/
-	cp -r ../../jsan/Test-Base/sample/run/bin/ run/bin/
-	cp -r ../../jsan/Test-Base/sample/run/template/ run/template/
+	cp -r $(INGY_JSAN_CODE)/Test-Base/sample/run/lib/ run/lib/
+	cp -r $(INGY_JSAN_CODE)/Test-Base/sample/run/bin/ run/bin/
+	cp -r $(INGY_JSAN_CODE)/Test-Base/sample/run/template/ run/template/
 
 run:
 	mkdir $@
