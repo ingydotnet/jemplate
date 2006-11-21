@@ -1,5 +1,6 @@
 index_title: Jemplate Testing
 import_libs:
   - ../Test/Jemplate.js
-  - ../../share/Jemplate.js
+  - JemplateRuntime.js
   - jemplate.js
+  - jemplate2.js

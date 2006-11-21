@@ -204,18 +204,6 @@ modify it under the same terms as Perl itself.
 // Main Jemplate class
 //------------------------------------------------------------------------------
 
-//if (typeof Jemplate == 'undefined')
-//    Jemplate = function(config) {
-//		if (config) { Jemplate.config = config; }
-//		else {
-//			// Default Config
-//			Jemplate.config = {
-//				DEBUG_UNDEF: false
-//			};
-//		}
-//	};
-
-
 if (typeof Jemplate == 'undefined') {
     Jemplate = function() {
         this.init.apply(this, arguments);
@@ -520,19 +508,17 @@ proto.get = function(key) {
             if (typeof value == 'undefined')
                 break;
             root = value;
-
-    }
+        }
     }
     else {
         value = this._dotop(root, key);
     }
 
-	/*
-	if ((value == null) || (value == undefined)) {
-		if (Jemplate.config && Jemplate.config.DEBUG_UNDEF) { throw 'undef'; }
-		else { value = ''; }
-	}
-	*/
+    if (typeof value == 'undefined') {
+        if (this.__config__.DEBUG_UNDEF)
+            throw("undefined value found while using DEGUG_UNDEF");
+        value = '';
+    }
 
     return value;
 }

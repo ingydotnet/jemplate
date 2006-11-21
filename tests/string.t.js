@@ -4,7 +4,7 @@ var filters = {
     jemplate: 'jemplate_process'
 };
 
-t.plan(11);
+t.plan(10);
 t.filters(filters);
 t.run_is('jemplate', 'output');
 
@@ -50,17 +50,6 @@ string_hash.html
 [% a.hash.value %]
 --- output
 Hi
-
-=== Test length method
---- jemplate
-string_length.html
-[% SET a = 'Hi' -%]
-[% a.length %]
-[% SET a = 10 -%]
-[% a.length %]
---- output
-2
-undefined
 
 === Test list method
 --- jemplate
@@ -126,5 +115,18 @@ string_split.html
 --- output
 aaa aaa aaa
 1 2 3 4
+
+*/
+
+/*
+=== Test length method
+--- jemplate
+string_length.html
+[% SET a = 'Hi' -%]
+[% a.length %]
+[% SET a = 10 -%]
+[% a.length %]
+--- output
+2
 
 */
