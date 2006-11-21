@@ -3,6 +3,7 @@
 - Use array for output
 - Option to include template source as comments
 - Put all Jemplate code into a standalone script.
+- Test INCLUDE_PATH
 
 === 0.19
 
@@ -15,9 +16,11 @@ x Option to bundle Jemplate.js runtime
 + Test --runtime == share/Jemplate.js
 + Test --list
 + Test --start-tag and JEMPLATE_START_TAG etc
-- Test multiple compile files
-- Test INCLUDE_PATH
-- Test DEBUG_UNDEF
++ Test multiple compile files
++ Test DEBUG_UNDEF
++ Test subdir templates
+
+- Change list output
 
 - make manifest
 
