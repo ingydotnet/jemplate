@@ -54,13 +54,13 @@ Use the --list option to check this.
         The output is written to STDOUT.
 
     -l, --list
-        Just list the template names that Jemplate would use from the
-        template-list.
+        Just print (STDOUT) the template names that Jemplate would use
+        from the template-list.
 
 B<IMPORTANT>: The runtime code is also distributed as
 F<share/Jemplate.js>, but this is deprecated and will be discontinued at
 some point. Please use the C<jemplate> command line tool with the
-C<--runtime> command, to create this file..
+C<--runtime> command, to create this file.
 
 =head1 Template Toolkit Compile Options:
 

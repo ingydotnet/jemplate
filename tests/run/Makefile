@@ -20,7 +20,7 @@ jemplate.js: jemplate ../*.t.js
 
 jemplate2.js: jemplate2
 	perl -I../../lib ../../jemplate --compile jemplate2 \
-		--start-tag='<!' --end-tag='!>' --post-chomp > $@
+		--start-tag='<!' --end-tag='!>' --any-case --post-chomp > $@
 
 jemplate: ../*.t.js
 	perl bin/pull-jemplates

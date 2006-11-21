@@ -1,6 +1,6 @@
 ---
 version: 0.19
-date:    Sun Nov 19 16:41:26 PST 2006
+date:    Tue Nov 21 08:22:25 PST 2006
 changes:
 - Fixed setting a hash value. Reported by Theo Petersen. Thanks.
 - David added ability to compile path names by passing directory to recurse
@@ -9,6 +9,8 @@ changes:
 - Allow Jemplate objects to be created with runtime configs.
 - Port some TT2 runtime options.
 - Better doc
+- --runtime command prints the runtime JavaScript module
+- --list lists the template names to be used
 
 ---
 version: 0.18

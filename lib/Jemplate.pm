@@ -38,7 +38,8 @@ sub main {
 
     if ($command eq 'list') {
         foreach (@$templates) {
-            print STDOUT $_->{full} . ' => ' . $_->{short} . "\n";
+            # print STDOUT $_->{full} . ' => ' . $_->{short} . "\n";
+            print STDOUT $_->{short} . "\n";
         }
         return;
     }

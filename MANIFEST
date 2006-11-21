@@ -87,6 +87,7 @@ tests/config.yaml
 tests/default.t.js
 tests/directives.t.js
 tests/filters.t.js
+tests/greetings.t.js
 tests/hash.t.js
 tests/hello.t.js
 tests/join.t.js
@@ -107,6 +108,7 @@ tests/run/bugs.t.html
 tests/run/default.t.html
 tests/run/directives.t.html
 tests/run/filters.t.html
+tests/run/greetings.t.html
 tests/run/hash.t.html
 tests/run/hello.t.html
 tests/run/index.html
@@ -168,6 +170,9 @@ tests/run/jemplate/string_size.html
 tests/run/jemplate/string_split.html
 tests/run/jemplate/test.html
 tests/run/jemplate2.js
+tests/run/jemplate2/greeting/english
+tests/run/jemplate2/greeting/spanish
+tests/run/jemplate2/greetings
 tests/run/jemplate2/hello
 tests/run/JemplateRuntime.js
 tests/run/join.t.html
