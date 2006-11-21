@@ -177,7 +177,7 @@ sub make_file_list {
         }
     }
 
-    return \@list;
+    return [ sort { $a->{full} cmp $b->{full} } @list ];
 }
 
 sub print_usage_and_exit {
