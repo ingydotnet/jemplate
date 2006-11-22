@@ -1,4 +1,11 @@
 ---
+version: 0.20
+date:    Wed Nov 22 09:12:25 PST 2006
+changes:
+- Fix tests due to assumed file glob sorting. Thanks Cees.
+- Fix tests where compile line numbers are off by one or two.
+
+---
 version: 0.19
 date:    Tue Nov 21 08:22:25 PST 2006
 changes:

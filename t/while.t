@@ -1,6 +1,6 @@
 use t::TestJemplate tests => 2;
 
-filters { 'tt' => 'parse_lite' };
+filters { 'tt' => ['parse_lite', 'X_line_numbers'] };
 run_is 'tt' => 'js';
 
 __END__
@@ -18,18 +18,18 @@ Foo
 [%- END -%]
 --- js
 output += 'Foo';
-//line 11 "(unknown template)"
+//line X "(unknown template)"
     
 // WHILE
 var failsafe = 1000;
 while (--failsafe && ((stash.get('foo') == 'bar'))) {
-//line 8 "(unknown template)"
+//line X "(unknown template)"
 if (1 == 2) {
-//line 5 "(unknown template)"
+//line X "(unknown template)"
 return output;
 }
 else {
-//line 7 "(unknown template)"
+//line X "(unknown template)"
 throw('Jemplate.STOP\n' + output);
 }
 
@@ -51,14 +51,14 @@ Foo
 [%- END -%]
 --- js
 output += 'Foo';
-//line 11 "(unknown template)"
+//line X "(unknown template)"
     
 // WHILE
 var failsafe = 1000;
 while (--failsafe && ((stash.get('foo') == 'bar'))) {
-//line 8 "(unknown template)"
+//line X "(unknown template)"
 if (1 == 2) {
-//line 5 "(unknown template)"
+//line X "(unknown template)"
   retval = list.get_next();
   value = retval[0];
   done = retval[1];
@@ -66,7 +66,7 @@ if (1 == 2) {
 
 }
 else {
-//line 7 "(unknown template)"
+//line X "(unknown template)"
 break;
 }
 

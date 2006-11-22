@@ -36,3 +36,9 @@ sub compile_lite {
     $result =~ s/\n+\z/\n/;
     return $result;
 }
+
+sub X_line_numbers {
+    my $js = shift;
+    $js =~ s!^//line \d+!//line X!gm;
+    return $js;
+}
