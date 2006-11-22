@@ -38,7 +38,6 @@ sub main {
 
     if ($command eq 'list') {
         foreach (@$templates) {
-            # print STDOUT $_->{full} . ' => ' . $_->{short} . "\n";
             print STDOUT $_->{short} . "\n";
         }
         return;
@@ -177,7 +176,7 @@ sub make_file_list {
         }
     }
 
-    return [ sort { $a->{full} cmp $b->{full} } @list ];
+    return [ sort { $a->{short} cmp $b->{short} } @list ];
 }
 
 sub print_usage_and_exit {
