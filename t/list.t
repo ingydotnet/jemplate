@@ -27,6 +27,6 @@ two
 Jemplate->main('--list', 't/list/foo', 't/list/three');
 --- output
 one
-two
 three
+two
 
