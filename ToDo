@@ -1,9 +1,15 @@
-=== 0.20
+=== 0.21
 
 - Use array for output
 - Option to include template source as comments
-- Put all Jemplate code into a standalone script.
+- Put all Jemplate code into a standalone script
 - Test INCLUDE_PATH
+- Rewrite docs
+- Support JavaScript compression
+
+=== 0.20
+
++ Fix test failures.
 
 === 0.19
 

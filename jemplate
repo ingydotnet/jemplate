@@ -1,11 +1,6 @@
 #!/usr/bin/perl
-
-use strict;
-use warnings;
 use lib 'lib';
-
 use Jemplate 0.19;
-
 Jemplate->main(@ARGV);
 
 =head1 Usage:
@@ -102,8 +97,3 @@ These compile time options are specific to Jemplate.
         comment next to each compiled template.
 
 =cut
-
-__DATA__
-
-#include Getopt::Long
-#include Jemplate
