@@ -547,7 +547,7 @@ proto._dotop = function(root, item, args) {
         (typeof root[item] != 'undefined')) {
         var value = root[item];
         if (typeof value == 'function')
-            value = value();
+            value = value.apply(root);
         return value;
     }
 
