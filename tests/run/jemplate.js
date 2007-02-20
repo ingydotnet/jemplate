@@ -1720,12 +1720,18 @@ Jemplate.templateMap['plugins_basic.html'] = function(context) {
     try {
 //line 1 "plugins_basic.html"
 // USE
-stash.set('dummy', context.plugin('dummy', []));
+stash.set('dummy', context.plugin('dummy', [ 'simple param' ]));
 //line 2 "plugins_basic.html"
 output += stash.get(['dummy', 0, 'simple', 0]);
 output += '\n#\n';
 //line 4 "plugins_basic.html"
 output += stash.get(['dummy', 0, 'params', [ 'one', 'two' ]]);
+output += '\n#\n';
+//line 6 "plugins_basic.html"
+output += stash.get(['dummy', 0, 'what', 0]);
+output += '\n#\n';
+//line 8 "plugins_basic.html"
+output += stash.get(['dummy', 0, 'get_what', 0]);
 output += '\n#\n';
     }
     catch(e) {

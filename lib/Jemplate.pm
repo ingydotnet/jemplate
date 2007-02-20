@@ -343,9 +343,7 @@ proto.plugin = function(name, args) {
         throw "Unknown plugin name ':" + name + "'";
 
     // The Context object (this) is passed as the first argument to the plugin.
-    // eval is used since we have the name of a class, and I don't know
-    // how to instantiate an object when the class name is in a variable...
-    return eval("new "+name+"(this, args)");
+    return new window[name](this, args);
 }
 
 proto.filter = function(text, name, args) {
