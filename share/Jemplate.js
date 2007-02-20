@@ -68,6 +68,9 @@ proto.process = function(template, data, output) {
     context.__filter__ = new Jemplate.Filter();
     context.__filter__.config = this.config;
 
+    context.__plugin__ = new Jemplate.Plugin();
+    context.__plugin__.config = this.config;
+
     var result;
 
     var proc = function(input) {
@@ -147,6 +150,16 @@ proto.set_error = function(error, output) {
     return error;
 }
 
+proto.plugin = function(name, args) {
+    if (typeof name == 'undefined')
+        throw "Unknown plugin name ':" + name + "'";
+
+    // The Context object (this) is passed as the first argument to the plugin.
+    // eval is used since we have the name of a class, and I don't know
+    // how to instantiate an object when the class name is in a variable...
+    return eval("new "+name+"(this, args)");
+}
+
 proto.filter = function(text, name, args) {
     if (name == 'null')
         name = "null_filter";
@@ -155,6 +168,17 @@ proto.filter = function(text, name, args) {
     else
         throw "Unknown filter name ':" + name + "'";
 }
+
+//------------------------------------------------------------------------------
+// Jemplate.Plugin class
+//------------------------------------------------------------------------------
+if (typeof Jemplate.Plugin == 'undefined') {
+    Jemplate.Plugin = function() { };
+}
+
+proto = Jemplate.Plugin.prototype;
+
+proto.plugins = {};
 
 //------------------------------------------------------------------------------
 // Jemplate.Filter class

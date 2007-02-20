@@ -510,6 +510,24 @@ sub stop {
     return "throw('Jemplate.STOP\\n' + output);";
 }   
 
+
+#------------------------------------------------------------------------
+# use(\@lnameargs)                         [% USE alias = plugin(args) %]
+#     # => [ [$file, ...], \@args, $alias ]
+#------------------------------------------------------------------------
+
+sub use {
+    my ($class, $lnameargs) = @_;
+    my ($file, $args, $alias) = @$lnameargs;
+    $file = shift @$file;       # same production rule as INCLUDE
+    $alias ||= $file;
+    $args = &args($class, $args);
+    $file .= ", $args" if $args;
+    return "// USE\n"
+         . "stash.set($alias, context.plugin($file));";
+}
+
+
 #------------------------------------------------------------------------
 # stubs()                                                      [% STOP %]
 #------------------------------------------------------------------------
