@@ -703,7 +703,11 @@ proto.hash_functions.values = function(hash) {
     return list;
 }
 
-
+//  delete
+proto.hash_functions.remove = function(hash, args) {
+    return delete hash[args[0]];
+}
+proto.hash_functions['delete'] = proto.hash_functions.remove;
 
 //------------------------------------------------------------------------------
 // Jemplate.Iterator class
