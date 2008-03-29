@@ -2,7 +2,7 @@
 
 INGY_JSAN_CODE=../../../ingy/jsan
 
-all: deps run-files
+all: run-files
 
 deps: run
 	cp -r $(INGY_JSAN_CODE)/Test-Base/sample/run/lib/ run/lib/

@@ -28,7 +28,6 @@ inc/Module/Install/Include.pm
 inc/Module/Install/Makefile.pm
 inc/Module/Install/Metadata.pm
 inc/Module/Install/Scripts.pm
-inc/Module/Install/Share.pm
 inc/Module/Install/TestBase.pm
 inc/Module/Install/Win32.pm
 inc/Module/Install/WriteAll.pm
@@ -43,16 +42,12 @@ lib/Jemplate.pm
 lib/Jemplate/Directive.pm
 lib/Jemplate/Grammar.pm
 lib/Jemplate/Parser.pm
+lib/Jemplate/Runtime.pm
 LICENSE
 Makefile.PL
 MANIFEST			This list of files
 META.yml
-parser/Grammar.pm.skel
-parser/Parser.yp
-parser/README
-parser/yc
 README
-share/Jemplate.js
 t/block.t
 t/call.t
 t/clear.t
@@ -100,6 +95,7 @@ tests/mangler/mangle.pl
 tests/mangler/README
 tests/mangler/test-data.tmpl.tt
 tests/objects.t.js
+tests/plugins.t.js
 tests/run/basics.t.html
 tests/run/bin/daemon
 tests/run/bin/pull-jemplates
@@ -154,6 +150,7 @@ tests/run/jemplate/myobjectnameattr.html
 tests/run/jemplate/operator1.html
 tests/run/jemplate/operator2.html
 tests/run/jemplate/operator3.html
+tests/run/jemplate/plugins_basic.html
 tests/run/jemplate/stash-functions1.html
 tests/run/jemplate/stash-functions2.html
 tests/run/jemplate/stash-functions3.html
@@ -174,6 +171,7 @@ tests/run/jemplate2/greeting/english
 tests/run/jemplate2/greeting/spanish
 tests/run/jemplate2/greetings
 tests/run/jemplate2/hello
+tests/run/jemplate_dummy_plugin.js
 tests/run/JemplateRuntime.js
 tests/run/join.t.html
 tests/run/lib/Subclass.js
@@ -186,6 +184,7 @@ tests/run/localise.t.html
 tests/run/loop.t.html
 tests/run/Makefile
 tests/run/objects.t.html
+tests/run/plugins.t.html
 tests/run/set.t.html
 tests/run/stash.t.html
 tests/run/string.t.html

@@ -12,7 +12,6 @@ no_index        directory => 'examples';
 
 clean_files     't/Jemplate.js';
 
-install_share;
 install_script  'jemplate';
 
 WriteAll;
