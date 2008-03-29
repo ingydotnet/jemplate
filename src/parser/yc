@@ -18,7 +18,8 @@
 #========================================================================
 
 : ${GRAMMAR:="Parser.yp"}
-: ${OUTPUT:="../lib/Jemplate/Grammar.pm"}
+# : ${OUTPUT:="../lib/Jemplate/Grammar.pm"}
+: ${OUTPUT:="Grammar.pm"}
 : ${TEMPLATE:="Grammar.pm.skel"}
 
 echo "Compiling parser grammar (${GRAMMAR} -> ${OUTPUT})"

@@ -1,0 +1,16 @@
+
+            *** THIS DIRECTORY IS FOR JEMPLATE HACKERS ONLY ***
+
+
+This src directory contains various Perl and JavaScript files that get
+stitched together to make the Jemplate Perl/CPAN distribution.
+
+If you want to hack on the Jemplate parser or runtime code, you can
+change the files in this directory. To build your changes into the
+Jemplate distribution modules simply run:
+
+    make
+
+from this directory.
+
+This directory is not included in the Jemplate CPAN distribution.

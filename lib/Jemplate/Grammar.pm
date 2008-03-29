@@ -13,8 +13,8 @@
 #   Andy Wardley   <abw@kfs.org>
 #
 # COPYRIGHT
-#   Copyright (C) 2006 Ingy döt Net.  All Rights Reserved.
-#   Copyright (C) 1996-2000 Andy Wardley.  All Rights Reserved.
+#   Copyright (C) 2006-2008 Ingy döt Net.
+#   Copyright (C) 1996-2000 Andy Wardley.
 #   Copyright (C) 1998-2000 Canon Research Centre Europe Ltd.
 #
 #   This module is free software; you can redistribute it and/or

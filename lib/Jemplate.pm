@@ -493,10 +493,10 @@ All tests run 100% successful in the above browsers.
 =head1 DEVELOPMENT
 
 The bleeding edge code is available via Subversion at
-http://svn.kwiki.org/ingy/Jemplate/
+http://svn.jemplate.net/repo/trunk/
 
 You can run the runtime tests directly from
-http://svn.kwiki.org/ingy/Jemplate/tests/run/index.html or from the
+http://svn.jemplate.net/repo/trunk/tests/run/index.html or from the
 corresponding CPAN or JSAN directories.
 
 Jemplate development is being discussed at irc://irc.freenode.net/#jemplate
@@ -532,7 +532,7 @@ David A. Coffey <dacoffey@cogsmith.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2006. Ingy döt Net. All rights reserved.
+Copyright (c) 2006-2008. Ingy döt Net.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
