@@ -580,6 +580,7 @@ proto.list_functions.splice = function(list, args) {
         return list.splice(args[0], args[1]);
     if (args.length == 3)
         return list.splice(args[0], args[1], args[2]);
+    return null;
 }
 
 proto.list_functions.push = function(list, args) {
@@ -785,7 +786,7 @@ Jemplate.Ajax = {
         throw("This is an Jemplate.Ajax.get " + _notice_ending);
     },
 
-    processCompatibleGet() {
+    processCompatibleGet: function() {
         return this.Ajax.apply(this, arguments);
     },
 
