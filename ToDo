@@ -1,3 +1,38 @@
+FUTURE:
+ - Integrate debugging with Firebug
+ - Better warnings (provide context of fault, e.g. which template?) on bad stash data (lists, etc).
+
+Integrate different frameworks for Ajax/JSON processing and 
+encaspulate Jemplate code so it can play nice with other javascript:
+
+    --runtime           Is equivalent to --ajax=ilinsky --json=json2
+                        Need to do testing of ilinsky to see if it's a better choice than gregory, but
+                        looks like it (and still has active and recent development).
+
+    --runtime-lite      Same as --ajax=none --json=none
+    --runtime-jquery    Same as --ajax=jquery --json=none
+    --runtime-yui       Same as --ajax=yui --json=yui
+    --runtime-legacy    Same as --ajax=gregory --json=json2
+
+    --json              By itself, equivalent to --json=json2
+    --json=json2        Use http://www.json.org/json2.js for parsing/stringifying (bundle)
+    --json=yui          Use YUI: YAHOO.lang.JSON
+    --json=none         Doesn't provide any functionality except a warning
+    
+    --ajax              By itself, equivalent to --ajax=ilinsky
+    --ajax=jquery       Use jQuery for Ajax get and post (external)
+    --ajax=yui          Use YUI: yui/connection/connection.js (external)
+    --ajax=ilinsky      Use http://code.google.com/p/xmlhttprequest/ (bundle)
+    --ajax=gregory      Use http://www.scss.com.au/family/andrew/webdesign/xmlhttprequest/ (bundle)
+    --ajax=none         Doesn't provide any functionality except a warning
+
+    --xxx               Include XXX and JJJ helper functions (bundle, of course)
+
+    --ilinsky-xhr       Provide Ilinsky's XmlHttpRequest regardless of which Ajax framework is
+                        chosen.
+
+    --minify                                Pass output through JavaScript::Minifier
+    --minify=/path/to/yuicompressor         Pass output through an exec java using the specified yuicompressor.jar
 
 === 0.21
 
