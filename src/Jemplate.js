@@ -17,7 +17,7 @@ modify it under the same terms as Perl itself.
 //------------------------------------------------------------------------------
 
 if (typeof Jemplate == 'undefined') {
-    Jemplate = function() {
+    var Jemplate = function() {
         this.init.apply(this, arguments);
     };
 }
@@ -30,7 +30,9 @@ Jemplate.process = function() {
     return jemplate.process.apply(jemplate, arguments);
 }
 
-proto = Jemplate.prototype;
+;(function(){
+
+var proto = Jemplate.prototype = {};
 
 proto.init = function(config) {
     this.config = config ||
@@ -87,7 +89,7 @@ proto.process = function(template, data, output) {
             return result;
         if (typeof output == 'function') {
             output(result);
-            return;
+            return null;
         }
         if (typeof(output) == 'string' || output instanceof String) {
             if (output.match(/^#[\w\-]+$/)) {
@@ -96,12 +98,12 @@ proto.process = function(template, data, output) {
                 if (typeof element == 'undefined')
                     throw('No element found with id="' + id + '"');
                 element.innerHTML = result;
-                return;
+                return null;
             }
         }
         else {
             output.innerHTML = result;
-            return;
+            return null;
         }
 
         throw("Invalid arguments in call to Jemplate.process");
@@ -112,8 +114,10 @@ proto.process = function(template, data, output) {
     if (typeof data == 'function')
         data = data();
     else if (typeof data == 'string') {
-        Ajax.get(data, function(r) { proc(JSON.parse(r)) });
-        return;
+//        Jemplate.Ajax.get(data, function(r) { proc(Jemplate.JSON.parse(r)) });
+        var url = data;
+        Jemplate.Ajax.processGet(url, function(data) { proc(data) });
+        return null;
     }
 
     return proc(data);
@@ -248,7 +252,7 @@ proto.filters.uri = function(text) {
 
 proto.filters.indent = function(text, args) {
     var pad = args[0];
-    if (! text) return;
+    if (! text) return null;
     if (typeof pad == 'undefined')
         pad = 4;
 
@@ -266,7 +270,7 @@ proto.filters.indent = function(text, args) {
 
 proto.filters.truncate = function(text, args) {
     var len = args[0];
-    if (! text) return;
+    if (! text) return null;
     if (! len)
         len = 32;
     // This should probably be <=, but TT just uses <
@@ -277,7 +281,7 @@ proto.filters.truncate = function(text, args) {
 }
 
 proto.filters.repeat = function(text, iter) {
-    if (! text) return;
+    if (! text) return null;
     if (! iter || iter == 0)
         iter = 1;
     if (iter == 1) return text
@@ -290,7 +294,7 @@ proto.filters.repeat = function(text, iter) {
 }
 
 proto.filters.replace = function(text, args) {
-    if (! text) return;
+    if (! text) return null;
     var re_search = args[0];
     var text_replace = args[1];
     if (! re_search)
@@ -651,20 +655,21 @@ proto.hash_functions.keys = function(hash) {
 proto.hash_functions.list = function(hash, args) {
     var what = '';
     if ( args )
-        var what = args[0];
+        what = args[0];
 
     var list = new Array();
+    var key;
     if (what == 'keys')
-        for ( var key in hash )
+        for ( key in hash )
             list.push(key);
     else if (what == 'values')
-        for ( var key in hash )
+        for ( key in hash )
             list.push(hash[key]);
     else if (what == 'each')
-        for ( var key in hash )
+        for ( key in hash )
             list.push(key, hash[key]);
     else
-        for ( var key in hash )
+        for ( key in hash )
             list.push({ 'key': key, 'value': hash[key] });
 
     return list;
@@ -772,3 +777,31 @@ proto.get_next = function(should_init) {
     }
     return [null, true];
 }
+
+var _notice_ending = "stub that doesn't do anything. Try including the jQuery, YUI, or standalone option when building the runtime";
+
+Jemplate.Ajax = {
+    get: function() {
+        throw("This is an Jemplate.Ajax.get " + _notice_ending);
+    },
+
+    processCompatibleGet() {
+        return this.Ajax.apply(this, arguments);
+    },
+
+    post: function() {
+        throw("This is an Jemplate.Ajax.post " + _notice_ending);
+    }
+};
+
+Jemplate.JSON = {
+    parse: function() {
+        throw("This is an Jemplate.JSON.parse " + _notice_ending);
+    },
+
+    stringify: function() {
+        throw("This is an Jemplate.JSON.stringify " + _notice_ending);
+    }
+};
+
+}());
