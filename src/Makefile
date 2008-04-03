@@ -1,3 +1,5 @@
+.PHONY: fetch
+
 GRAMMAR_MODULE=../lib/Jemplate/Grammar.pm
 RUNTIME_MODULE=../lib/Jemplate/Runtime.pm
 

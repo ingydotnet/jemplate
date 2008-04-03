@@ -1,9 +1,3 @@
-package Jemplate::Runtime;
-use strict;
-use warnings;
-
-sub main {
-    <<'...';
 /*------------------------------------------------------------------------------
 Jemplate - Template Toolkit for JavaScript
 
@@ -23,7 +17,7 @@ modify it under the same terms as Perl itself.
 //------------------------------------------------------------------------------
 
 if (typeof Jemplate == 'undefined') {
-    var Jemplate = function() {
+    Jemplate = function() {
         this.init.apply(this, arguments);
     };
 }
@@ -36,9 +30,7 @@ Jemplate.process = function() {
     return jemplate.process.apply(jemplate, arguments);
 }
 
-;(function(){
-
-var proto = Jemplate.prototype = {};
+proto = Jemplate.prototype;
 
 proto.init = function(config) {
     this.config = config ||
@@ -76,9 +68,6 @@ proto.process = function(template, data, output) {
     context.__filter__ = new Jemplate.Filter();
     context.__filter__.config = this.config;
 
-    context.__plugin__ = new Jemplate.Plugin();
-    context.__plugin__.config = this.config;
-
     var result;
 
     var proc = function(input) {
@@ -95,7 +84,7 @@ proto.process = function(template, data, output) {
             return result;
         if (typeof output == 'function') {
             output(result);
-            return null;
+            return;
         }
         if (typeof(output) == 'string' || output instanceof String) {
             if (output.match(/^#[\w\-]+$/)) {
@@ -104,12 +93,12 @@ proto.process = function(template, data, output) {
                 if (typeof element == 'undefined')
                     throw('No element found with id="' + id + '"');
                 element.innerHTML = result;
-                return null;
+                return;
             }
         }
         else {
             output.innerHTML = result;
-            return null;
+            return;
         }
 
         throw("Invalid arguments in call to Jemplate.process");
@@ -120,10 +109,8 @@ proto.process = function(template, data, output) {
     if (typeof data == 'function')
         data = data();
     else if (typeof data == 'string') {
-//        Jemplate.Ajax.get(data, function(r) { proc(Jemplate.JSON.parse(r)) });
-        var url = data;
-        Jemplate.Ajax.processGet(url, function(data) { proc(data) });
-        return null;
+        Ajax.get(data, function(r) { proc(JSON.parse(r)) });
+        return;
     }
 
     return proc(data);
@@ -160,14 +147,6 @@ proto.set_error = function(error, output) {
     return error;
 }
 
-proto.plugin = function(name, args) {
-    if (typeof name == 'undefined')
-        throw "Unknown plugin name ':" + name + "'";
-
-    // The Context object (this) is passed as the first argument to the plugin.
-    return new window[name](this, args);
-}
-
 proto.filter = function(text, name, args) {
     if (name == 'null')
         name = "null_filter";
@@ -176,17 +155,6 @@ proto.filter = function(text, name, args) {
     else
         throw "Unknown filter name ':" + name + "'";
 }
-
-//------------------------------------------------------------------------------
-// Jemplate.Plugin class
-//------------------------------------------------------------------------------
-if (typeof Jemplate.Plugin == 'undefined') {
-    Jemplate.Plugin = function() { };
-}
-
-proto = Jemplate.Plugin.prototype;
-
-proto.plugins = {};
 
 //------------------------------------------------------------------------------
 // Jemplate.Filter class
@@ -258,7 +226,7 @@ proto.filters.uri = function(text) {
 
 proto.filters.indent = function(text, args) {
     var pad = args[0];
-    if (! text) return null;
+    if (! text) return;
     if (typeof pad == 'undefined')
         pad = 4;
 
@@ -276,7 +244,7 @@ proto.filters.indent = function(text, args) {
 
 proto.filters.truncate = function(text, args) {
     var len = args[0];
-    if (! text) return null;
+    if (! text) return;
     if (! len)
         len = 32;
     // This should probably be <=, but TT just uses <
@@ -287,7 +255,7 @@ proto.filters.truncate = function(text, args) {
 }
 
 proto.filters.repeat = function(text, iter) {
-    if (! text) return null;
+    if (! text) return;
     if (! iter || iter == 0)
         iter = 1;
     if (iter == 1) return text
@@ -300,7 +268,7 @@ proto.filters.repeat = function(text, iter) {
 }
 
 proto.filters.replace = function(text, args) {
-    if (! text) return null;
+    if (! text) return;
     var re_search = args[0];
     var text_replace = args[1];
     if (! re_search)
@@ -391,7 +359,7 @@ proto._dotop = function(root, item, args) {
         (typeof root[item] != 'undefined')) {
         var value = root[item];
         if (typeof value == 'function')
-            value = value.apply(root);
+            value = value();
         return value;
     }
 
@@ -586,7 +554,6 @@ proto.list_functions.splice = function(list, args) {
         return list.splice(args[0], args[1]);
     if (args.length == 3)
         return list.splice(args[0], args[1], args[2]);
-    return null;
 }
 
 proto.list_functions.push = function(list, args) {
@@ -662,21 +629,20 @@ proto.hash_functions.keys = function(hash) {
 proto.hash_functions.list = function(hash, args) {
     var what = '';
     if ( args )
-        what = args[0];
+        var what = args[0];
 
     var list = new Array();
-    var key;
     if (what == 'keys')
-        for ( key in hash )
+        for ( var key in hash )
             list.push(key);
     else if (what == 'values')
-        for ( key in hash )
+        for ( var key in hash )
             list.push(hash[key]);
     else if (what == 'each')
-        for ( key in hash )
+        for ( var key in hash )
             list.push(key, hash[key]);
     else
-        for ( key in hash )
+        for ( var key in hash )
             list.push({ 'key': key, 'value': hash[key] });
 
     return list;
@@ -715,11 +681,7 @@ proto.hash_functions.values = function(hash) {
     return list;
 }
 
-//  delete
-proto.hash_functions.remove = function(hash, args) {
-    return delete hash[args[0]];
-}
-proto.hash_functions['delete'] = proto.hash_functions.remove;
+
 
 //------------------------------------------------------------------------------
 // Jemplate.Iterator class
@@ -785,38 +747,6 @@ proto.get_next = function(should_init) {
     return [null, true];
 }
 
-var _notice_ending = "stub that doesn't do anything. Try including the jQuery, YUI, or standalone option when building the runtime";
-
-Jemplate.Ajax = {
-    get: function() {
-        throw("This is an Jemplate.Ajax.get " + _notice_ending);
-    },
-
-    processCompatibleGet: function() {
-        return this.Ajax.apply(this, arguments);
-    },
-
-    post: function() {
-        throw("This is an Jemplate.Ajax.post " + _notice_ending);
-    }
-};
-
-Jemplate.JSON = {
-    parse: function() {
-        throw("This is an Jemplate.JSON.parse " + _notice_ending);
-    },
-
-    stringify: function() {
-        throw("This is an Jemplate.JSON.stringify " + _notice_ending);
-    }
-};
-
-}());
-...
-}
-
-sub xxx {
-    <<'...';
 //------------------------------------------------------------------------------
 // Debugging Support
 //------------------------------------------------------------------------------
@@ -830,11 +760,7 @@ function XXX(msg) {
 function JJJ(obj) {
     return XXX(JSON.stringify(obj));
 }
-...
-}
 
-sub ajax {
-    <<'...';
 //------------------------------------------------------------------------------
 // Ajax support
 //------------------------------------------------------------------------------
@@ -1073,11 +999,8 @@ if (!window.ActiveXObject && window.XMLHttpRequest) {
     return null;
   };
 }
-...
-}
 
-sub json {
-    <<'...';
+
 //------------------------------------------------------------------------------
 // JSON Support
 //------------------------------------------------------------------------------
@@ -1187,33 +1110,3 @@ var JSON = function () {
         }
     };
 }();
-...
-}
-
-1;
-
-=head1 NAME
-
-Jemplate::Runtime - Perl Module containing the Jemplate JavaScript Runtime
-
-=head1 SYNOPSIS
-
-    use Jemplate::Runtime;
-    print Jemplate::Runtime->main;
-
-=head1 DESCRIPTION
-
-This module is auto-generated and used internally by Jemplate. It
-contains subroutines that simply return various parts of the Jemplate
-JavaScript Runtime code.
-
-=head1 COPYRIGHT
-
-Copyright (c) 2008. Ingy döt Net.
-
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
-
-See L<http://www.perl.com/perl/misc/Artistic.html>
-
-=cut
