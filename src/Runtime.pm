@@ -2,27 +2,64 @@ package Jemplate::Runtime;
 use strict;
 use warnings;
 
-sub main {
+sub main { return &kernel }
+sub kernel {
     <<'...';
-[% INCLUDE Jemplate.js -%]
+[% INCLUDE "js/kernel.js" %]
+...
+}
+
+sub ajax_jquery {
+    <<'...';
+[% INCLUDE "js/ajax-jquery.js" %]
+...
+}
+
+sub ajax_xhr {
+    <<'...';
+[% INCLUDE "js/ajax-xhr.js" %]
+...
+}
+
+sub ajax_yui {
+    <<'...';
+[% INCLUDE "js/ajax-yui.js" %]
+...
+}
+
+sub json_json2 {
+    <<'...';
+[% INCLUDE "js/json-json2.js" %]
+...
+}
+
+sub json_yui {
+    <<'...';
+[% INCLUDE "js/json-yui.js" %]
+...
+}
+
+sub json2 {
+    <<'...';
+[% INCLUDE "js/json2.js" %]
+...
+}
+
+sub xhr_gregory {
+    <<'...';
+[% INCLUDE "js/xhr-gregory.js" %]
+...
+}
+
+sub xhr_ilinsky {
+    <<'...';
+[% INCLUDE "js/xhr-ilinsky.js" %]
 ...
 }
 
 sub xxx {
     <<'...';
-[% INCLUDE Jemplate/XXX.js -%]
-...
-}
-
-sub ajax {
-    <<'...';
-[% INCLUDE Jemplate/Ajax.js -%]
-...
-}
-
-sub json {
-    <<'...';
-[% INCLUDE Jemplate/JSON.js -%]
+[% INCLUDE "js/xxx.js" %]
 ...
 }
 
@@ -42,6 +79,28 @@ Jemplate::Runtime - Perl Module containing the Jemplate JavaScript Runtime
 This module is auto-generated and used internally by Jemplate. It
 contains subroutines that simply return various parts of the Jemplate
 JavaScript Runtime code.
+
+=head1 METHODS
+
+head2 kernel
+
+head2 ajax_jquery
+
+head2 ajax_xhr
+
+head2 ajax_yui
+
+head2 json_json2
+
+head2 json_yui
+
+head2 json2
+
+head2 xhr_gregory
+
+head2 xhr_ilinsky
+
+head2 xxx
 
 =head1 COPYRIGHT
 

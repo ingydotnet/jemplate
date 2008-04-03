@@ -26,24 +26,25 @@ sub main {
 
     my @argv = @_;
 
-    my ($command, $template_options, $jemplate_options) = get_options(@argv);
+    my ($template_options, $jemplate_options) = get_options(@argv);
+    my ($runtime, $compile, $list) = @$jemplate_options{qw/runtime compile list/};
 
-    if ($command eq 'runtime') {
-        print STDOUT runtime_source_code();
-        return;
+    if ($runtime) {
+        print STDOUT runtime_source_code(@$jemplate_options{qw/runtime ajax json xxx xhr/});
+        return unless $compile;
     }
 
     my $templates = make_file_list(@argv);
     print_usage_and_exit() unless @$templates;
 
-    if ($command eq 'list') {
+    if ($list) {
         foreach (@$templates) {
             print STDOUT $_->{short} . "\n";
         }
         return;
     }
 
-    if ($command eq 'compile') {
+    if ($compile) {
         my $jemplate = Jemplate->new(%$template_options);
         print STDOUT $jemplate->_preamble;
         foreach my $template (@$templates) {
@@ -91,11 +92,12 @@ sub get_options {
         : 1;
 
     my $source = 0;
+    my ($ajax, $json, $xxx, $xhr, $minify);
 
     GetOptions(
         "compile|c"     => \$compile,
         "list|l"        => \$list,
-        "runtime|r"     => \$runtime,
+        "runtime|r:s"   => \$runtime,
 
         "start-tag=s"   => \$start_tag,
         "end-tag=s"     => \$end_tag,
@@ -107,8 +109,22 @@ sub get_options {
 
         "source|s"      => \$source,
 
+        "ajax:s"        => \$ajax,
+        "json:s"        => \$json,
+        "xxx:s"         => \$xxx,
+        "xhr:s"         => \$xhr,
+
+        "minify:s"      => \$minify,
+
         "help|?"        => \&print_usage_and_exit,
     ) or print_usage_and_exit();
+
+    $runtime = "standard" if defined $runtime && ! $runtime;
+    $runtime = "standard" if $runtime && $runtime eq 1;
+
+    print_usage_and_exit("Don't understand '--runtime $runtime'") if ! grep { $runtime =~ m/$_/ } qw/standard lite jquery yui legacy/;
+    print_usage_and_exit("Can't specify --list with a --runtime and/or the --compile option") if $list && ($runtime || $compile);
+    print_usage_and_exit() unless $list || $runtime || $compile;
 
     my $command =
         $runtime ? 'runtime' :
@@ -126,9 +142,11 @@ sub get_options {
     $options->{EVAL_JAVASCRIPT} = $eval_javascript if defined $eval_javascript;
 
     return (
-        $command,
         $options,
-        {source => $source},
+        { compile => $compile, runtime => $runtime, list => $list,
+            source => $source,
+            ajax => $ajax, json => $json, xxx => $xxx, xhr => $xhr,
+            minify => $minify },
     );
 }
 
@@ -181,16 +199,55 @@ sub make_file_list {
 }
 
 sub print_usage_and_exit {
+    print STDOUT join "\n", "", @_, "Aborting!", "\n" if @_;
     print STDOUT usage();
     exit;
 }
 
 sub runtime_source_code {
     require Jemplate::Runtime;
-    print Jemplate::Runtime->main;
-    print Jemplate::Runtime->xxx;
-    print Jemplate::Runtime->ajax;
-    print Jemplate::Runtime->json;
+
+    my ($runtime, $ajax, $json, $xhr, $xxx) = map { defined $_ ? $_ : "" } @_[0 .. 4];
+
+    if ($runtime eq "standard") {
+        $ajax ||= "xhr";
+        $json ||= "json2";
+        $xhr ||= "ilinsky";
+    }
+    elsif ($runtime eq "jquery") {
+        $ajax ||= "jquery";
+    }
+    elsif ($runtime eq "yui") {
+        $ajax ||= "yui";
+        $json ||= "yui";
+    }
+    elsif ($runtime eq "legacy") {
+        $ajax ||= "xhr";
+        $json ||= "json2";
+        $xhr ||= "gregory";
+    }
+    elsif ($runtime eq "lite") {
+    }
+
+    $ajax = "xhr" if $ajax eq 1;
+    $json = "json2" if $json eq 1;
+    $xhr = "ilinsky" if $xhr eq 1;
+
+    print Jemplate::Runtime->kernel if $runtime;
+
+    print Jemplate::Runtime->json2 if $json eq "json2";
+    
+    print Jemplate::Runtime->ajax_xhr if $ajax eq "xhr";
+    print Jemplate::Runtime->ajax_jquery if $ajax eq "jquery";
+    print Jemplate::Runtime->ajax_yui if $ajax eq "yui";
+
+    print Jemplate::Runtime->json_json2 if $json eq "json2";
+    print Jemplate::Runtime->json_yui if $json eq "yui";
+
+    print Jemplate::Runtime->xhr_ilinsky if $xhr eq "ilinsky";
+    print Jemplate::Runtime->xhr_gregory if $xhr eq "gregory";
+
+    print Jemplate::Runtime->xxx if $xxx;
 }
 
 #-------------------------------------------------------------------------------
