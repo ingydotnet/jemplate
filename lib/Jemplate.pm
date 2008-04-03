@@ -99,6 +99,7 @@ sub get_options {
 
         "start-tag=s"   => \$start_tag,
         "end-tag=s"     => \$end_tag,
+        "trim=s"        => \$trim,
         "pre-chomp"     => \$pre_chomp,
         "post-chomp"    => \$post_chomp,
         "any-case"      => \$anycase,
