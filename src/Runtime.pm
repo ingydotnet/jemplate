@@ -33,6 +33,20 @@ sub json_json2 {
 ...
 }
 
+sub json_json2_internal {
+    <<'...';
+;(function(){
+
+var JSON;
+
+[% INCLUDE "js/json2.js" %]
+
+[% INCLUDE "js/json-json2-internal.js" %]
+
+}());
+...
+}
+
 sub json_yui {
     <<'...';
 [% INCLUDE "js/json-yui.js" %]

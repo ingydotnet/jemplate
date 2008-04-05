@@ -207,7 +207,7 @@ sub print_usage_and_exit {
 sub runtime_source_code {
     require Jemplate::Runtime;
 
-    my ($runtime, $ajax, $json, $xhr, $xxx) = map { defined $_ ? $_ : "" } @_[0 .. 4];
+    my ($runtime, $ajax, $json, $xhr, $xxx) = map { defined $_ ? lc $_ : "" } @_[0 .. 4];
 
     if ($runtime eq "standard") {
         $ajax ||= "xhr";
@@ -235,13 +235,14 @@ sub runtime_source_code {
 
     print Jemplate::Runtime->kernel if $runtime;
 
-    print Jemplate::Runtime->json2 if $json eq "json2";
+    print Jemplate::Runtime->json2 if $json =~ m/^json2?$/i;
     
     print Jemplate::Runtime->ajax_xhr if $ajax eq "xhr";
     print Jemplate::Runtime->ajax_jquery if $ajax eq "jquery";
     print Jemplate::Runtime->ajax_yui if $ajax eq "yui";
 
-    print Jemplate::Runtime->json_json2 if $json eq "json2";
+    print Jemplate::Runtime->json_json2 if $json =~ m/^json2?$/i;
+    print Jemplate::Runtime->json_json2_internal if $json =~ m/^json2?[_-]?internal$/i;
     print Jemplate::Runtime->json_yui if $json eq "yui";
 
     print Jemplate::Runtime->xhr_ilinsky if $xhr eq "ilinsky";

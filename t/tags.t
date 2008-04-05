@@ -35,11 +35,11 @@ output += ' baz!\n';
 
 #-------------------------------------------------------------------------------
 {
-    my ($command, $options) = Jemplate->get_options(qw(
+    my ($template_options, $jemplate_options) = Jemplate->get_options(qw(
         --compile
     )); 
     my $got = Jemplate->new(
-        %$options,
+        %$template_options,
     )->compile_template_content($input, 'test_template');
 
     is strip($got), $unexpected, 
@@ -48,13 +48,13 @@ output += ' baz!\n';
 
 #-------------------------------------------------------------------------------
 {
-    my ($command, $options) = Jemplate->get_options(qw(
+    my ($template_options, $jemplate_options) = Jemplate->get_options(qw(
         --compile
         --start-tag=<!
         --end-tag=!>
     )); 
     my $got = Jemplate->new(
-        %$options,
+        %$template_options,
     )->compile_template_content($input, 'test_template');
 
     is strip($got), $expected, 
@@ -65,12 +65,12 @@ output += ' baz!\n';
 {
     $ENV{JEMPLATE_START_TAG} = '<!';
     $ENV{JEMPLATE_END_TAG} = '!>';
-    my ($command, $options) = Jemplate->get_options(qw(
+    my ($template_options, $jemplate_options) = Jemplate->get_options(qw(
         --compile
     )); 
 
     my $got = Jemplate->new(
-        %$options,
+        %$template_options,
     )->compile_template_content($input, 'test_template');
 
     is strip($got), $expected, 
