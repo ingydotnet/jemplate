@@ -23,6 +23,7 @@ my $data = {
     %$config,
     test_file => $test_file_name,
     all_test_files => [ glob('*.t.html') ],
+#    all_test_files => [ grep { !m/plugins/ } glob('*.t.html') ]
 };
 my $result;
 
