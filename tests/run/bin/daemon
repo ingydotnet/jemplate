@@ -70,6 +70,9 @@ while ( my $connection = $daemon->accept ) {
             $connection->send_response($response);
         }
         else {
+
+            print "$file FORBIDDEN\n";
+
             $connection->send_error(RC_FORBIDDEN);
             $connection->close;
         }
