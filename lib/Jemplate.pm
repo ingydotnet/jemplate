@@ -30,7 +30,7 @@ sub main {
     my ($runtime, $compile, $list) = @$jemplate_options{qw/runtime compile list/};
 
     if ($runtime) {
-        print STDOUT runtime_source_code(@$jemplate_options{qw/runtime ajax json xxx xhr/});
+        print STDOUT runtime_source_code(@$jemplate_options{qw/runtime ajax json xhr xxx/});
         return unless $compile;
     }
 
@@ -111,7 +111,7 @@ sub get_options {
 
         "ajax:s"        => \$ajax,
         "json:s"        => \$json,
-        "xxx:s"         => \$xxx,
+        "xxx"           => \$xxx,
         "xhr:s"         => \$xhr,
 
         "minify:s"      => \$minify,
@@ -225,6 +225,7 @@ sub runtime_source_code {
         $ajax ||= "xhr";
         $json ||= "json2";
         $xhr ||= "gregory";
+        $xxx = 1;
     }
     elsif ($runtime eq "lite") {
     }

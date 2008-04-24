@@ -3,8 +3,10 @@ plan qw/no_plan/;
 
 use constant USE_THE_SPIDERMONKEY => $ENV{USE_THE_SPIDERMONKEY} ? 1 : 0;
 
+my $file = "./t/tmp.jemplate.js";
+my $content;
 sub jemplate(@) {
-    my $file = "./t/tmp.jemplate.js";
+    undef $content;
     ok(system("$^X ./jemplate @_ > $file") == 0);
     ok(-s $file);
     if (USE_THE_SPIDERMONKEY) {
@@ -12,9 +14,50 @@ sub jemplate(@) {
     }
 }
 
-jemplate "--runtime";
+sub check(@) {
+    unless (defined $content) {
+        local *FILE;
+        local $/;
+        open FILE, $file or die $!;
+        $content = <FILE>;
+    }
+    like($content, $_) for @_;
+}
 
-ok(1);
+jemplate qw/--runtime/;
+
+jemplate qw/--runtime=standard/;
+check qr/JSON\.parse/;
+check qr/JSON\.stringify/;
+check qr/window\.document\.all && !window.opera;/; # Using xhr=ilinsky
+check qr/!!window\.controllers,/;
+
+jemplate qw/--runtime=jquery/;
+check qr/jQuery\.getJSON/;
+check qr/jQuery\.post/;
+
+jemplate qw/--runtime=yui/;
+check qr/YAHOO\.connect\./;
+check qr/YAHOO\.lang\.JSON/;
+
+jemplate qw/--runtime=legacy/;
+
+jemplate qw/--runtime=lite/;
+
+jemplate qw/--runtime=yui --xhr=ilinsky/;
+check qr/YAHOO\.connect\./;
+check qr/YAHOO\.lang\.JSON/;
+
+jemplate qw/--runtime=yui --xhr=gregory/;
+check qr/YAHOO\.connect\./;
+check qr/YAHOO\.lang\.JSON/;
+
+jemplate qw/--runtime=yui --xhr=gregory --xxx/;
+check qr/function XXX/;
+
+jemplate qw/--runtime=legacy/;
+check qr/function XXX/;
+
 
 __END__
 
