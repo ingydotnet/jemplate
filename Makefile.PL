@@ -5,6 +5,7 @@ all_from        'lib/Jemplate.pm';
 
 requires        'Template' => '2.14';
 requires        'File::Find::Rule' => '0.30';
+requires        'Directory::Scratch';
 
 use_test_base;
 

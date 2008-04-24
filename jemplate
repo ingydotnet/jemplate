@@ -16,11 +16,12 @@ Jemplate->main(@ARGV);
 Where C<--runtime> and C<runtime-opt> can include:
 
     --runtime           Equivalent to --ajax=ilinsky --json=json2
+    --runtime=standard
 
-    --runtime-lite      Same as --ajax=none --json=none
-    --runtime-jquery    Same as --ajax=jquery --json=none
-    --runtime-yui       Same as --ajax=yui --json=yui
-    --runtime-legacy    Same as --ajax=gregory --json=json2
+    --runtime=lite      Same as --ajax=none --json=none
+    --runtime=jquery    Same as --ajax=jquery --json=none
+    --runtime=yui       Same as --ajax=yui --json=yui
+    --runtime=legacy    Same as --ajax=gregory --json=json2
 
     --json              By itself, equivalent to --json=json2
     --json=json2        Include http://www.json.org/json2.js for parsing/stringifying

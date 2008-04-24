@@ -3,11 +3,24 @@ plan qw/no_plan/;
 
 use constant USE_THE_SPIDERMONKEY => $ENV{USE_THE_SPIDERMONKEY} ? 1 : 0;
 
-my $file = "./t/tmp.jemplate.js";
+use Directory::Scratch;
+my $scratch = Directory::Scratch->new;
+
 my $content;
-sub jemplate(@) {
-    undef $content;
+
+my $check_file = $scratch->file("check.js");
+my $a_file = $scratch->file("a.js");
+my $b_file = $scratch->file("b.js");
+
+sub _jemplate($@) {
+    my $file = shift;
     ok(system("$^X ./jemplate @_ > $file") == 0);
+}
+
+sub jemplate(@) {
+    my $file = $check_file;
+    undef $content;
+    _jemplate $file, @_;
     ok(-s $file);
     if (USE_THE_SPIDERMONKEY) {
         ok(system("/usr/bin/js -swC -e 'var window = { document: {}, Function: { prototype: {} } }' $file") == 0);
@@ -15,6 +28,7 @@ sub jemplate(@) {
 }
 
 sub check(@) {
+    my $file = $check_file;
     unless (defined $content) {
         local *FILE;
         local $/;
@@ -22,6 +36,12 @@ sub check(@) {
         $content = <FILE>;
     }
     like($content, $_) for @_;
+}
+
+sub same($$) {
+    _jemplate($a_file, @{ shift() });
+    _jemplate($b_file, @{ shift() });
+    ok(-s $a_file > 0 && -s $a_file == -s $b_file);
 }
 
 sub check_fail {
@@ -63,22 +83,42 @@ sub check_json2 {
 }
 
 jemplate qw/--runtime/;
+    check_xhr;
     check_json2;
     check_ilinsky;
 
+same([qw/--runtime/], [qw/--runtime=lite --ajax=xhr --xhr=ilinsky --json/]);
+same([qw/--runtime/], [qw/--runtime=lite --ajax=xhr --xhr=ilinsky --json=json/]);
+same([qw/--runtime/], [qw/--runtime=lite --ajax=xhr --xhr=ilinsky --json=json2/]);
+
 jemplate qw/--runtime=standard/;
+    check_xhr;
     check_json2;
     check_ilinsky;
+
+same([qw/--runtime/], [qw/--runtime=standard/]);
+
+jemplate qw/--runtime=lite/;
+#    !check_xhr;
+#    !check_json2;
+#    !check_ilinsky;
 
 jemplate qw/--runtime=jquery/;
     check_jquery;
 
+same([qw/--runtime=jquery/], [qw/--runtime=lite --ajax=jquery/]);
+
 jemplate qw/--runtime=yui/;
     check_yui;
 
+same([qw/--runtime=yui/], [qw/--runtime=lite --ajax=yui --json=yui/]);
+
 jemplate qw/--runtime=legacy/;
+    check_xhr;
     check_json2;
     check_gregory;
+
+same([qw/--runtime=legacy/], [qw/--runtime=lite --ajax=xhr --json=json2 --xhr=gregory --xxx/]);
 
 jemplate qw/--runtime=lite/;
 
