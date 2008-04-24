@@ -119,7 +119,7 @@ sub get_options {
         "help|?"        => \&print_usage_and_exit,
     ) or print_usage_and_exit();
 
-    $runtime = "standard" if defined $runtime && ! $runtime;
+    ($runtime, $ajax, $json, $xxx, $xhr, $minify) = map { defined $_ && ! length $_ ? 1 : $_ } ($runtime, $ajax, $json, $xxx, $xhr, $minify);
     $runtime = "standard" if $runtime && $runtime eq 1;
 
     print_usage_and_exit("Don't understand '--runtime $runtime'") if ! grep { $runtime =~ m/$_/ } qw/standard lite jquery yui legacy/;
@@ -231,6 +231,7 @@ sub runtime_source_code {
     }
 
     $ajax = "xhr" if $ajax eq 1;
+    $xhr ||= 1 if $ajax eq "xhr";
     $json = "json2" if $json eq 1;
     $xhr = "ilinsky" if $xhr eq 1;
 
