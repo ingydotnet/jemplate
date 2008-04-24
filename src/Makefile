@@ -10,5 +10,6 @@ $(GRAMMAR_MODULE): parser
 	mv parser/Grammar.pm $@
 	rm parser/Parser.output
 
-$(RUNTIME_MODULE): Makefile Runtime.pm Jemplate.js Jemplate
+#$(RUNTIME_MODULE): Makefile Runtime.pm Jemplate.js Jemplate
+$(RUNTIME_MODULE): Makefile Runtime.pm
 	tpage Runtime.pm > $@

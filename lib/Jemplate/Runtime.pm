@@ -869,8 +869,7 @@ Jemplate.Ajax = {
         var request = new XMLHttpRequest();
         request.open('POST', url, Boolean(callback));
         request.setRequestHeader(
-            'Content-Type',
-            'application/x-www-form-urlencoded'
+            'Content-Type', 'application/x-www-form-urlencoded'
         );
         return this.request(request, data, callback);
     },
@@ -891,6 +890,7 @@ Jemplate.Ajax = {
                       '" failed with status: ' + request.status);
             return request.responseText;
         }
+        return null;
     }
 };
 
@@ -1106,7 +1106,8 @@ var JSON;
     test, toJSON, toString
 */
 
-if (!this.JSON) {
+if (!JSON) var JSON;
+if (!JSON) {
 
 // Create a JSON object only if one does not already exist. We create the
 // object in a closure to avoid global variables.
@@ -1289,6 +1290,8 @@ if (!this.JSON) {
                 gap = mind;
                 return v;
             }
+
+            return null;
         }
 
 
@@ -1609,7 +1612,8 @@ sub json2 {
     test, toJSON, toString
 */
 
-if (!this.JSON) {
+if (!JSON) var JSON;
+if (!JSON) {
 
 // Create a JSON object only if one does not already exist. We create the
 // object in a closure to avoid global variables.
@@ -1792,6 +1796,8 @@ if (!this.JSON) {
                 gap = mind;
                 return v;
             }
+
+            return null;
         }
 
 

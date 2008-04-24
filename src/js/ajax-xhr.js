@@ -18,8 +18,7 @@ Jemplate.Ajax = {
         var request = new XMLHttpRequest();
         request.open('POST', url, Boolean(callback));
         request.setRequestHeader(
-            'Content-Type',
-            'application/x-www-form-urlencoded'
+            'Content-Type', 'application/x-www-form-urlencoded'
         );
         return this.request(request, data, callback);
     },
@@ -40,6 +39,7 @@ Jemplate.Ajax = {
                       '" failed with status: ' + request.status);
             return request.responseText;
         }
+        return null;
     }
 };
 

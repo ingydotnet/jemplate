@@ -1,4 +1,20 @@
 FUTURE:
+
+09:55 < nkuttler_> apparently firefox sets the accept header to request xml rather than json, which obviously is incompatible with later JSON.parse calls. I have added a 
+                  req.setRequestHeader("Accept", "text/x-json"); to Jemplate.js to fix that. any comments?
+10:05 < nkuttler_> kind of makes sense to me as jemplate can only handle json, at least atm
+
+       var req = new XMLHttpRequest();
+       req.open('GET', url, Boolean(callback));
+       req.setRequestHeader('Accept', 'text/x-json');
+           return Ajax._send(req, null, callback);
+       }
+
+14:13 < nkuttler> hm, it could break servers that don't understand x-json but expect text/json or application/json
+14:14 < nkuttler> hm, application/json http://www.ietf.org/rfc/rfc4627.txt
+14:16 < nkuttler> maybe rather something like req.setRequestHeader('Accept', 'text/json; text/x-json; application/json');
+
+
  - Integrate debugging with Firebug
  - Better warnings (provide context of fault, e.g. which template?) on bad stash data (lists, etc).
 

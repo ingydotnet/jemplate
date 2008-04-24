@@ -145,7 +145,8 @@
     test, toJSON, toString
 */
 
-if (!this.JSON) {
+if (!JSON) var JSON;
+if (!JSON) {
 
 // Create a JSON object only if one does not already exist. We create the
 // object in a closure to avoid global variables.
@@ -328,6 +329,8 @@ if (!this.JSON) {
                 gap = mind;
                 return v;
             }
+
+            return null;
         }
 
 

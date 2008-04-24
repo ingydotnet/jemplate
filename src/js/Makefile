@@ -4,7 +4,7 @@ CURL := curl
 JS := js
 
 check: ajax-jquery.js ajax-xhr.js ajax-yui.js json-json2.js json-yui.js json2.js kernel.js xhr-gregory.js xhr-ilinsky.js xxx.js
-	for file in $^; do js -e "window = { Function: { prototype: {} }, document: {} }; Jemplate = {};" -wC $$file; done
+	for file in $^; do js -e "window = { Function: { prototype: {} }, document: {} }; Jemplate = {};" -swC $$file; done
 
 fetch: xhr-gregory.js xhr-ilinsky.js json2.js
 
