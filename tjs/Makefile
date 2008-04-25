@@ -1,5 +1,5 @@
 .PHONY: all prepare-var-jt var clean help
-.PHONY: test test-jquery test-yui runtime runtime-jquery runtime-yui
+.PHONY: test-all test test-jquery test-yui runtime runtime-jquery runtime-yui
 
 T_JS := $(wildcard t/*t.js)
 T_HTML := $(T_JS:t/%.t.js=var/%.t.html)
@@ -8,13 +8,19 @@ RUNTIME_JS := var/runtime.js
 
 help:
 	@echo
+	@echo -e "\t$(MAKE) test-all"
+	@echo
 	@echo -e "\t$(MAKE) test"
 	@echo -e "\t$(MAKE) test-jquery"
 	@echo -e "\t$(MAKE) test-yui"
+	@echo -e "\t$(MAKE) clean"
 	@echo
 
 all: var $(T_HTML) var/index.html var/runtime.js var/jt.js var/jt-greeting.js
 	(cd var && ln -snf ../js . && ln -snf ../t/*.js .)
+
+test-all:
+	./bin/test-run
 
 test: all runtime
 	(cd var && ../bin/daemon -p 8081)
