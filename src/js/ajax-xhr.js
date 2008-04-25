@@ -5,6 +5,7 @@ Jemplate.Ajax = {
     get: function(url, callback) {
         var request = new XMLHttpRequest();
         request.open('GET', url, Boolean(callback));
+        request.setRequestHeader('Accept', 'text/json; text/x-json; application/json');
         return this.request(request, null, callback);
     },
 
@@ -17,6 +18,7 @@ Jemplate.Ajax = {
     post: function(url, data, callback) {
         var request = new XMLHttpRequest();
         request.open('POST', url, Boolean(callback));
+        request.setRequestHeader('Accept', 'text/json; text/x-json; application/json');
         request.setRequestHeader(
             'Content-Type', 'application/x-www-form-urlencoded'
         );
