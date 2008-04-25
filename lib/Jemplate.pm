@@ -30,7 +30,7 @@ sub main {
     my ($runtime, $compile, $list) = @$jemplate_options{qw/runtime compile list/};
 
     if ($runtime) {
-        print STDOUT runtime_source_code(@$jemplate_options{qw/runtime ajax json xhr xxx compact/});
+        runtime_source_code(@$jemplate_options{qw/runtime ajax json xhr xxx compact/});
         return unless $compile;
     }
 

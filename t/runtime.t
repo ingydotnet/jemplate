@@ -158,6 +158,9 @@ jemplate qw/--runtime=lite --ajax --json/;
     check_ilinsky;
     check_json2;
 
+jemplate qw{--runtime --compile t/assets/jt};
+    check qr/Jemplate\.templateMap\['hello'\] = function\(context\) \{/;
+
 __END__
 
 use t::TestJemplate tests => 2;
