@@ -239,22 +239,26 @@ sub runtime_source_code {
     $json = "json2" if $json eq 1;
     $xhr = "ilinsky" if $xhr eq 1;
 
-    print $Jemplate_Runtime->kernel if $runtime;
+    my @runtime;
 
-    print $Jemplate_Runtime->json2 if $json =~ m/^json2?$/i;
+    push @runtime, $Jemplate_Runtime->kernel if $runtime;
+
+    push @runtime, $Jemplate_Runtime->json2 if $json =~ m/^json2?$/i;
     
-    print $Jemplate_Runtime->ajax_xhr if $ajax eq "xhr";
-    print $Jemplate_Runtime->ajax_jquery if $ajax eq "jquery";
-    print $Jemplate_Runtime->ajax_yui if $ajax eq "yui";
+    push @runtime, $Jemplate_Runtime->ajax_xhr if $ajax eq "xhr";
+    push @runtime, $Jemplate_Runtime->ajax_jquery if $ajax eq "jquery";
+    push @runtime, $Jemplate_Runtime->ajax_yui if $ajax eq "yui";
 
-    print $Jemplate_Runtime->json_json2 if $json =~ m/^json2?$/i;
-    print $Jemplate_Runtime->json_json2_internal if $json =~ m/^json2?[_-]?internal$/i;
-    print $Jemplate_Runtime->json_yui if $json eq "yui";
+    push @runtime, $Jemplate_Runtime->json_json2 if $json =~ m/^json2?$/i;
+    push @runtime, $Jemplate_Runtime->json_json2_internal if $json =~ m/^json2?[_-]?internal$/i;
+    push @runtime, $Jemplate_Runtime->json_yui if $json eq "yui";
 
-    print $Jemplate_Runtime->xhr_ilinsky if $xhr eq "ilinsky";
-    print $Jemplate_Runtime->xhr_gregory if $xhr eq "gregory";
+    push @runtime, $Jemplate_Runtime->xhr_ilinsky if $xhr eq "ilinsky";
+    push @runtime, $Jemplate_Runtime->xhr_gregory if $xhr eq "gregory";
 
-    print $Jemplate_Runtime->xxx if $xxx;
+    push @runtime, $Jemplate_Runtime->xxx if $xxx;
+
+    print join ";", @runtime;
 }
 
 #-------------------------------------------------------------------------------

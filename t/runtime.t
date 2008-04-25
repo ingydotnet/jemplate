@@ -1,19 +1,25 @@
 use t::TestJemplate;
 plan qw/no_plan/;
 
-use constant USE_THE_SPIDERMONKEY => $ENV{USE_THE_SPIDERMONKEY} ? 1 : 0;
+use constant TEST_SPIDERMONKEY => $ENV{TEST_SPIDERMONKEY} ? 1 : 0;
+use constant TEST_COMPACT => $ENV{TEST_COMPACT} ? 1 : 0;
 
-use Directory::Scratch;
-my $scratch = Directory::Scratch->new;
+#use Directory::Scratch;
+#my $scratch = Directory::Scratch->new;
+
+#my $check_file = $scratch->file("check.js");
+#my $a_file = $scratch->file("a.js");
+#my $b_file = $scratch->file("b.js");
+
+my $check_file = "t/check.js";
+my $a_file = "t/a.js";
+my $b_file = "t/b.js";
 
 my $content;
 
-my $check_file = $scratch->file("check.js");
-my $a_file = $scratch->file("a.js");
-my $b_file = $scratch->file("b.js");
-
 sub _jemplate($@) {
     my $file = shift;
+    unshift @_, "--compact" if TEST_COMPACT;
     ok(system("$^X ./jemplate @_ > $file") == 0);
 }
 
@@ -22,7 +28,7 @@ sub jemplate(@) {
     undef $content;
     _jemplate $file, @_;
     ok(-s $file);
-    if (USE_THE_SPIDERMONKEY) {
+    if (TEST_SPIDERMONKEY) {
         ok(system("/usr/bin/js -swC -e 'var window = { document: {}, Function: { prototype: {} } }' $file") == 0);
     }
 }
@@ -54,7 +60,7 @@ sub check_ilinsky {
 }
 
 sub check_gregory {
-    check qr/case\s*'microsoft.xmlhttp':\s+case\s*'msxml2.xmlhttp':\s+case\s*'msxml2.xmlhttp.3.0':\s+case\s*'msxml2.xmlhttp.4.0':\s+case\s*'msxml2.xmlhttp.5.0':\s+/
+    check qr{XMLHttpRequest\.open\(\) - user/password not supported};
 }
 
 sub check_yui {
@@ -63,9 +69,10 @@ sub check_yui {
 }
 
 sub check_xhr {
-    check qr/request.onreadystatechange = function\(\)/;
-    check qr/if\s*\(request.readyState\s*==\s*4\)/;
-    check qr/if\s*\(request.status == 200\)/;
+    my $request = "(?:request|.)";
+    check qr/$request.onreadystatechange\s*=\s*function\(\)/;
+    check qr/if\s*\($request.readyState\s*==\s*4\)/;
+    check qr/if\s*\($request.status\s*==\s*200\)/;
 }
 
 sub check_jquery {
