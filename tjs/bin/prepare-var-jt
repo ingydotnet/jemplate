@@ -1,0 +1,25 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use IO::All;
+
+my $output_dir = 'var/jt';
+
+my %jemplates;
+
+for my $test (glob 't/*.t.js') {
+    my $file_contents = io($test)->all;
+    my (@jemplates) = ($file_contents =~ /(^--- jemplate\n.*?)(?=^---|\z)/gsm);
+    for my $jemplate (@jemplates) {
+        my ($ignore, $jemplate_file, $jemplate_content) =
+            split /\n/, $jemplate, 3;
+        $jemplates{$jemplate_file} = $jemplate_content;
+    }
+}
+
+mkdir $output_dir unless -d $output_dir;
+for my $jemplate_file (sort keys %jemplates) {
+    io("$output_dir/$jemplate_file")->print($jemplates{$jemplate_file});
+}
+

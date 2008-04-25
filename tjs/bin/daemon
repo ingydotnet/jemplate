@@ -1,0 +1,109 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+use Getopt::Long    qw[];
+use HTTP::Daemon    qw[];
+use HTTP::Response  qw[];
+use HTTP::Status    qw[RC_FORBIDDEN];
+use LWP::MediaTypes qw[guess_media_type];
+use Path::Class     qw[];
+use Pod::Usage      qw[];
+
+$SIG{'PIPE'} = 'IGNORE';
+
+Getopt::Long::Configure( 'no_ignore_case' );
+Getopt::Long::Configure( 'bundling' );
+Getopt::Long::GetOptions(
+    'p|port=i' => \( my $port = 8080 ),
+    'H|host=s' => \( my $host ),
+    'h|help|?' => sub { Pod::Usage::pod2usage( { -verbose => 1, -exitval => 0 } ) },
+    'm|man'    => sub { Pod::Usage::pod2usage( { -verbose => 2, -exitval => 0 } ) },
+) or exit 1;
+
+#my $base = Path::Class::File->new($0)->parent->parent->absolute;
+my $base = Path::Class::Dir->new; # Use the CWD
+my %args = ( LocalPort => $port, ReuseAddr => 1 );
+
+if ( defined $host ) {
+    $args{LocalHost} = $host;
+}
+
+my $daemon = HTTP::Daemon->new(%args)
+  or die("Failed to create daemon: $!\n");
+
+print "Please contact me at: <URL:", $daemon->url, ">\n";
+
+while ( my $connection = $daemon->accept ) {
+
+    while ( my $request = $connection->get_request ) {
+
+        my $file = $request->url->path =~ m|^/share|
+          ? $base->parent->file( $request->url->path )
+          : $request->url->path eq '/'
+              ? $base->file('index.html')
+              : $base->file( $request->url->path );
+
+        $file = $file->cleanup->absolute;
+
+        if ( -e $file && $request->method eq 'GET' ) {
+
+            print "$file\n";
+
+            my $stat     = $file->stat;
+            my $type     = ( guess_media_type( $file->stringify ) )[0];
+            my $response = HTTP::Response->new( 200, 'OK' );
+            $response->header( 'Connection'    => 'close' );
+            $response->header( 'Cache-Control' => 'no-cache, max-age=0' );
+
+            if ( 0 && $request->if_modified_since || 0 == $stat->mtime ) {
+                $response->code(304);
+                $response->message('Not Modified');
+            }
+            else {
+                $response->content( scalar $file->slurp );
+                $response->content_length( $stat->size );
+                $response->content_type($type);
+                $response->last_modified( $stat->mtime );
+            }
+
+            $connection->send_response($response);
+        }
+        else {
+
+            print "$file FORBIDDEN\n";
+
+            $connection->send_error(RC_FORBIDDEN);
+            $connection->close;
+        }
+    }
+}
+
+__END__
+
+=head1 NAME
+
+daemon - Jemplate test daemon
+
+=head1 SYNOPSIS
+
+daemon [-p]
+
+ Options:
+   -H --host   Host to listen to
+   -p --port   Port to listen to
+   -m --man    Displays manpage
+   -h --help   Displays this help
+
+=head1 COMMAND LINE OPTIONS
+
+=head2 --host
+
+Host to listen to. Defaults to listen to the given port on all interfaces.
+
+=head2 --port
+
+Port to listen to. Defaults to listen to 8080.
+
+=cut

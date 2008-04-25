@@ -7,6 +7,7 @@ ALL_TARGETS:=$(ALL_T_HTML) index.html JemplateRuntime.js jemplate.js jemplate2.j
 all: $(ALL_TARGETS)
 	ln -fs ../Test .
 	ln -fs ../*.t.js .
+	ln -fs ../jquery*.js .
 
 %.t.html: template/test.html
 	perl bin/render-template $< $@
@@ -15,7 +16,7 @@ index.html: template/index.html ../*.t.js
 	perl bin/render-template $< $@
 
 JemplateRuntime.js:
-	perl -I../../lib ../../jemplate --compact --runtime > $@
+	perl -I../../lib ../../jemplate --runtime=yui > $@
 #	perl -I../../lib ../../jemplate --runtime > $@
 
 jemplate.js: jemplate ../*.t.js
