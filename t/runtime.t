@@ -29,7 +29,7 @@ sub jemplate(@) {
     _jemplate $file, @_;
     ok(-s $file);
     if (TEST_SPIDERMONKEY) {
-        ok(system("/usr/bin/js -swC -e 'var window = { document: {}, Function: { prototype: {} } }' $file") == 0);
+        ok(system("js -swC -e 'var window = { document: {}, Function: { prototype: {} } }' $file") == 0);
     }
 }
 
