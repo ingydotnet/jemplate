@@ -30,7 +30,7 @@ sub main {
     my ($runtime, $compile, $list) = @$jemplate_options{qw/runtime compile list/};
 
     if ($runtime) {
-        print STDOUT runtime_source_code(@$jemplate_options{qw/runtime ajax json xhr xxx/});
+        print STDOUT runtime_source_code(@$jemplate_options{qw/runtime ajax json xhr xxx compact/});
         return unless $compile;
     }
 
@@ -65,7 +65,7 @@ sub main {
 sub get_options {
     local @ARGV = @_;
 
-    my $runtime = 0;
+    my $runtime;
     my $compile = 0;
     my $list = 0;
 
@@ -92,7 +92,7 @@ sub get_options {
         : 1;
 
     my $source = 0;
-    my ($ajax, $json, $xxx, $xhr, $minify);
+    my ($ajax, $json, $xxx, $xhr, $compact, $minify);
 
     GetOptions(
         "compile|c"     => \$compile,
@@ -114,6 +114,7 @@ sub get_options {
         "xxx"           => \$xxx,
         "xhr:s"         => \$xhr,
 
+        "compact"       => \$compact,
         "minify:s"      => \$minify,
 
         "help|?"        => \&print_usage_and_exit,
@@ -122,7 +123,7 @@ sub get_options {
     ($runtime, $ajax, $json, $xxx, $xhr, $minify) = map { defined $_ && ! length $_ ? 1 : $_ } ($runtime, $ajax, $json, $xxx, $xhr, $minify);
     $runtime = "standard" if $runtime && $runtime eq 1;
 
-    print_usage_and_exit("Don't understand '--runtime $runtime'") if ! grep { $runtime =~ m/$_/ } qw/standard lite jquery yui legacy/;
+    print_usage_and_exit("Don't understand '--runtime $runtime'") if defined $runtime && ! grep { $runtime =~ m/$_/ } qw/standard lite jquery yui legacy/;
     print_usage_and_exit("Can't specify --list with a --runtime and/or the --compile option") if $list && ($runtime || $compile);
     print_usage_and_exit() unless $list || $runtime || $compile;
 
@@ -146,7 +147,7 @@ sub get_options {
         { compile => $compile, runtime => $runtime, list => $list,
             source => $source,
             ajax => $ajax, json => $json, xxx => $xxx, xhr => $xhr,
-            minify => $minify },
+            compact => $compact, minify => $minify },
     );
 }
 
@@ -206,8 +207,11 @@ sub print_usage_and_exit {
 
 sub runtime_source_code {
     require Jemplate::Runtime;
+    require Jemplate::Runtime::Compact;
 
-    my ($runtime, $ajax, $json, $xhr, $xxx) = map { defined $_ ? lc $_ : "" } @_[0 .. 4];
+    my ($runtime, $ajax, $json, $xhr, $xxx, $compact) = map { defined $_ ? lc $_ : "" } @_[0 .. 5];
+
+    my $Jemplate_Runtime = $compact ? "Jemplate::Runtime::Compact" : "Jemplate::Runtime";
 
     if ($runtime eq "standard") {
         $ajax ||= "xhr";
@@ -235,22 +239,22 @@ sub runtime_source_code {
     $json = "json2" if $json eq 1;
     $xhr = "ilinsky" if $xhr eq 1;
 
-    print Jemplate::Runtime->kernel if $runtime;
+    print $Jemplate_Runtime->kernel if $runtime;
 
-    print Jemplate::Runtime->json2 if $json =~ m/^json2?$/i;
+    print $Jemplate_Runtime->json2 if $json =~ m/^json2?$/i;
     
-    print Jemplate::Runtime->ajax_xhr if $ajax eq "xhr";
-    print Jemplate::Runtime->ajax_jquery if $ajax eq "jquery";
-    print Jemplate::Runtime->ajax_yui if $ajax eq "yui";
+    print $Jemplate_Runtime->ajax_xhr if $ajax eq "xhr";
+    print $Jemplate_Runtime->ajax_jquery if $ajax eq "jquery";
+    print $Jemplate_Runtime->ajax_yui if $ajax eq "yui";
 
-    print Jemplate::Runtime->json_json2 if $json =~ m/^json2?$/i;
-    print Jemplate::Runtime->json_json2_internal if $json =~ m/^json2?[_-]?internal$/i;
-    print Jemplate::Runtime->json_yui if $json eq "yui";
+    print $Jemplate_Runtime->json_json2 if $json =~ m/^json2?$/i;
+    print $Jemplate_Runtime->json_json2_internal if $json =~ m/^json2?[_-]?internal$/i;
+    print $Jemplate_Runtime->json_yui if $json eq "yui";
 
-    print Jemplate::Runtime->xhr_ilinsky if $xhr eq "ilinsky";
-    print Jemplate::Runtime->xhr_gregory if $xhr eq "gregory";
+    print $Jemplate_Runtime->xhr_ilinsky if $xhr eq "ilinsky";
+    print $Jemplate_Runtime->xhr_gregory if $xhr eq "gregory";
 
-    print Jemplate::Runtime->xxx if $xxx;
+    print $Jemplate_Runtime->xxx if $xxx;
 }
 
 #-------------------------------------------------------------------------------

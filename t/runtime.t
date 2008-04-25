@@ -49,7 +49,7 @@ sub check_fail {
 }
 
 sub check_ilinsky {
-    check qr/window\.document\.all && !window.opera;/;
+    check qr/window\.document\.all\s*&&\s*!window.opera;/;
     check qr/!!window\.controllers,/;
 }
 
@@ -64,7 +64,7 @@ sub check_yui {
 
 sub check_xhr {
     check qr/request.onreadystatechange = function\(\)/;
-    check qr/if\s*\(request.readyState == 4\)/;
+    check qr/if\s*\(request.readyState\s*==\s*4\)/;
     check qr/if\s*\(request.status == 200\)/;
 }
 

@@ -1,0 +1,1 @@
+(function(){Jemplate.JSON={parse:function(A){return YAHOO.lang.JSON.parse(A)},stringify:function(A){return YAHOO.lang.JSON.stringify(A)}}}())

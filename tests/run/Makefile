@@ -15,7 +15,8 @@ index.html: template/index.html ../*.t.js
 	perl bin/render-template $< $@
 
 JemplateRuntime.js:
-	perl -I../../lib ../../jemplate --runtime > $@
+	perl -I../../lib ../../jemplate --compact --runtime > $@
+#	perl -I../../lib ../../jemplate --runtime > $@
 
 jemplate.js: jemplate ../*.t.js
 	perl -I../../lib ../../jemplate --compile jemplate/* > $@

@@ -40,6 +40,8 @@ Where C<--runtime> and C<runtime-opt> can include:
 
     --xxx               Include XXX and JJJ helper functions
 
+    --compact           Use the YUICompressor compacted version of the runtime
+
 Where C<compile-opt> can include:
 
     --start-tag
