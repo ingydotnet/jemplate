@@ -1,15 +1,22 @@
 .PHONY: all prepare-var-jt var clean help
-.PHONY: test test-jquery test-yui runtime-jquery runtime-yui
+.PHONY: test test-jquery test-yui runtime runtime-jquery runtime-yui
 
 T_JS := $(wildcard t/*t.js)
 T_HTML := $(T_JS:t/%.t.js=var/%.t.html)
 JEMPLATE := perl -I../lib ../jemplate
 RUNTIME_JS := var/runtime.js
 
+help:
+	@echo
+	@echo -e "\t$(MAKE) test"
+	@echo -e "\t$(MAKE) test-jquery"
+	@echo -e "\t$(MAKE) test-yui"
+	@echo
+
 all: var $(T_HTML) var/index.html var/runtime.js var/jt.js var/jt-greeting.js
 	(cd var && ln -snf ../js . && ln -snf ../t/*.js .)
 
-test: all
+test: all runtime
 	(cd var && ../bin/daemon -p 8081)
 
 test-jquery: all runtime-jquery
@@ -17,6 +24,9 @@ test-jquery: all runtime-jquery
 
 test-yui: all runtime-yui
 	(cd var && ../bin/daemon -p 8081)
+
+runtime:
+	$(JEMPLATE) --runtime > $(RUNTIME_JS)
 
 runtime-jquery:
 	$(JEMPLATE) --runtime=jquery > $(RUNTIME_JS)
@@ -47,10 +57,3 @@ prepare-var-jt:
 
 clean:
 	rm -rf var
-
-help:
-	@echo
-	@echo -e "\t$(MAKE) test"
-	@echo -e "\t$(MAKE) test-jquery"
-	@echo -e "\t$(MAKE) test-yui"
-	@echo
