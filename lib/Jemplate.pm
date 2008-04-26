@@ -646,6 +646,8 @@ Christian Hansen
 
 David A. Coffey <dacoffey@cogsmith.com>
 
+Robert Krimen <robertkrimen@gmail.com>
+
 =head1 COPYRIGHT
 
 Copyright (c) 2006-2008. Ingy döt Net.
