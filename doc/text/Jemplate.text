@@ -16,14 +16,11 @@ SYNOPSIS
 
         Jemplate.process('my-template.html', 'url/data.json', '#some-div');
 
-    or, with Prototype.js:
+    or, with jQuery.js:
 
-        new Ajax.Request("url/data.json", {
-            onComplete: function(req) {
-                var data = eval(req.responseText);
-                Jemplate.process('my-template.html', data, '#some-div');
-            }
-        );
+        jQuery.getJSON("url/data.json", function(data) {
+            Jemplate.process('my-template.html', data, '#some-div');
+        });
 
 DESCRIPTION
     Jemplate is a templating framework for JavaScript that is built over
@@ -60,26 +57,26 @@ HOWTO
 
         > jemplate --runtime > js/Jemplate.js
 
-    Now all you need to do is include these two files in the HEAD of your
-    html:
+    Now all you need to do is include these two files in your HTML:
 
         <script src="js/Jemplate.js" type="text/javascript"></script>
         <script src="js/jemplates.js" type="text/javascript"></script>
 
-    Now you have Jemplate support for these templates in your html document.
+    Now you have Jemplate support for these templates in your HTML document.
 
 PUBLIC API
     The Jemplate.js JavaScript runtime module has the following API method:
 
-    Jemplate.process(template-name, data, [target]);
+    Jemplate.process(template-name, data, target);
         The "template-name" is a string like 'body.html' that is the name of
         the top level template that you wish to process.
 
-        The "data" can be a object, a function or a url. If it is an object,
-        it is used directly. If it is a function, the function is called and
-        the returned object is used. If it is a url, an asynchronous
-        <Ajax.get> is performed. The result is expected to be a JSON string,
-        which gets turned into an object.
+        The optional "data" specififies the data object to be used by the
+        templates. It can be an object, a function or a url. If it is an
+        object, it is used directly. If it is a function, the function is
+        called and the returned object is used. If it is a url, an
+        asynchronous <Ajax.get> is performed. The result is expected to be a
+        JSON string, which gets turned into an object.
 
         The optional "target" can be an HTMLElement reference, a function or
         a string beginning with a "#" char. If the target is omitted, the
@@ -189,10 +186,10 @@ BROWSER SUPPORT
 
 DEVELOPMENT
     The bleeding edge code is available via Subversion at
-    http://svn.kwiki.org/ingy/Jemplate/
+    http://svn.jemplate.net/repo/trunk/
 
     You can run the runtime tests directly from
-    http://svn.kwiki.org/ingy/Jemplate/tests/run/index.html or from the
+    http://svn.jemplate.net/repo/trunk/tests/run/index.html or from the
     corresponding CPAN or JSAN directories.
 
     Jemplate development is being discussed at
@@ -207,9 +204,14 @@ CREDIT
     them ;)
 
 AUTHORS
+    Ingy döt Net <ingy@cpan.org>
+
+    (Note: I had to list myself first so that this line would go into
+    META.yml)
+
     Jemplate is truly a community authored project:
 
-    Ingy dÃ¶t Net <ingy@cpan.org>
+    Ingy döt Net <ingy@cpan.org>
 
     Tatsuhiko Miyagawa <miyagawa@bulknews.net>
 
@@ -225,8 +227,10 @@ AUTHORS
 
     David A. Coffey <dacoffey@cogsmith.com>
 
+    Robert Krimen <robertkrimen@gmail.com>
+
 COPYRIGHT
-    Copyright (c) 2006. Ingy dÃ¶t Net. All rights reserved.
+    Copyright (c) 2006-2008. Ingy döt Net.
 
     This program is free software; you can redistribute it and/or modify it
     under the same terms as Perl itself.

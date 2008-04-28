@@ -1,6 +1,12 @@
 #!/usr/bin/perl
+
+#BOOTSTRAP-BEGIN
+# This section of code will be replaced by lots of inline Perl modules
+# to make the standalone jemplate script.
 use lib 'lib';
-use Jemplate 0.19;
+use Jemplate 0.21;
+#BOOTSTRAP-END
+
 Jemplate->main(@ARGV);
 
 =head1 Usage:
@@ -99,11 +105,6 @@ Use the --list option to check this.
     -l, --list
         Just print (STDOUT) the template names that Jemplate would use
         from the template-list.
-
-B<IMPORTANT>: The runtime code is also distributed as
-F<share/Jemplate.js>, but this is deprecated and will be discontinued at
-some point. Please use the C<jemplate> command line tool with the
-C<--runtime> command, to create this file.
 
 =head1 Template Toolkit Compile Options:
 

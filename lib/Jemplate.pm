@@ -5,7 +5,7 @@ use warnings;
 use Template 2.14;
 use Getopt::Long;
 
-our $VERSION = '0.20';
+our $VERSION = '0.21';
 
 use Jemplate::Parser;
 
@@ -141,6 +141,8 @@ sub get_options {
     my $source = 0;
     my ($ajax, $json, $xxx, $xhr, $compact, $minify);
 
+    my $help = 0;
+
     GetOptions(
         "compile|c"     => \$compile,
         "list|l"        => \$list,
@@ -164,8 +166,12 @@ sub get_options {
         "compact"       => \$compact,
         "minify:s"      => \$minify,
 
-        "help|?"        => \&print_usage_and_exit,
+        "help|?"        => \$help,
     ) or print_usage_and_exit();
+
+    if ($help) {
+        print_usage_and_exit();
+    }
 
     ($runtime, $ajax, $json, $xxx, $xhr, $minify) = map { defined $_ && ! length $_ ? 1 : $_ } ($runtime, $ajax, $json, $xxx, $xhr, $minify);
     $runtime = "standard" if $runtime && $runtime eq 1;
@@ -388,6 +394,8 @@ if (typeof(Jemplate) == 'undefined')
 
 1;
 
+=encoding utf8
+
 =head1 NAME
 
 Jemplate - JavaScript Templating with Template Toolkit
@@ -408,14 +416,11 @@ or simply:
 
     Jemplate.process('my-template.html', 'url/data.json', '#some-div');
 
-or, with Prototype.js:
+or, with jQuery.js:
 
-    new Ajax.Request("url/data.json", {
-        onComplete: function(req) {
-            var data = eval(req.responseText);
-            Jemplate.process('my-template.html', data, '#some-div');
-        }
-    );
+    jQuery.getJSON("url/data.json", function(data) {
+        Jemplate.process('my-template.html', data, '#some-div');
+    });
 
 =head1 DESCRIPTION
 
@@ -454,13 +459,12 @@ You also need to generate the Jemplate runtime.
 
     > jemplate --runtime > js/Jemplate.js
 
-Now all you need to do is include these two files in the HEAD of
-your html:
+Now all you need to do is include these two files in your HTML:
 
     <script src="js/Jemplate.js" type="text/javascript"></script>
     <script src="js/jemplates.js" type="text/javascript"></script>
 
-Now you have Jemplate support for these templates in your html document.
+Now you have Jemplate support for these templates in your HTML document.
 
 =head1 PUBLIC API
 
@@ -468,13 +472,14 @@ The Jemplate.js JavaScript runtime module has the following API method:
 
 =over
 
-=item Jemplate.process(template-name, data, [target]);
+=item Jemplate.process(template-name, data, target);
 
 The C<template-name> is a string like C<'body.html'> that is the name of
 the top level template that you wish to process.
 
-The C<data> can be a object, a function or a url. If it is an object, it
-is used directly. If it is a function, the function is called and the
+The optional C<data> specififies the data object to be used by the
+templates. It can be an object, a function or a url. If it is an object,
+it is used directly. If it is a function, the function is called and the
 returned object is used. If it is a url, an asynchronous <Ajax.get> is
 performed. The result is expected to be a JSON string, which gets turned
 into an object.
@@ -627,6 +632,10 @@ receive for this work. (As long as you are in the same room when I'm
 drinking them ;)
 
 =head1 AUTHORS
+
+Ingy döt Net <ingy@cpan.org>
+
+(Note: I had to list myself first so that this line would go into META.yml)
 
 Jemplate is truly a community authored project:
 

@@ -1,8 +1,10 @@
+<?xml version="1.0" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>Jemplate - JavaScript Templating with Template Toolkit</title>
-<link rev="made" href="mailto:root@b01.apple.com" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:root@omen.apple.com" />
 </head>
 
 <body style="background-color: white">
@@ -30,6 +32,7 @@
 <hr />
 <p>
 </p>
+<hr />
 <h1><a name="name">NAME</a></h1>
 <p>Jemplate - JavaScript Templating with Template Toolkit</p>
 <p>
@@ -48,14 +51,11 @@
 <p>or simply:</p>
 <pre>
     Jemplate.process('my-template.html', 'url/data.json', '#some-div');</pre>
-<p>or, with Prototype.js:</p>
+<p>or, with jQuery.js:</p>
 <pre>
-    new Ajax.Request(&quot;url/data.json&quot;, {
-        onComplete: function(req) {
-            var data = eval(req.responseText);
-            Jemplate.process('my-template.html', data, '#some-div');
-        }
-    );</pre>
+    jQuery.getJSON(&quot;url/data.json&quot;, function(data) {
+        Jemplate.process('my-template.html', data, '#some-div');
+    });</pre>
 <p>
 </p>
 <hr />
@@ -89,27 +89,27 @@ a template directory called <code>templates</code> that contains:</p>
 <p>You also need to generate the Jemplate runtime.</p>
 <pre>
     &gt; jemplate --runtime &gt; js/Jemplate.js</pre>
-<p>Now all you need to do is include these two files in the HEAD of
-your html:</p>
+<p>Now all you need to do is include these two files in your HTML:</p>
 <pre>
     &lt;script src=&quot;js/Jemplate.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
     &lt;script src=&quot;js/jemplates.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;</pre>
-<p>Now you have Jemplate support for these templates in your html document.</p>
+<p>Now you have Jemplate support for these templates in your HTML document.</p>
 <p>
 </p>
 <hr />
 <h1><a name="public_api">PUBLIC API</a></h1>
 <p>The Jemplate.js JavaScript runtime module has the following API method:</p>
 <dl>
-<dt><strong><a name="item_process">Jemplate.process(template-name, data, [target]);</a></strong><br />
-</dt>
+<dt><strong><a name="item_process">Jemplate.process(template-name, data, target);</a></strong>
+
 <dd>
-The <code>template-name</code> is a string like <code>'body.html'</code> that is the name of
-the top level template that you wish to process.
+<p>The <code>template-name</code> is a string like <code>'body.html'</code> that is the name of
+the top level template that you wish to process.</p>
 </dd>
 <dd>
-<p>The <code>data</code> can be a object, a function or a url. If it is an object, it
-is used directly. If it is a function, the function is called and the
+<p>The optional <code>data</code> specififies the data object to be used by the
+templates. It can be an object, a function or a url. If it is an object,
+it is used directly. If it is a function, the function is called and the
 returned object is used. If it is a url, an asynchronous &lt;Ajax.get&gt; is
 performed. The result is expected to be a JSON string, which gets turned
 into an object.</p>
@@ -125,79 +125,82 @@ an HTMLElement.</p>
 <p>If an HTMLElement is used (by id or directly) then the innerHTML
 property is set to the template processing result.</p>
 </dd>
-<p></p></dl>
+</li>
+</dl>
 <p>The Jemplate.pm Perl module has the following public class methods,
 although you won't likely need to use them directly. Normally, you just
 use the <code>jemplate</code> command line tool.</p>
 <dl>
-<dt><strong><a name="item_compile_template_files">Jemplate-&gt;compile_template_files(@template_file_paths);</a></strong><br />
-</dt>
+<dt><strong><a name="item_compile_template_files">Jemplate-&gt;compile_template_files(@template_file_paths);</a></strong>
+
 <dd>
-Take a list of template file paths and compile them into a module of
-functions. Returns the text of the module.
+<p>Take a list of template file paths and compile them into a module of
+functions. Returns the text of the module.</p>
 </dd>
-<p></p>
-<dt><strong><a name="item_compile_template_content">Jemplate-&gt;compile_template_content($content, $template_name);</a></strong><br />
-</dt>
+</li>
+<dt><strong><a name="item_compile_template_content">Jemplate-&gt;compile_template_content($content, $template_name);</a></strong>
+
 <dd>
-Compile one template whose content is in memory. You must provide a
+<p>Compile one template whose content is in memory. You must provide a
 unique template name. Returns the JavaScript text result of the
-compilation.
+compilation.</p>
 </dd>
-<p></p>
-<dt><strong><a name="item_compile_module">Jemplate-&gt;compile_module($module_path, \@template_file_paths);</a></strong><br />
-</dt>
+</li>
+<dt><strong><a name="item_compile_module">Jemplate-&gt;compile_module($module_path, \@template_file_paths);</a></strong>
+
 <dd>
-Similar to `compile_template_files`, but prints to result to the
-$module_path. Returns 1 if successful, undef if error.
+<p>Similar to `compile_template_files`, but prints to result to the
+$module_path. Returns 1 if successful, undef if error.</p>
 </dd>
-<p></p>
-<dt><strong><a name="item_compile_module_cached">Jemplate-&gt;compile_module_cached($module_path, \@template_file_paths);</a></strong><br />
-</dt>
+</li>
+<dt><strong><a name="item_compile_module_cached">Jemplate-&gt;compile_module_cached($module_path, \@template_file_paths);</a></strong>
+
 <dd>
-Similar to `compile_module`, but only compiles if one of the templates
+<p>Similar to `compile_module`, but only compiles if one of the templates
 is newer than the module. Returns 1 if sucessful compile, 0 if no
-compile due to cache, undef if error.
+compile due to cache, undef if error.</p>
 </dd>
-<p></p></dl>
+</li>
+</dl>
 <p>
 </p>
 <hr />
 <h1><a name="ajax_and_json_methods">AJAX AND JSON METHODS</a></h1>
 <p>Jemplate comes with builtin Ajax and JSON support.</p>
 <dl>
-<dt><strong><a name="item_get">Ajax.get(url, [callback]);</a></strong><br />
-</dt>
+<dt><strong><a name="item_get">Ajax.get(url, [callback]);</a></strong>
+
 <dd>
-Does a GET operation to the url.
+<p>Does a GET operation to the url.</p>
 </dd>
 <dd>
 <p>If a callback is provided, the operation is asynchronous, and the data
 is passed to the callback. Otherwise, the operation is synchronous and
 the data is returned.</p>
 </dd>
-<p></p>
-<dt><strong><a name="item_post">Ajax.post(url, data, [callback]);</a></strong><br />
-</dt>
+</li>
+<dt><strong><a name="item_post">Ajax.post(url, data, [callback]);</a></strong>
+
 <dd>
-Does a POST operation to the url.
+<p>Does a POST operation to the url.</p>
 </dd>
 <dd>
 <p>Same callback rules as <a href="#item_get"><code>get</code></a> apply.</p>
 </dd>
-<p></p>
-<dt><strong><a name="item_stringify">JSON.stringify(object);</a></strong><br />
-</dt>
+</li>
+<dt><strong><a name="item_stringify">JSON.stringify(object);</a></strong>
+
 <dd>
-Return the JSON serialization of an object.
+<p>Return the JSON serialization of an object.</p>
 </dd>
-<p></p>
-<dt><strong><a name="item_parse">JSON.parse(jsonString);</a></strong><br />
-</dt>
+</li>
+<dt><strong><a name="item_parse">JSON.parse(jsonString);</a></strong>
+
 <dd>
-Turns a JSON string into an object and returns the object.
+<p>Turns a JSON string into an object and returns the object.</p>
 </dd>
-<p></p></dl>
+</li>
+</dl>
 <p>
 </p>
 <hr />
@@ -254,9 +257,9 @@ in the distro for a list of all features and their progress.</p>
 <hr />
 <h1><a name="development">DEVELOPMENT</a></h1>
 <p>The bleeding edge code is available via Subversion at
-<a href="http://svn.kwiki.org/ingy/Jemplate/">http://svn.kwiki.org/ingy/Jemplate/</a></p>
+<a href="http://svn.jemplate.net/repo/trunk/">http://svn.jemplate.net/repo/trunk/</a></p>
 <p>You can run the runtime tests directly from
-<a href="http://svn.kwiki.org/ingy/Jemplate/tests/run/index.html">http://svn.kwiki.org/ingy/Jemplate/tests/run/index.html</a> or from the
+<a href="http://svn.jemplate.net/repo/trunk/tests/run/index.html">http://svn.jemplate.net/repo/trunk/tests/run/index.html</a> or from the
 corresponding CPAN or JSAN directories.</p>
 <p>Jemplate development is being discussed at <a href="irc://irc.freenode.net/#jemplate">irc://irc.freenode.net/#jemplate</a></p>
 <p>If you want a committer bit, just ask ingy on the irc channel.</p>
@@ -272,6 +275,8 @@ drinking them ;)</p>
 </p>
 <hr />
 <h1><a name="authors">AUTHORS</a></h1>
+<p>Ingy döt Net &lt;<a href="mailto:ingy@cpan.org">ingy@cpan.org</a>&gt;</p>
+<p>(Note: I had to list myself first so that this line would go into META.yml)</p>
 <p>Jemplate is truly a community authored project:</p>
 <p>Ingy döt Net &lt;<a href="mailto:ingy@cpan.org">ingy@cpan.org</a>&gt;</p>
 <p>Tatsuhiko Miyagawa &lt;<a href="mailto:miyagawa@bulknews.net">miyagawa@bulknews.net</a>&gt;</p>
@@ -281,11 +286,12 @@ drinking them ;)</p>
 <p>Cees Hek &lt;<a href="mailto:ceeshek@gmail.com">ceeshek@gmail.com</a>&gt;</p>
 <p>Christian Hansen</p>
 <p>David A. Coffey &lt;<a href="mailto:dacoffey@cogsmith.com">dacoffey@cogsmith.com</a>&gt;</p>
+<p>Robert Krimen &lt;<a href="mailto:robertkrimen@gmail.com">robertkrimen@gmail.com</a>&gt;</p>
 <p>
 </p>
 <hr />
 <h1><a name="copyright">COPYRIGHT</a></h1>
-<p>Copyright (c) 2006. Ingy döt Net. All rights reserved.</p>
+<p>Copyright (c) 2006-2008. Ingy döt Net.</p>
 <p>This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.</p>
 <p>See <a href="http://www.perl.com/perl/misc/Artistic.html">http://www.perl.com/perl/misc/Artistic.html</a></p>

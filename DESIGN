@@ -36,7 +36,7 @@ Take a template string and its name and return the compiled code.
 
 - Jemplate->compile_module($module_path, \@template_file_paths);
 
-Similar to `compile_templates`, but prints to result to the
+Similar to `compile_templates`, but prints the result to the
 $module_path. Returns 1 if successful, undef if error.
 
 - Jemplate->compile_module_cached($module_path, \@template_file_paths);

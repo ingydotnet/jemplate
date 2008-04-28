@@ -1,4 +1,18 @@
 ---
+version: 0.21
+date:    Mon Apr 28 12:44:13 CST 2008
+changes:
+- Robert Krimen provided massive improvements including:
+  - jQuery support
+  - YUI support
+  - Many new command line options for fine grained control
+  - Doc changes
+  - Much refactoring
+- Ingy added:
+  - A standalone Jemplate compiler (bin/jemplate)
+  - Some doc: (bin/README)
+
+---
 version: 0.20
 date:    Wed Nov 22 09:12:25 PST 2006
 changes:

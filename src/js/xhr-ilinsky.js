@@ -164,7 +164,7 @@
 				fReadyStateChange(oRequest);
 
 			nState	= oRequest.readyState;
-		};
+		};
 		// Add method sniffer
 		if (cXMLHttpRequest.onopen)
 			cXMLHttpRequest.onopen.apply(this, arguments);
@@ -300,3 +300,4 @@
 	// Register new object with window
 	window.XMLHttpRequest	= cXMLHttpRequest;
 })();
+
