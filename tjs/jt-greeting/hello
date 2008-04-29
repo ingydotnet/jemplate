@@ -1,1 +1,5 @@
+<! BLOCK importantMessage !>
+    Message is <b><! message !></b>
+<! END !>
+
 Hello, <! name !>!

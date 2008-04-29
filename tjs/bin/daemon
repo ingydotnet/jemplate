@@ -40,11 +40,11 @@ while ( my $connection = $daemon->accept ) {
 
     while ( my $request = $connection->get_request ) {
 
-        if ( $request->path eq "ajax" ) {
+        if ( $request->url->path =~ /^\/ajax\b/ ) {
             my $response = HTTP::Response->new( 200, 'OK' );
             $response->header( 'Connection'    => 'close' );
             $response->header( 'Cache-Control' => 'no-cache, max-age=0' );
-            my $content = encode_json { hello => 'world' };
+            my $content = encode_json { message => 'abcdefghijklmnopqrstuvwxy' };
             $response->content( $content );
             $response->content_length( length $content );
             $response->content_type( "text/plain" );

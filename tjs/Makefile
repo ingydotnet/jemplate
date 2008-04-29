@@ -42,6 +42,7 @@ runtime-yui:
 
 var:
 	mkdir -p var
+	rsync -Cav htdocs/ var/
 
 $(T_HTML): var/%.t.html: tt/test.html t/%.t.js
 	./bin/render-template $< $@
