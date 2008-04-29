@@ -1,0 +1,16 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use Template;
+
+{
+    my $template = shift or die "No template provided";
+    -f $template or die "$template does not exist";
+
+    my $t = Template->new({
+        INCLUDE_PATH => [ '.' ],
+    });
+
+    $t->process($template, {});
+}
