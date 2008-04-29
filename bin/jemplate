@@ -1,12 +1,28 @@
 #!/usr/bin/env perl
 
 #BOOTSTRAP-BEGIN
+# This is the standalone Jemplate compiler.
+#
+# All you need is this program and the program called `perl`. You don't need
+# to install any Perl modules.
+#
+# If you downloaded this program from the internet, don't forget to put it in
+# your path and make sure it is executable. Like this:
+#
+#     mv jemplate /usr/local/bin/
+#     chmod +x /usr/local/bin/jemplate
+#
+# Try this command to make sure it works:
+#
+#     jemplate --help
+
 use Config;
 BEGIN {
     @INC = $Config::Config{privlib};
 }
 use strict;
 use warnings;
+
 #
 # Inline include of Template/Constants.pm
 #
@@ -16,16 +32,15 @@ BEGIN {
  
 package Template::Constants;
 
+require 5.004;
 require Exporter;
 
 use strict;
-use warnings;
-use base 'Exporter';
-
-use vars qw( @EXPORT_OK %EXPORT_TAGS );
+use vars qw( $VERSION @ISA @EXPORT_OK %EXPORT_TAGS );
 use vars qw( $DEBUG_OPTIONS @STATUS @ERROR @CHOMP @DEBUG);
 
-our $VERSION = 2.74;
+@ISA     = qw( Exporter );
+$VERSION = sprintf("%d.%02d", q$Revision: 2.68 $ =~ /(\d+)\.(\d+)/);
 
 
 
@@ -45,10 +60,8 @@ use constant ERROR_FILTER    =>  'filter'; # filter error
 use constant ERROR_PLUGIN    =>  'plugin'; # plugin error
 
 use constant CHOMP_NONE      => 0; # do not remove whitespace
-use constant CHOMP_ALL       => 1; # remove whitespace up to newline
-use constant CHOMP_ONE       => 1; # new name for CHOMP_ALL
+use constant CHOMP_ALL       => 1; # remove whitespace
 use constant CHOMP_COLLAPSE  => 2; # collapse whitespace to a single space
-use constant CHOMP_GREEDY    => 3; # remove all whitespace including newlines
 
 use constant DEBUG_OFF       =>    0; # do nothing
 use constant DEBUG_ON        =>    1; # basic debugging flag
@@ -88,7 +101,7 @@ $DEBUG_OPTIONS  = {
                STATUS_DECLINED STATUS_ERROR );
 @ERROR   = qw( ERROR_FILE ERROR_VIEW ERROR_UNDEF ERROR_PERL 
                ERROR_RETURN ERROR_FILTER ERROR_PLUGIN );
-@CHOMP   = qw( CHOMP_NONE CHOMP_ALL CHOMP_ONE CHOMP_COLLAPSE CHOMP_GREEDY );
+@CHOMP   = qw( CHOMP_NONE CHOMP_ALL CHOMP_COLLAPSE );
 @DEBUG   = qw( DEBUG_OFF DEBUG_ON DEBUG_UNDEF DEBUG_VARS 
                DEBUG_DIRS DEBUG_STASH DEBUG_CONTEXT DEBUG_PARSER
                DEBUG_PROVIDER DEBUG_PLUGINS DEBUG_FILTERS DEBUG_SERVICE
@@ -155,11 +168,13 @@ BEGIN {
  
 package Template::Base;
 
+require 5.004;
+
 use strict;
-use warnings;
+use vars qw( $VERSION );
 use Template::Constants;
 
-our $VERSION = 2.77;
+$VERSION = sprintf("%d.%02d", q$Revision: 2.70 $ =~ /(\d+)\.(\d+)/);
 
 
 
@@ -168,25 +183,25 @@ sub new {
     my ($argnames, @args, $arg, $cfg);
 
     {	no strict qw( refs );
-        $argnames = \@{"$class\::BASEARGS"} || [ ];
+	$argnames = \@{"$class\::BASEARGS"} || [ ];
     }
 
     # shift off all mandatory args, returning error if undefined or null
     foreach $arg (@$argnames) {
-        return $class->error("no $arg specified")
-            unless ($cfg = shift);
-        push(@args, $cfg);
+	return $class->error("no $arg specified")
+	    unless ($cfg = shift);
+	push(@args, $cfg);
     }
 
     # fold all remaining args into a hash, or use provided hash ref
     $cfg  = defined $_[0] && UNIVERSAL::isa($_[0], 'HASH') ? shift : { @_ };
 
     my $self = bless {
-        map { ($_ => shift @args) } @$argnames,
-        _ERROR  => '',
+	map { ($_ => shift @args) } @$argnames,
+	_ERROR  => '',
         DEBUG   => 0,
     }, $class;
-    
+
     return $self->_init($cfg) ? $self : $class->error($self->error);
 }
 
@@ -197,15 +212,15 @@ sub error {
     my $errvar;
 
     { 
-        no strict qw( refs );
-        $errvar = ref $self ? \$self->{ _ERROR } : \${"$self\::ERROR"};
+	no strict qw( refs );
+	$errvar = ref $self ? \$self->{ _ERROR } : \${"$self\::ERROR"};
     }
     if (@_) {
-        $$errvar = ref($_[0]) ? shift : join('', @_);
-        return undef;
+	$$errvar = ref($_[0]) ? shift : join('', @_);
+	return undef;
     }
     else {
-        return $$errvar;
+	return $$errvar;
     }
 }
 
@@ -228,9 +243,9 @@ sub debug {
     my ($pkg, $file, $line) = caller();
 
     unless ($msg =~ /\n$/) {
-        $msg .= ($self->{ DEBUG } & Template::Constants::DEBUG_CALLER)
-            ? " at $file line $line\n"
-            : "\n";
+	$msg .= ($self->{ DEBUG } & Template::Constants::DEBUG_CALLER)
+		 ? " at $file line $line\n"
+		 : "\n";
     }
 
     print STDERR "[$pkg] $msg";
@@ -259,15 +274,16 @@ BEGIN {
  
 package Template::Config;
 
-use strict;
-use warnings;
-use base 'Template::Base';
-use vars qw( $VERSION $DEBUG $ERROR $INSTDIR
-             $PARSER $PROVIDER $PLUGINS $FILTERS $ITERATOR 
-             $LATEX_PATH $PDFLATEX_PATH $DVIPS_PATH
-             $STASH $SERVICE $CONTEXT $CONSTANTS @PRELOAD );
+require 5.004;
 
-$VERSION   = 2.74;
+use strict;
+use base qw( Template::Base );
+use vars qw( $VERSION $DEBUG $ERROR $INSTDIR
+	     $PARSER $PROVIDER $PLUGINS $FILTERS $ITERATOR 
+             $LATEX_PATH $PDFLATEX_PATH $DVIPS_PATH
+	     $STASH $SERVICE $CONTEXT $CONSTANTS @PRELOAD );
+
+$VERSION   = sprintf("%d.%02d", q$Revision: 2.68 $ =~ /(\d+)\.(\d+)/);
 $DEBUG     = 0 unless defined $DEBUG;
 $ERROR     = '';
 $CONTEXT   = 'Template::Context';
@@ -277,14 +293,17 @@ $PARSER    = 'Template::Parser';
 $PLUGINS   = 'Template::Plugins';
 $PROVIDER  = 'Template::Provider';
 $SERVICE   = 'Template::Service';
-$STASH     = 'Template::Stash::XS';
+$STASH     = 'Template::Stash';
 $CONSTANTS = 'Template::Namespace::Constants';
 
 @PRELOAD   = ( $CONTEXT, $FILTERS, $ITERATOR, $PARSER,
                $PLUGINS, $PROVIDER, $SERVICE, $STASH );
 
-$INSTDIR  = '/usr/local/tt2';
+$INSTDIR  = '';
 
+$LATEX_PATH    = '';
+$PDFLATEX_PATH = '';
+$DVIPS_PATH    = '';
 
 
 
@@ -330,8 +349,8 @@ sub provider {
 
     return undef unless $class->load($PROVIDER);
     return $PROVIDER->new($params) 
-        || $class->error("failed to create template provider: ",
-                         $PROVIDER->error);
+	|| $class->error("failed to create template provider: ",
+			 $PROVIDER->error);
 }
 
 
@@ -432,6 +451,10 @@ sub instdir {
 }
 
 
+sub latexpaths {
+    return [$LATEX_PATH, $PDFLATEX_PATH, $DVIPS_PATH];
+}
+
 
 
 package Template::TieString;
@@ -460,24 +483,23 @@ BEGIN {
 
 package Template::Document;
 
+require 5.004;
+
 use strict;
-use warnings;
-use base 'Template::Base';
+use vars qw( $VERSION $ERROR $COMPERR $DEBUG $AUTOLOAD $UNICODE );
+use base qw( Template::Base );
 use Template::Constants;
 
-our $VERSION = 2.79;
-our $DEBUG   = 0 unless defined $DEBUG;
-our $ERROR   = '';
-our ($COMPERR, $AUTOLOAD, $UNICODE);
+$VERSION = sprintf("%d.%02d", q$Revision: 2.74 $ =~ /(\d+)\.(\d+)/);
 
 BEGIN {
     # UNICODE is supported in versions of Perl from 5.008 onwards
     if ($UNICODE = $] > 5.007 ? 1 : 0) {
-        if ($] > 5.008) {
+        if ($^V gt v5.8.0) {
             # utf8::is_utf8() available from Perl 5.8.1 onwards
             *is_utf8 = \&utf8::is_utf8;
         }
-        elsif ($] == 5.008) {
+        elsif ($^V eq v5.8.0) {
             # use Encode::is_utf8() for Perl 5.8.0
             require Encode;
             *is_utf8 = \&Encode::is_utf8;
@@ -684,16 +706,21 @@ BEGIN { $INC{'Template/Exception.pm'} = 'dummy/Template/Exception.pm'; }
 BEGIN {
 #line 0 "Template/Exception.pm"
 
+
 package Template::Exception;
 
+require 5.005;
+
 use strict;
-use warnings;
+use vars qw( $VERSION );
+
 use constant TYPE  => 0;
 use constant INFO  => 1;
 use constant TEXT  => 2;
 use overload q|""| => "as_string", fallback => 1;
 
-our $VERSION = 2.69;
+
+$VERSION = sprintf("%d.%02d", q$Revision: 2.65 $ =~ /(\d+)\.(\d+)/);
 
 
 
@@ -774,16 +801,18 @@ BEGIN {
 
 package Template::Service;
 
+require 5.004;
+
 use strict;
-use warnings;
-use base 'Template::Base';
+use vars qw( $VERSION $DEBUG $ERROR );
+use base qw( Template::Base );
+use Template::Base;
 use Template::Config;
 use Template::Exception;
 use Template::Constants;
 
-our $VERSION = 2.80;
-our $DEBUG   = 0 unless defined $DEBUG;
-our $ERROR   = '';
+$VERSION = sprintf("%d.%02d", q$Revision: 2.77 $ =~ /(\d+)\.(\d+)/);
+$DEBUG   = 0 unless defined $DEBUG;
 
 
 
@@ -862,7 +891,7 @@ sub process {
     delete $params->{ template };
 
     if ($error) {
-    #   $error = $error->as_string if ref $error;
+    #	$error = $error->as_string if ref $error;
         return $self->error($error);
     }
 
@@ -920,7 +949,7 @@ sub _recover {
     # point... unless a module like CGI::Carp messes around with the 
     # DIE handler. 
     return undef
-        unless UNIVERSAL::isa($$error, 'Template::Exception');
+	unless (ref $$error);
 
     # a 'stop' exception is thrown by [% STOP %] - we return the output
     # buffer stored in the exception object
@@ -928,7 +957,7 @@ sub _recover {
         if $$error->type() eq 'stop';
 
     my $handlers = $self->{ ERROR }
-        || return undef;                    ## RETURN
+        || return undef;					## RETURN
 
     if (ref $handlers eq 'HASH') {
         if ($hkey = $$error->select_handler(keys %$handlers)) {
@@ -940,7 +969,7 @@ sub _recover {
             $self->debug("using default error handler") if $self->{ DEBUG };
         }
         else {
-            return undef;                   ## RETURN
+            return undef;					## RETURN
         }
     }
     else {
@@ -951,7 +980,7 @@ sub _recover {
     eval { $handler = $context->template($handler) };
     if ($@) {
         $$error = $@;
-        return undef;                       ## RETURN
+        return undef;						## RETURN
     };
     
     $context->stash->set('error', $$error);
@@ -960,7 +989,7 @@ sub _recover {
     };
     if ($@) {
         $$error = $@;
-        return undef;                       ## RETURN
+        return undef;						## RETURN
     }
 
     return $output;
@@ -976,11 +1005,11 @@ sub _dump {
 
     my $error = $self->{ ERROR };
     $error = join('', 
-          "{\n",
-          (map { "    $_ => $error->{ $_ }\n" }
-           keys %$error),
-          "}\n")
-    if ref $error;
+		  "{\n",
+		  (map { "    $_ => $error->{ $_ }\n" }
+		   keys %$error),
+		  "}\n")
+	if ref $error;
     
     local $" = ', ';
     return <<EOF;
@@ -1006,33 +1035,35 @@ BEGIN {
 
 package Template::Provider;
 
+require 5.004;
+
 use strict;
-use warnings;
-use base 'Template::Base';
+use vars qw( $VERSION $DEBUG $ERROR $DOCUMENT $STAT_TTL $MAX_DIRS $UNICODE );
+use base qw( Template::Base );
 use Template::Config;
 use Template::Constants;
 use Template::Document;
 use File::Basename;
 use File::Spec;
 
+$VERSION  = sprintf("%d.%02d", q$Revision: 2.81 $ =~ /(\d+)\.(\d+)/);
+
+$DOCUMENT = 'Template::Document' unless defined $DOCUMENT;
+
+$STAT_TTL = 1 unless defined $STAT_TTL;
+
+$MAX_DIRS = 64 unless defined $MAX_DIRS;
+
 use constant PREV   => 0;
-use constant NAME   => 1;   # template name -- indexed by this name in LOOKUP
-use constant DATA   => 2;   # Compiled template
-use constant LOAD   => 3;   # mtime of template
-use constant NEXT   => 4;   # link to next item in cache linked list
-use constant STAT   => 5;   # Time last stat()ed
+use constant NAME   => 1;
+use constant DATA   => 2; 
+use constant LOAD   => 3;
+use constant NEXT   => 4;
+use constant STAT   => 5;
 
-our $VERSION = 2.93;
-our $DEBUG   = 0 unless defined $DEBUG;
-our $ERROR   = '';
+$DEBUG = 0 unless defined $DEBUG;
 
-our $DOCUMENT = 'Template::Document' unless defined $DOCUMENT;
-
-our $STAT_TTL = 1 unless defined $STAT_TTL;
-
-our $MAX_DIRS = 64 unless defined $MAX_DIRS;
-
-our $UNICODE = $] > 5.007 ? 1 : 0;
+$UNICODE = $] > 5.007 ? 1 : 0;
 
 my $boms = [
     'UTF-8'    => "\x{ef}\x{bb}\x{bf}",
@@ -1042,14 +1073,11 @@ my $boms = [
     'UTF-16LE' => "\x{ff}\x{fe}",
 ];
 
-our $RELATIVE_PATH = qr[(?:^|/)\.+/];
-
-
-BEGIN {
-    if ($] < 5.006) {
-        package bytes;
-        $INC{'bytes.pm'} = 1;
-    }
+BEGIN { 
+    if ($] < 5.006) { 
+        package bytes; 
+        $INC{'bytes.pm'} = 1; 
+    } 
 }
 
 
@@ -1059,40 +1087,39 @@ sub fetch {
     my ($self, $name) = @_;
     my ($data, $error);
 
-
     if (ref $name) {
         # $name can be a reference to a scalar, GLOB or file handle
         ($data, $error) = $self->_load($name);
         ($data, $error) = $self->_compile($data)
             unless $error;
         $data = $data->{ data }
-            unless $error;
+	    unless $error;
     }
     elsif (File::Spec->file_name_is_absolute($name)) {
         # absolute paths (starting '/') allowed if ABSOLUTE set
-        ($data, $error) = $self->{ ABSOLUTE }
-            ? $self->_fetch($name)
-            : $self->{ TOLERANT }
-                ? (undef, Template::Constants::STATUS_DECLINED)
+        ($data, $error) = $self->{ ABSOLUTE } 
+	    ? $self->_fetch($name) 
+            : $self->{ TOLERANT } 
+		? (undef, Template::Constants::STATUS_DECLINED)
             : ("$name: absolute paths are not allowed (set ABSOLUTE option)",
                Template::Constants::STATUS_ERROR);
     }
-    elsif ($name =~ m/$RELATIVE_PATH/o) {
+    elsif ($name =~ m[^\.+/]) {
         # anything starting "./" is relative to cwd, allowed if RELATIVE set
-        ($data, $error) = $self->{ RELATIVE }
-            ? $self->_fetch($name)
-            : $self->{ TOLERANT }
-                ? (undef, Template::Constants::STATUS_DECLINED)
+        ($data, $error) = $self->{ RELATIVE } 
+	    ? $self->_fetch($name) 
+            : $self->{ TOLERANT } 
+		? (undef, Template::Constants::STATUS_DECLINED)
             : ("$name: relative paths are not allowed (set RELATIVE option)",
                Template::Constants::STATUS_ERROR);
     }
     else {
         # otherwise, it's a file name relative to INCLUDE_PATH
-        ($data, $error) = $self->{ INCLUDE_PATH }
-            ? $self->_fetch_path($name)
+        ($data, $error) = $self->{ INCLUDE_PATH } 
+	    ? $self->_fetch_path($name) 
             : (undef, Template::Constants::STATUS_DECLINED);
     }
-
+    
 
     return ($data, $error);
 }
@@ -1116,10 +1143,10 @@ sub load {
 
     if (File::Spec->file_name_is_absolute($name)) {
         # absolute paths (starting '/') allowed if ABSOLUTE set
-        $error = "$name: absolute paths are not allowed (set ABSOLUTE option)"
+        $error = "$name: absolute paths are not allowed (set ABSOLUTE option)" 
             unless $self->{ ABSOLUTE };
     }
-    elsif ($name =~ m[$RELATIVE_PATH]o) {
+    elsif ($name =~ m[^\.+/]) {
         # anything starting "./" is relative to cwd, allowed if RELATIVE set
         $error = "$name: relative paths are not allowed (set RELATIVE option)"
             unless $self->{ RELATIVE };
@@ -1133,18 +1160,26 @@ sub load {
           foreach my $dir (@$paths) {
               $path = "$dir/$name";
               last INCPATH
-                  if $self->_template_modified($path);
+                  if -f $path;
           }
-          undef $path;      # not found
+          undef $path;	    # not found
       }
     }
 
-    # Now fetch the content
-    ($data, $error) = $self->_template_content($path)
-        if defined $path && !$error;
-
+    if (defined $path && ! $error) {
+        local $/ = undef;    # slurp files in one go
+        local *FH;
+        if (open(FH, $path)) {
+            $data = <FH>;
+            close(FH);
+        }
+        else {
+            $error = "$name: $!";
+        }
+    }
+    
     if ($error) {
-        return $self->{ TOLERANT }
+        return $self->{ TOLERANT } 
             ? (undef, Template::Constants::STATUS_DECLINED)
             : ($error, Template::Constants::STATUS_ERROR);
     }
@@ -1156,7 +1191,7 @@ sub load {
     }
 }
 
-
+ 
 
 
 sub include_path {
@@ -1172,13 +1207,13 @@ sub paths {
     my @ipaths = @{ $self->{ INCLUDE_PATH } };
     my (@opaths, $dpaths, $dir);
     my $count = $MAX_DIRS;
-
+    
     while (@ipaths && --$count) {
         $dir = shift @ipaths || next;
-
+        
         # $dir can be a sub or object ref which returns a reference
         # to a dynamically generated list of search paths.
-
+        
         if (ref $dir eq 'CODE') {
             eval { $dpaths = &$dir() };
             if ($@) {
@@ -1189,7 +1224,7 @@ sub paths {
             next;
         }
         elsif (UNIVERSAL::can($dir, 'paths')) {
-            $dpaths = $dir->paths()
+            $dpaths = $dir->paths() 
                 || return $self->error($dir->error());
             unshift(@ipaths, @$dpaths);
             next;
@@ -1199,7 +1234,7 @@ sub paths {
         }
     }
     return $self->error("INCLUDE_PATH exceeds $MAX_DIRS directories")
-        if @ipaths;
+	if @ipaths;
 
     return \@opaths;
 }
@@ -1242,10 +1277,10 @@ sub _init {
     # coerce INCLUDE_PATH to an array ref, if not already so
     $path = [ split(/$dlim/, $path) ]
         unless ref $path eq 'ARRAY';
-
-    # don't allow a CACHE_SIZE 1 because it breaks things and the
+    
+    # don't allow a CACHE_SIZE 1 because it breaks things and the 
     # additional checking isn't worth it
-    $size = 2
+    $size = 2 
         if defined $size && ($size == 1 || $size < 0);
 
     if (defined ($debug = $params->{ DEBUG })) {
@@ -1258,28 +1293,27 @@ sub _init {
 
     if ($self->{ DEBUG }) {
         local $" = ', ';
-        $self->debug("creating cache of ",
+        $self->debug("creating cache of ", 
                      defined $size ? $size : 'unlimited',
                      " slots for [ @$path ]");
     }
-
+    
     # create COMPILE_DIR and sub-directories representing each INCLUDE_PATH
     # element in which to store compiled files
     if ($cdir) {
+        
+
         require File::Path;
         foreach my $dir (@$path) {
             next if ref $dir;
             my $wdir = $dir;
             $wdir =~ s[:][]g if $^O eq 'MSWin32';
             $wdir =~ /(.*)/;  # untaint
-            $wdir = $1;
-            $wdir = File::Spec->catfile($cdir, $1);
-            File::Path::mkpath($wdir) unless -d $wdir;
+            &File::Path::mkpath(File::Spec->catfile($cdir, $1));
         }
     }
 
     $self->{ LOOKUP       } = { };
-    $self->{ NOTFOUND     } = { };  # Tracks templates *not* found.
     $self->{ SLOTS        } = 0;
     $self->{ SIZE         } = $size;
     $self->{ INCLUDE_PATH } = $path;
@@ -1290,14 +1324,12 @@ sub _init {
     $self->{ RELATIVE     } = $params->{ RELATIVE } || 0;
     $self->{ TOLERANT     } = $params->{ TOLERANT } || 0;
     $self->{ DOCUMENT     } = $params->{ DOCUMENT } || $DOCUMENT;
-    $self->{ PARSER       } = $params->{ PARSER   };
-    $self->{ DEFAULT      } = $params->{ DEFAULT  };
-    $self->{ ENCODING     } = $params->{ ENCODING };
-    $self->{ STAT_TTL     } = $params->{ STAT_TTL } || $STAT_TTL;
+    $self->{ PARSER       } = $params->{ PARSER };
+    $self->{ DEFAULT      } = $params->{ DEFAULT };
     $self->{ PARAMS       } = $params;
 
     # look for user-provided UNICODE parameter or use default from package var
-    $self->{ UNICODE      } = defined $params->{ UNICODE }
+    $self->{ UNICODE      } = defined $params->{ UNICODE } 
                                     ? $params->{ UNICODE } : $UNICODE;
 
     return $self;
@@ -1306,104 +1338,142 @@ sub _init {
 
 
 sub _fetch {
-    my ($self, $name, $t_name) = @_;
-    my $stat_ttl = $self->{ STAT_TTL };
+    my ($self, $name) = @_;
+    my $size = $self->{ SIZE };
+    my ($slot, $data, $error);
 
     $self->debug("_fetch($name)") if $self->{ DEBUG };
 
-    # First see if the named template is in the memory cache
-    if ((my $slot = $self->{ LOOKUP }->{ $name })) {
-        # Test if cache is fresh, and reload/compile if not.
-        my ($data, $error) = $self->_refresh($slot);
+    my $compiled = $self->_compiled_filename($name);
 
-        return $error
-            ? ( $data, $error )     # $data may contain error text
-            : $slot->[ DATA ];      # returned document object
-    }
-
-    # Otherwise, see if we already know the template is not found
-    if (my $last_stat_time = $self->{ NOTFOUND }->{ $name }) {
-        my $expires_in = $last_stat_time + $stat_ttl - time;
-        if ($expires_in > 0) {
-            $self->debug(" file [$name] in negative cache.  Expires in $expires_in seconds")
-                if $self->{ DEBUG };
-            return (undef, Template::Constants::STATUS_DECLINED);
+    if (defined $size && ! $size) {
+        # caching disabled so load and compile but don't cache
+        if ($compiled && -f $compiled 
+            && (stat($name))[9] <= (stat($compiled))[9]) {
+            $data = $self->_load_compiled($compiled);
+            $error = $self->error() unless $data;
         }
         else {
-            delete $self->{ NOTFOUND }->{ $name };
+            ($data, $error) = $self->_load($name);
+            ($data, $error) = $self->_compile($data, $compiled)
+                unless $error;
+            $data = $data->{ data }
+            unless $error;
         }
     }
-
-    # Is there an up-to-date compiled version on disk?
-    if ($self->_compiled_is_current($name)) {
-        # require() the compiled template.
-        my $compiled_template = $self->_load_compiled( $self->_compiled_filename($name) );
-
-        # Store and return the compiled template
-        return $self->store( $name, $compiled_template ) if $compiled_template;
-
-        # Problem loading compiled template:
-        # warn and continue to fetch source template
-        warn($self->error(), "\n");
+    elsif ($slot = $self->{ LOOKUP }->{ $name }) {
+        # cached entry exists, so refresh slot and extract data
+        ($data, $error) = $self->_refresh($slot);
+        $data = $slot->[ DATA ]
+            unless $error;
     }
-
-    # Now fetch template from source, compile, and cache.
-    my ($template, $error) = $self->_load($name, $t_name);
-    unless ($error) {
-        ($template, $error) = $self->_compile($template, $self->_compiled_filename($name) );
-
-        # Store compiled template and return it
-        return $self->store( $name, $template->{data} ) unless $error;
+    else {
+        # nothing in cache so try to load, compile and cache
+        if ($compiled && -f $compiled 
+            && (stat($name))[9] <= (stat($compiled))[9]) {
+            $data = $self->_load_compiled($compiled);
+            $error = $self->error() unless $data;
+            $self->store($name, $data) unless $error;
+        }
+        else {
+            ($data, $error) = $self->_load($name);
+            ($data, $error) = $self->_compile($data, $compiled)
+                unless $error;
+            $data = $self->_store($name, $data)
+                unless $error;
+        }
     }
-
-    # Template could not be fetched.  Add to the negative/notfound cache.
-    $self->{ NOTFOUND }->{ $name } = time;
-
-    return ( $template, $error );
+    
+    return ($data, $error);
 }
 
 
 
 sub _fetch_path {
     my ($self, $name) = @_;
+    my ($size, $compext, $compdir) = 
+	@$self{ qw( SIZE COMPILE_EXT COMPILE_DIR ) };
+    my ($dir, $paths, $path, $compiled, $slot, $data, $error);
+    local *FH;
 
     $self->debug("_fetch_path($name)") if $self->{ DEBUG };
 
-    # the template may have been stored using a non-filename name
-    # so look for the plain name in the cache first
-    if ((my $slot = $self->{ LOOKUP }->{ $name })) {
-        # cached entry exists, so refresh slot and extract data
-        my ($data, $error) = $self->_refresh($slot);
+    # caching is enabled if $size is defined and non-zero or undefined
+    my $caching = (! defined $size || $size);
 
-        return $error
-            ? ($data, $error)
-            : ($slot->[ DATA ], $error );
-    }
+    INCLUDE: {
 
-    my $paths = $self->paths
-        || return ( $self->error, Template::Constants::STATUS_ERROR );
-
-    # search the INCLUDE_PATH for the file, in cache or on disk
-    foreach my $dir (@$paths) {
-        my $path = File::Spec->catfile($dir, $name);
-
-        $self->debug("searching path: $path\n") if $self->{ DEBUG };
-
-        my ($data, $error) = $self->_fetch( $path, $name );
-
-        # Return if no error or if a serious error.
-        return ( $data, $error )
-            if !$error || $error == Template::Constants::STATUS_ERROR;
-
-    }
-
-    # not found in INCLUDE_PATH, now try DEFAULT
-    return $self->_fetch_path( $self->{DEFAULT} )
-        if defined $self->{DEFAULT} && $name ne $self->{DEFAULT};
-
-    # We could not handle this template name
-    return (undef, Template::Constants::STATUS_DECLINED);
+        # the template may have been stored using a non-filename name
+        if ($caching && ($slot = $self->{ LOOKUP }->{ $name })) {
+            # cached entry exists, so refresh slot and extract data
+            ($data, $error) = $self->_refresh($slot);
+            $data = $slot->[ DATA ] 
+                unless $error;
+            last INCLUDE;
+        }
+        
+        $paths = $self->paths() || do {
+            $error = Template::Constants::STATUS_ERROR;
+            $data  = $self->error();
+            last INCLUDE;
+        };
+        
+        # search the INCLUDE_PATH for the file, in cache or on disk
+        foreach $dir (@$paths) {
+            $path = File::Spec->catfile($dir, $name);
+            
+            $self->debug("searching path: $path\n") if $self->{ DEBUG };
+            
+            if ($caching && ($slot = $self->{ LOOKUP }->{ $path })) {
+                # cached entry exists, so refresh slot and extract data
+                ($data, $error) = $self->_refresh($slot);
+                $data = $slot->[ DATA ]
+                    unless $error;
+                last INCLUDE;
+            }
+            elsif (-f $path) {
+                $compiled = $self->_compiled_filename($path)
+                    if $compext || $compdir;
+                
+                if ($compiled && -f $compiled 
+                    && (stat($path))[9] <= (stat($compiled))[9]) {
+                    if ($data = $self->_load_compiled($compiled)) {
+                        # store in cache
+                        $data  = $self->store($path, $data);
+                        $error = Template::Constants::STATUS_OK;
+                        last INCLUDE;
+                    }
+                    else {
+                        warn($self->error(), "\n");
+                    }
+                }
+                # $compiled is set if an attempt to write the compiled 
+                # template to disk should be made
+                
+                ($data, $error) = $self->_load($path, $name);
+                ($data, $error) = $self->_compile($data, $compiled)
+                    unless $error;
+                $data = $self->_store($path, $data)
+                    unless $error || ! $caching;
+                $data = $data->{ data } if ! $caching;
+                # all done if $error is OK or ERROR
+                last INCLUDE if ! $error 
+                    || $error == Template::Constants::STATUS_ERROR;
+            }
+        }
+        # template not found, so look for a DEFAULT template
+        my $default;
+        if (defined ($default = $self->{ DEFAULT }) && $name ne $default) {
+            $name = $default;
+            redo INCLUDE;
+        }
+        ($data, $error) = (undef, Template::Constants::STATUS_DECLINED);
+    } # INCLUDE
+    
+    return ($data, $error);
 }
+
+
 
 sub _compiled_filename {
     my ($self, $file) = @_;
@@ -1411,7 +1481,7 @@ sub _compiled_filename {
     my ($path, $compiled);
 
     return undef
-        unless $compext || $compdir;
+	unless $compext || $compdir;
 
     $path = $file;
     $path =~ /^(.+)$/s or die "invalid filename: $path";
@@ -1423,12 +1493,13 @@ sub _compiled_filename {
     return $compiled;
 }
 
+
 sub _load_compiled {
     my ($self, $file) = @_;
     my $compiled;
 
     # load compiled template via require();  we zap any
-    # %INC entry to ensure it is reloaded (we don't
+    # %INC entry to ensure it is reloaded (we don't 
     # want 1 returned by require() to say it's in memory)
     delete $INC{ $file };
     eval { $compiled = require $file; };
@@ -1438,117 +1509,107 @@ sub _load_compiled {
 }
 
 
+
+
 sub _load {
     my ($self, $name, $alias) = @_;
     my ($data, $error);
     my $tolerant = $self->{ TOLERANT };
     my $now = time;
+    local $/ = undef;    # slurp files in one go
+    local *FH;
 
     $alias = $name unless defined $alias or ref $name;
 
-    $self->debug("_load($name, ", defined $alias ? $alias : '<no alias>',
+    $self->debug("_load($name, ", defined $alias ? $alias : '<no alias>', 
                  ')') if $self->{ DEBUG };
 
-    # SCALAR ref is the template text
-    if (ref $name eq 'SCALAR') {
-        # $name can be a SCALAR reference to the input text...
-        return {
-            name => defined $alias ? $alias : 'input text',
-            path => defined $alias ? $alias : 'input text',
-            text => $$name,
-            time => $now,
-            load => 0,
-        };
-    }
-
-    # Otherwise, assume GLOB as a file handle
-    if (ref $name) {
-        local $/;
-        my $text = <$name>;
-        $text = $self->_decode_unicode($text) if $self->{ UNICODE };
-        return {
-            name => defined $alias ? $alias : 'input file handle',
-            path => defined $alias ? $alias : 'input file handle',
-            text => $text,
-            time => $now,
-            load => 0,
-        };
-    }
-
-    # Otherwise, it's the name of the template
-    if ( $self->_template_modified( $name ) ) {  # does template exist?
-        my ($text, $error, $mtime ) = $self->_template_content( $name );
-        unless ( $error )  {
-            $text = $self->_decode_unicode($text) if $self->{ UNICODE };
-            return {
-                name => $alias,
-                path => $name,
-                text => $text,
-                time => $mtime,
-                load => $now,
+    LOAD: {
+        if (ref $name eq 'SCALAR') {
+            # $name can be a SCALAR reference to the input text...
+            $data = {
+                name => defined $alias ? $alias : 'input text',
+                text => $$name,
+                time => $now,
+                load => 0,
             };
         }
-
-        return ( "$alias: $!", Template::Constants::STATUS_ERROR )
-            unless $tolerant;
+        elsif (ref $name) {
+            # ...or a GLOB or file handle...
+            my $text = <$name>;
+            $text = $self->_decode_unicode($text) if $self->{ UNICODE };
+            $data = {
+                name => defined $alias ? $alias : 'input file handle',
+                text => $text,
+                time => $now,
+                load => 0,
+            };
+        }
+        elsif (-f $name) {
+            if (open(FH, $name)) {
+                my $text = <FH>;
+                $text = $self->_decode_unicode($text) if $self->{ UNICODE };
+                $data = {
+                    name => $alias,
+                    path => $name,
+                    text => $text,
+                    time => (stat $name)[9],
+                    load => $now,
+                };
+            }
+            elsif ($tolerant) {
+                ($data, $error) = (undef, Template::Constants::STATUS_DECLINED);
+            }
+            else {
+                $data  = "$alias: $!";
+                $error = Template::Constants::STATUS_ERROR;
+            }
+        }
+        else {
+            ($data, $error) = (undef, Template::Constants::STATUS_DECLINED);
+        }
     }
-
-    # Unable to process template, pass onto the next Provider.
-    return (undef, Template::Constants::STATUS_DECLINED);
+    
+    $data->{ path } = $data->{ name }
+        if $data and ! defined $data->{ path };
+    
+    return ($data, $error);
 }
 
 
 
 sub _refresh {
     my ($self, $slot) = @_;
-    my $stat_ttl = $self->{ STAT_TTL };
     my ($head, $file, $data, $error);
 
-    $self->debug("_refresh([ ",
+
+    $self->debug("_refresh([ ", 
                  join(', ', map { defined $_ ? $_ : '<undef>' } @$slot),
                  '])') if $self->{ DEBUG };
 
-    # if it's more than $STAT_TTL seconds since we last performed a
+    # if it's more than $STAT_TTL seconds since we last performed a 
     # stat() on the file then we need to do it again and see if the file
     # time has changed
-    my $now = time;
-    my $expires_in_sec = $slot->[ STAT ] + $stat_ttl - $now;
+    if ( (time - $slot->[ STAT ]) > $STAT_TTL && stat $slot->[ NAME ] ) {
+        $slot->[ STAT ] = time;
 
-    if ( $expires_in_sec <= 0 ) {  # Time to check!
-        $slot->[ STAT ] = $now;
-
-        # Grab mtime of template.
-        # Seems like this should be abstracted to compare to
-        # just ask for a newer compiled template (if it's newer)
-        # and let that check for a newer template source.
-        my $template_mtime = $self->_template_modified( $slot->[ NAME ] );
-        if ( ! defined $template_mtime || ( $template_mtime != $slot->[ LOAD ] )) {
-            $self->debug("refreshing cache file ", $slot->[ NAME ])
+        if ( (stat(_))[9] != $slot->[ LOAD ]) {
+            
+            $self->debug("refreshing cache file ", $slot->[ NAME ]) 
                 if $self->{ DEBUG };
-
-            ($data, $error) = $self->_load($slot->[ NAME ], $slot->[ DATA ]->{ name });
+            
+            ($data, $error) = $self->_load($slot->[ NAME ],
+                                           $slot->[ DATA ]->{ name });
             ($data, $error) = $self->_compile($data)
                 unless $error;
-
-            if ($error) {
-                # if the template failed to load/compile then we wipe out the
-                # STAT entry.  This forces the provider to try and reload it
-                # each time instead of using the previously cached version
-                # until $STAT_TTL is next up
-                $slot->[ STAT ] = 0;
-            }
-            else {
+            
+            unless ($error) {
                 $slot->[ DATA ] = $data->{ data };
                 $slot->[ LOAD ] = $data->{ time };
             }
         }
-
-    } elsif ( $self->{ DEBUG } ) {
-        $self->debug( sprintf('STAT_TTL not met for file [%s].  Expires in %d seconds',
-                        $slot->[ NAME ], $expires_in_sec ) );
     }
-
-    # Move this slot to the head of the list
+    
     unless( $self->{ HEAD } == $slot ) {
         # remove existing slot from usage chain...
         if ($slot->[ PREV ]) {
@@ -1563,7 +1624,7 @@ sub _refresh {
         else {
             $self->{ TAIL } = $slot->[ PREV ];
         }
-
+        
         # ..and add to start of list
         $head = $self->{ HEAD };
         $head->[ PREV ] = $slot if $head;
@@ -1571,10 +1632,9 @@ sub _refresh {
         $slot->[ NEXT ] = $head;
         $self->{ HEAD } = $slot;
     }
-
+    
     return ($data, $error);
 }
-
 
 
 
@@ -1583,51 +1643,46 @@ sub _store {
     my $size = $self->{ SIZE };
     my ($slot, $head);
 
-    # Return if memory cache disabled.  (overridding code should also check)
-    # $$$ What's the expected behaviour of store()?  Can't tell from the
-    # docs if you can call store() when SIZE = 0.
-    return $data->{data} if defined $size and !$size;
-
-    # extract the compiled template from the data hash
+    # extract the load time and compiled template from the data
+    my $load = (stat($name))[9];
     $data = $data->{ data };
-    $self->debug("_store($name, $data)") if $self->{ DEBUG };
 
-    # check the modification time -- extra stat here
-    my $load = $self->_modified($name);
+    $self->debug("_store($name, $data)") if $self->{ DEBUG };
 
     if (defined $size && $self->{ SLOTS } >= $size) {
         # cache has reached size limit, so reuse oldest entry
+        
         $self->debug("reusing oldest cache entry (size limit reached: $size)\nslots: $self->{ SLOTS }") if $self->{ DEBUG };
-
+        
         # remove entry from tail of list
         $slot = $self->{ TAIL };
         $slot->[ PREV ]->[ NEXT ] = undef;
         $self->{ TAIL } = $slot->[ PREV ];
-
+        
         # remove name lookup for old node
         delete $self->{ LOOKUP }->{ $slot->[ NAME ] };
-
+        
         # add modified node to head of list
         $head = $self->{ HEAD };
         $head->[ PREV ] = $slot if $head;
         @$slot = ( undef, $name, $data, $load, $head, time );
         $self->{ HEAD } = $slot;
-
+        
         # add name lookup for new node
         $self->{ LOOKUP }->{ $name } = $slot;
     }
     else {
         # cache is under size limit, or none is defined
-
+        
         $self->debug("adding new cache entry") if $self->{ DEBUG };
-
+        
         # add new node to head of list
         $head = $self->{ HEAD };
         $slot = [ undef, $name, $data, $load, $head, time ];
         $head->[ PREV ] = $slot if $head;
         $self->{ HEAD } = $slot;
         $self->{ TAIL } = $slot unless $self->{ TAIL };
-
+        
         # add lookup from name to slot and increment nslots
         $self->{ LOOKUP }->{ $name } = $slot;
         $self->{ SLOTS }++;
@@ -1643,68 +1698,58 @@ sub _compile {
     my $text = $data->{ text };
     my ($parsedoc, $error);
 
-    $self->debug("_compile($data, ",
-                 defined $compfile ? $compfile : '<no compfile>', ')')
+    $self->debug("_compile($data, ", 
+                 defined $compfile ? $compfile : '<no compfile>', ')') 
         if $self->{ DEBUG };
 
-    my $parser = $self->{ PARSER }
+    my $parser = $self->{ PARSER } 
         ||= Template::Config->parser($self->{ PARAMS })
         ||  return (Template::Config->error(), Template::Constants::STATUS_ERROR);
 
     # discard the template text - we don't need it any more
-    delete $data->{ text };
-
+    delete $data->{ text };   
+    
     # call parser to compile template into Perl code
     if ($parsedoc = $parser->parse($text, $data)) {
 
-        $parsedoc->{ METADATA } = {
+        $parsedoc->{ METADATA } = { 
             'name'    => $data->{ name },
             'modtime' => $data->{ time },
             %{ $parsedoc->{ METADATA } },
         };
-
+        
         # write the Perl code to the file $compfile, if defined
         if ($compfile) {
             my $basedir = &File::Basename::dirname($compfile);
             $basedir =~ /(.*)/;
             $basedir = $1;
-
-            unless (-d $basedir) {
-                eval { File::Path::mkpath($basedir) };
-                $error = "failed to create compiled templates directory: $basedir ($@)"
-                    if ($@);
-            }
-
-            unless ($error) {
-                my $docclass = $self->{ DOCUMENT };
-                $error = 'cache failed to write '
-                    . &File::Basename::basename($compfile)
-                    . ': ' . $docclass->error()
-                    unless $docclass->write_perl_file($compfile, $parsedoc);
-            }
-
+            &File::Path::mkpath($basedir) unless -d $basedir;
+            
+            my $docclass = $self->{ DOCUMENT };
+            $error = 'cache failed to write '
+                . &File::Basename::basename($compfile)
+                . ': ' . $docclass->error()
+                unless $docclass->write_perl_file($compfile, $parsedoc);
+            
             # set atime and mtime of newly compiled file, don't bother
             # if time is undef
             if (!defined($error) && defined $data->{ time }) {
                 my ($cfile) = $compfile =~ /^(.+)$/s or do {
-                    return("invalid filename: $compfile",
+                    return("invalid filename: $compfile", 
                            Template::Constants::STATUS_ERROR);
                 };
-
+                
                 my ($ctime) = $data->{ time } =~ /^(\d+)$/;
                 unless ($ctime || $ctime eq 0) {
-                    return("invalid time: $ctime",
+                    return("invalid time: $ctime", 
                            Template::Constants::STATUS_ERROR);
                 }
                 utime($ctime, $ctime, $cfile);
-
-                $self->debug(" cached compiled template to file [$compfile]")
-                    if $self->{ DEBUG };
             }
         }
-
+        
         unless ($error) {
-            return $data                                        ## RETURN ##
+            return $data				        ## RETURN ##
                 if $data->{ data } = $DOCUMENT->new($parsedoc);
             $error = $Template::Document::ERROR;
         }
@@ -1713,71 +1758,13 @@ sub _compile {
         $error = Template::Exception->new( 'parse', "$data->{ name } " .
                                            $parser->error() );
     }
-
+    
     # return STATUS_ERROR, or STATUS_DECLINED if we're being tolerant
-    return $self->{ TOLERANT }
+    return $self->{ TOLERANT } 
         ? (undef, Template::Constants::STATUS_DECLINED)
         : ($error,  Template::Constants::STATUS_ERROR)
 }
 
-
-sub _compiled_is_current {
-    my ( $self, $template_name ) = @_;
-    my $compiled_name   = $self->_compiled_filename($template_name) || return;
-    my $compiled_mtime  = (stat($compiled_name))[9] || return;
-    my $template_mtime  = $self->_template_modified( $template_name ) || return;
-
-    # This was >= in the 2.15, but meant that downgrading
-    # a source template would not get picked up.
-    return $compiled_mtime == $template_mtime;
-}
-
-
-
-sub _template_modified {
-    my $self = shift;
-    my $template = shift || return;
-    return (stat( $template ))[9];
-}
-
-
-sub _template_content {
-    my ($self, $path) = @_;
-
-    return (undef, "No path specified to fetch content from ")
-        unless $path;
-
-    my $data;
-    my $mod_date;
-    my $error;
-
-    local *FH;
-    if (open(FH, "< $path")) {
-        local $/;
-        $data = <FH>;
-        $mod_date = (stat($path))[9];
-        close(FH);
-    }
-    else {
-        $error = "$path: $!";
-    }
-
-    return wantarray
-        ? ( $data, $error, $mod_date )
-        : $data;
-}
-
-
-
-sub _modified {
-    my ($self, $name, $time) = @_;
-    my $load = $self->_template_modified($name)
-        || return $time ? 1 : 0;
-
-    return $time
-         ? $load > $time
-         : $load;
-}
 
 
 sub _dump {
@@ -1791,11 +1778,11 @@ sub _dump {
     my $output = "[Template::Provider] {\n";
     my $format = "    %-16s => %s\n";
     my $key;
-
-    $output .= sprintf($format, 'INCLUDE_PATH',
+    
+    $output .= sprintf($format, 'INCLUDE_PATH', 
                        '[ ' . join(', ', @{ $self->{ INCLUDE_PATH } }) . ' ]');
     $output .= sprintf($format, 'CACHE_SIZE', $size);
-
+    
     foreach $key (qw( ABSOLUTE RELATIVE TOLERANT DELIMITER
                       COMPILE_EXT COMPILE_DIR )) {
         $output .= sprintf($format, $key, $self->{ $key });
@@ -1805,15 +1792,15 @@ sub _dump {
 
     local $" = ', ';
     my $lookup = $self->{ LOOKUP };
-    $lookup = join('', map {
+    $lookup = join('', map { 
         sprintf("    $format", $_, defined $lookup->{ $_ }
                 ? ('[ ' . join(', ', map { defined $_ ? $_ : '<undef>' }
                                @{ $lookup->{ $_ } }) . ' ]') : '<undef>');
     } sort keys %$lookup);
     $lookup = "{\n$lookup    }";
-
+    
     $output .= sprintf($format, LOOKUP => $lookup);
-
+    
     $output .= '}';
     return $output;
 }
@@ -1826,53 +1813,51 @@ sub _dump_cache {
 
     $count = 0;
     if ($node = $self->{ HEAD }) {
-        while ($node) {
-            $lut->{ $node } = $count++;
-            $node = $node->[ NEXT ];
-        }
-        $node = $self->{ HEAD };
-        print STDERR "CACHE STATE:\n";
-        print STDERR "  HEAD: ", $self->{ HEAD }->[ NAME ], "\n";
-        print STDERR "  TAIL: ", $self->{ TAIL }->[ NAME ], "\n";
-        while ($node) {
-            my ($prev, $name, $data, $load, $next) = @$node;
-            $prev = $prev ? "#$lut->{ $prev }<-": '<undef>';
-            $next = $next ? "->#$lut->{ $next }": '<undef>';
-            print STDERR "   #$lut->{ $node } : [ $prev, $name, $data, $load, $next ]\n";
-            $node = $node->[ NEXT ];
-        }
+	while ($node) {
+	    $lut->{ $node } = $count++;
+	    $node = $node->[ NEXT ];
+	}
+	$node = $self->{ HEAD };
+	print STDERR "CACHE STATE:\n";
+	print STDERR "  HEAD: ", $self->{ HEAD }->[ NAME ], "\n";
+	print STDERR "  TAIL: ", $self->{ TAIL }->[ NAME ], "\n";
+	while ($node) {
+	    my ($prev, $name, $data, $load, $next) = @$node;
+	    $prev = $prev ? "#$lut->{ $prev }<-": '<undef>';
+	    $next = $next ? "->#$lut->{ $next }": '<undef>';
+	    print STDERR "   #$lut->{ $node } : [ $prev, $name, $data, $load, $next ]\n";
+	    $node = $node->[ NEXT ];
+	}
     }
 }
 
 
-sub _decode_unicode {
+
+
+sub _decode_unicode
+{
+    use bytes;
+
     my $self   = shift;
     my $string = shift;
 
-    use bytes;
-    require Encode;
-
-    return $string if Encode::is_utf8( $string );
-
     # try all the BOMs in order looking for one (order is important
     # 32bit BOMs look like 16bit BOMs)
-
-    my $count  = 0;
-
+    my $count = 0;
     while ($count < @{ $boms }) {
         my $enc = $boms->[$count++];
         my $bom = $boms->[$count++];
-
+        
         # does the string start with the bom?
         if ($bom eq substr($string, 0, length($bom))) {
             # decode it and hand it back
+            require Encode;
             return Encode::decode($enc, substr($string, length($bom)), 1);
         }
     }
 
-    return $self->{ ENCODING }
-        ? Encode::decode( $self->{ ENCODING }, $string )
-        : $string;
+    # no boms matched so it must be a non unicode string which we return as is
+    return $string;
 }
 
 
@@ -1886,13 +1871,15 @@ sub _decode_unicode {
 BEGIN { $INC{'Template.pm'} = 'dummy/Template.pm'; }
 BEGIN {
 #line 0 "Template.pm"
-
+ 
 package Template;
+use base qw( Template::Base );
+
+require 5.005;
 
 use strict;
-use warnings;
-use base 'Template::Base';
-
+use vars qw( $VERSION $AUTOLOAD $ERROR $DEBUG $BINMODE );
+use Template::Base;
 use Template::Config;
 use Template::Constants;
 use Template::Provider;  
@@ -1900,11 +1887,10 @@ use Template::Service;
 use File::Basename;
 use File::Path;
 
-our $VERSION = '2.19';
-our $ERROR   = '';
-our $DEBUG   = 0;
-our $BINMODE = 0 unless defined $BINMODE;
-our $AUTOLOAD;
+$VERSION     = '2.14';
+$ERROR       = '';
+$DEBUG       = 0;
+$BINMODE     = 0 unless defined $BINMODE;
 
 Template::Config->preload() if $ENV{ MOD_PERL };
 
@@ -1915,10 +1901,10 @@ sub process {
     my ($output, $error);
     my $options = (@opts == 1) && UNIVERSAL::isa($opts[0], 'HASH')
         ? shift(@opts) : { @opts };
-
-    $options->{ binmode } = $BINMODE
-        unless defined $options->{ binmode };
     
+    $options->{ binmode } = $BINMODE 
+        unless defined $options->{ binmode };
+
     # we're using this for testing in t/output.t and t/filter.t so 
     # don't remove it if you don't want tests to fail...
     $self->DEBUG("set binmode\n") if $DEBUG && $options->{ binmode };
@@ -1931,7 +1917,7 @@ sub process {
             my $outpath = $self->{ OUTPUT_PATH };
             $outstream = "$outpath/$outstream" if $outpath;
         }	
-
+        
         # send processed template to output stream, checking for error
         return ($self->error($error))
             if ($error = &_output($outstream, \$output, $options));
@@ -2026,8 +2012,8 @@ sub _output {
         }
         elsif (open(FP, ">$where")) { 
             # binmode option can be 1 or a specific layer, e.g. :utf8
-            my $bm = $options->{ binmode  };
-            if ($bm && $bm eq 1) { 
+            my $bm = $options->{ binmode };
+            if ($bm && +$bm == 1) { 
                 binmode FP;
             }
             elsif ($bm){ 
@@ -2062,10 +2048,12 @@ BEGIN {
 
 package Template::Grammar;
 
-use strict;
-use warnings;
+require 5.004;
 
-our $VERSION  = 2.25;
+use strict;
+use vars qw( $VERSION );
+
+$VERSION  = sprintf("%d.%02d", q$Revision: 2.22 $ =~ /(\d+)\.(\d+)/);
 
 my (@RESERVED, %CMPOP, $LEXTABLE, $RULES, $STATES);
 my ($factory, $rawstart);
@@ -2079,7 +2067,6 @@ my ($factory, $rawstart);
 	IF UNLESS ELSE ELSIF FOR NEXT WHILE SWITCH CASE META IN
 	TRY THROW CATCH FINAL LAST RETURN STOP CLEAR VIEW DEBUG
     );
-
 
 
 %CMPOP = qw( 
@@ -2170,10 +2157,10 @@ $STATES = [
 			'WRAPPER' => 55,
 			";" => -18,
 			'FOR' => 21,
-			'LITERAL' => 57,
 			'NEXT' => 22,
-			"\"" => 60,
+			'LITERAL' => 57,
 			'TEXT' => 24,
+			"\"" => 60,
 			'PROCESS' => 61,
 			'RETURN' => 64,
 			'FILTER' => 25,
@@ -2191,37 +2178,37 @@ $STATES = [
 		DEFAULT => -3,
 		GOTOS => {
 			'item' => 39,
+			'node' => 23,
+			'rawperl' => 59,
+			'term' => 58,
 			'loop' => 4,
+			'use' => 63,
+			'expr' => 62,
 			'capture' => 42,
 			'statement' => 5,
 			'view' => 7,
 			'wrapper' => 46,
 			'atomexpr' => 48,
 			'chunk' => 11,
+			'defblock' => 66,
 			'atomdir' => 12,
 			'anonblock' => 50,
 			'template' => 52,
-			'defblockname' => 14,
-			'ident' => 16,
-			'assign' => 19,
-			'macro' => 20,
-			'lterm' => 56,
-			'node' => 23,
-			'term' => 58,
-			'rawperl' => 59,
-			'expr' => 62,
-			'use' => 63,
-			'defblock' => 66,
-			'filter' => 29,
 			'sterm' => 68,
+			'defblockname' => 14,
+			'filter' => 29,
+			'ident' => 16,
 			'perl' => 31,
-			'chunks' => 33,
 			'setlist' => 70,
-			'try' => 35,
+			'chunks' => 33,
 			'switch' => 34,
-			'directive' => 71,
+			'try' => 35,
+			'assign' => 19,
 			'block' => 72,
-			'condition' => 73
+			'directive' => 71,
+			'macro' => 20,
+			'condition' => 73,
+			'lterm' => 56
 		}
 	},
 	{#State 1
@@ -2317,8 +2304,8 @@ $STATES = [
 			'node' => 23,
 			'ident' => 77,
 			'term' => 95,
-			'lterm' => 56,
-			'list' => 92
+			'list' => 92,
+			'lterm' => 56
 		}
 	},
 	{#State 10
@@ -2438,14 +2425,14 @@ $STATES = [
 			"\${" => 37
 		},
 		GOTOS => {
-			'names' => 91,
-			'lvalue' => 112,
-			'item' => 113,
-			'name' => 82,
 			'filepart' => 87,
-			'filename' => 85,
+			'names' => 91,
 			'nameargs' => 118,
-			'lnameargs' => 115
+			'filename' => 85,
+			'lvalue' => 112,
+			'lnameargs' => 115,
+			'item' => 113,
+			'name' => 82
 		}
 	},
 	{#State 26
@@ -2512,14 +2499,14 @@ $STATES = [
 			"\${" => 37
 		},
 		GOTOS => {
-			'names' => 91,
-			'lvalue' => 112,
-			'item' => 113,
-			'name' => 82,
 			'filepart' => 87,
-			'filename' => 85,
+			'names' => 91,
 			'nameargs' => 118,
-			'lnameargs' => 130
+			'filename' => 85,
+			'lvalue' => 112,
+			'lnameargs' => 130,
+			'item' => 113,
+			'name' => 82
 		}
 	},
 	{#State 33
@@ -2549,10 +2536,10 @@ $STATES = [
 			'WRAPPER' => 55,
 			";" => -18,
 			'FOR' => 21,
-			'LITERAL' => 57,
 			'NEXT' => 22,
-			"\"" => 60,
+			'LITERAL' => 57,
 			'TEXT' => 24,
+			"\"" => 60,
 			'PROCESS' => 61,
 			'RETURN' => 64,
 			'FILTER' => 25,
@@ -2814,13 +2801,13 @@ $STATES = [
 			"\${" => 37
 		},
 		GOTOS => {
-			'expr' => 151,
 			'sterm' => 68,
 			'item' => 39,
-			'assign' => 150,
 			'node' => 23,
 			'ident' => 149,
 			'term' => 58,
+			'expr' => 151,
+			'assign' => 150,
 			'lterm' => 56
 		}
 	},
@@ -3025,10 +3012,10 @@ $STATES = [
 	},
 	{#State 76
 		ACTIONS => {
+			"\$" => 43,
 			'COMMA' => 171,
 			'LITERAL' => 75,
 			'IDENT' => 2,
-			"\$" => 43,
 			"\${" => 37
 		},
 		DEFAULT => -30,
@@ -3188,10 +3175,10 @@ $STATES = [
 			'WRAPPER' => 55,
 			";" => -18,
 			'FOR' => 21,
-			'LITERAL' => 57,
 			'NEXT' => 22,
-			"\"" => 60,
+			'LITERAL' => 57,
 			'TEXT' => 24,
+			"\"" => 60,
 			'PROCESS' => 61,
 			'RETURN' => 64,
 			'FILTER' => 25,
@@ -3339,13 +3326,13 @@ $STATES = [
 			'atomexpr' => 48,
 			'atomdir' => 12,
 			'mdir' => 194,
-			'filter' => 29,
 			'sterm' => 68,
+			'filter' => 29,
 			'ident' => 149,
 			'perl' => 31,
 			'setlist' => 70,
-			'try' => 35,
 			'switch' => 34,
+			'try' => 35,
 			'assign' => 19,
 			'directive' => 196,
 			'condition' => 73,
@@ -3403,13 +3390,13 @@ $STATES = [
 			'atomexpr' => 48,
 			'atomdir' => 12,
 			'mdir' => 197,
-			'filter' => 29,
 			'sterm' => 68,
+			'filter' => 29,
 			'ident' => 149,
 			'perl' => 31,
 			'setlist' => 70,
-			'try' => 35,
 			'switch' => 34,
+			'try' => 35,
 			'assign' => 19,
 			'directive' => 196,
 			'condition' => 73,
@@ -3559,13 +3546,13 @@ $STATES = [
 	},
 	{#State 134
 		ACTIONS => {
-			'DIV' => 159,
-			'BINOP' => 161,
 			"+" => 157,
 			'CAT' => 163,
 			'CMPOP' => 164,
+			'DIV' => 159,
 			'MOD' => 165,
-			"/" => 166
+			"/" => 166,
+			'BINOP' => 161
 		},
 		DEFAULT => -142
 	},
@@ -3686,14 +3673,14 @@ $STATES = [
 			"\${" => 37
 		},
 		GOTOS => {
-			'names' => 91,
-			'lvalue' => 112,
-			'item' => 113,
-			'name' => 82,
 			'filepart' => 87,
-			'filename' => 85,
+			'names' => 91,
 			'nameargs' => 118,
-			'lnameargs' => 221
+			'filename' => 85,
+			'lvalue' => 112,
+			'lnameargs' => 221,
+			'item' => 113,
+			'name' => 82
 		}
 	},
 	{#State 144
@@ -4117,10 +4104,10 @@ $STATES = [
 	},
 	{#State 169
 		ACTIONS => {
+			"\$" => 43,
 			'COMMA' => 171,
 			'LITERAL' => 75,
 			'IDENT' => 2,
-			"\$" => 43,
 			"\${" => 37
 		},
 		DEFAULT => -31,
@@ -4188,10 +4175,10 @@ $STATES = [
 			'WRAPPER' => 55,
 			";" => -18,
 			'FOR' => 21,
-			'LITERAL' => 57,
 			'NEXT' => 22,
-			"\"" => 60,
+			'LITERAL' => 57,
 			'TEXT' => 24,
+			"\"" => 60,
 			'PROCESS' => 61,
 			'RETURN' => 64,
 			'FILTER' => 25,
@@ -4298,7 +4285,8 @@ $STATES = [
 	},
 	{#State 179
 		ACTIONS => {
-			'NOT' => 38,
+			"{" => 30,
+			'COMMA' => 258,
 			'LITERAL' => 256,
 			'IDENT' => 2,
 			"\"" => 60,
@@ -4306,20 +4294,16 @@ $STATES = [
 			"[" => 9,
 			'NUMBER' => 26,
 			'REF' => 27,
-			"{" => 30,
-			'COMMA' => 258,
-			"(" => 53,
 			"\${" => 37
 		},
 		DEFAULT => -163,
 		GOTOS => {
-			'expr' => 257,
 			'sterm' => 68,
 			'item' => 254,
 			'param' => 255,
 			'node' => 23,
 			'ident' => 253,
-			'term' => 58,
+			'term' => 257,
 			'lterm' => 56
 		}
 	},
@@ -4407,10 +4391,10 @@ $STATES = [
 			'WRAPPER' => 55,
 			";" => -18,
 			'FOR' => 21,
-			'LITERAL' => 57,
 			'NEXT' => 22,
-			"\"" => 60,
+			'LITERAL' => 57,
 			'TEXT' => 24,
+			"\"" => 60,
 			'PROCESS' => 61,
 			'RETURN' => 64,
 			'FILTER' => 25,
@@ -4428,37 +4412,37 @@ $STATES = [
 		DEFAULT => -3,
 		GOTOS => {
 			'item' => 39,
+			'node' => 23,
+			'rawperl' => 59,
+			'term' => 58,
 			'loop' => 4,
+			'use' => 63,
+			'expr' => 62,
 			'capture' => 42,
 			'statement' => 5,
 			'view' => 7,
 			'wrapper' => 46,
 			'atomexpr' => 48,
 			'chunk' => 11,
+			'defblock' => 66,
 			'atomdir' => 12,
 			'anonblock' => 50,
 			'template' => 267,
-			'defblockname' => 14,
-			'ident' => 16,
-			'assign' => 19,
-			'macro' => 20,
-			'lterm' => 56,
-			'node' => 23,
-			'term' => 58,
-			'rawperl' => 59,
-			'expr' => 62,
-			'use' => 63,
-			'defblock' => 66,
-			'filter' => 29,
 			'sterm' => 68,
+			'defblockname' => 14,
+			'filter' => 29,
+			'ident' => 16,
 			'perl' => 31,
-			'chunks' => 33,
 			'setlist' => 70,
-			'switch' => 34,
+			'chunks' => 33,
 			'try' => 35,
-			'directive' => 71,
+			'switch' => 34,
+			'assign' => 19,
 			'block' => 72,
-			'condition' => 73
+			'directive' => 71,
+			'macro' => 20,
+			'condition' => 73,
+			'lterm' => 56
 		}
 	},
 	{#State 191
@@ -4517,14 +4501,14 @@ $STATES = [
 			"\${" => 37
 		},
 		GOTOS => {
-			'expr' => 151,
 			'sterm' => 68,
 			'item' => 39,
-			'assign' => 150,
 			'margs' => 270,
 			'node' => 23,
 			'ident' => 149,
 			'term' => 58,
+			'expr' => 151,
+			'assign' => 150,
 			'lterm' => 56
 		}
 	},
@@ -4587,13 +4571,11 @@ $STATES = [
 	},
 	{#State 202
 		ACTIONS => {
-			'NOT' => 38,
 			"{" => 30,
 			'COMMA' => 258,
 			'LITERAL' => 256,
 			'IDENT' => 2,
 			"\"" => 60,
-			"(" => 53,
 			"\$" => 43,
 			"[" => 9,
 			'NUMBER' => 26,
@@ -4602,13 +4584,12 @@ $STATES = [
 		},
 		DEFAULT => -64,
 		GOTOS => {
-			'expr' => 257,
 			'sterm' => 68,
 			'item' => 254,
 			'param' => 255,
 			'node' => 23,
 			'ident' => 253,
-			'term' => 58,
+			'term' => 257,
 			'lterm' => 56
 		}
 	},
@@ -4668,10 +4649,10 @@ $STATES = [
 			'WRAPPER' => 55,
 			";" => -18,
 			'FOR' => 21,
-			'LITERAL' => 57,
 			'NEXT' => 22,
-			"\"" => 60,
+			'LITERAL' => 57,
 			'TEXT' => 24,
+			"\"" => 60,
 			'PROCESS' => 61,
 			'RETURN' => 64,
 			'FILTER' => 25,
@@ -4764,10 +4745,10 @@ $STATES = [
 			'WRAPPER' => 55,
 			";" => -18,
 			'FOR' => 21,
-			'LITERAL' => 57,
 			'NEXT' => 22,
-			"\"" => 60,
+			'LITERAL' => 57,
 			'TEXT' => 24,
+			"\"" => 60,
 			'PROCESS' => 61,
 			'RETURN' => 64,
 			'FILTER' => 25,
@@ -4885,13 +4866,11 @@ $STATES = [
 	},
 	{#State 216
 		ACTIONS => {
-			'NOT' => 38,
 			"{" => 30,
 			'COMMA' => 258,
 			'LITERAL' => 256,
 			'IDENT' => 2,
 			"\"" => 60,
-			"(" => 53,
 			"\$" => 43,
 			"[" => 9,
 			'NUMBER' => 26,
@@ -4900,13 +4879,12 @@ $STATES = [
 			"\${" => 37
 		},
 		GOTOS => {
-			'expr' => 257,
 			'sterm' => 68,
 			'item' => 254,
 			'param' => 255,
 			'node' => 23,
 			'ident' => 253,
-			'term' => 58,
+			'term' => 257,
 			'lterm' => 56
 		}
 	},
@@ -4937,10 +4915,10 @@ $STATES = [
 			'WRAPPER' => 55,
 			";" => -18,
 			'FOR' => 21,
-			'LITERAL' => 57,
 			'NEXT' => 22,
-			"\"" => 60,
+			'LITERAL' => 57,
 			'TEXT' => 24,
+			"\"" => 60,
 			'PROCESS' => 61,
 			'RETURN' => 64,
 			'FILTER' => 25,
@@ -5017,10 +4995,10 @@ $STATES = [
 			'WRAPPER' => 55,
 			";" => -18,
 			'FOR' => 21,
-			'LITERAL' => 57,
 			'NEXT' => 22,
-			"\"" => 60,
+			'LITERAL' => 57,
 			'TEXT' => 24,
+			"\"" => 60,
 			'PROCESS' => 61,
 			'RETURN' => 64,
 			'FILTER' => 25,
@@ -5157,10 +5135,10 @@ $STATES = [
 			'WRAPPER' => 55,
 			";" => -18,
 			'FOR' => 21,
-			'LITERAL' => 57,
 			'NEXT' => 22,
-			"\"" => 60,
+			'LITERAL' => 57,
 			'TEXT' => 24,
+			"\"" => 60,
 			'PROCESS' => 61,
 			'RETURN' => 64,
 			'FILTER' => 25,
@@ -5237,10 +5215,10 @@ $STATES = [
 			'WRAPPER' => 55,
 			";" => -18,
 			'FOR' => 21,
-			'LITERAL' => 57,
 			'NEXT' => 22,
-			"\"" => 60,
+			'LITERAL' => 57,
 			'TEXT' => 24,
+			"\"" => 60,
 			'PROCESS' => 61,
 			'RETURN' => 64,
 			'FILTER' => 25,
@@ -5354,20 +5332,20 @@ $STATES = [
 	},
 	{#State 238
 		ACTIONS => {
-			'DIV' => 159,
-			'BINOP' => 161,
 			"+" => 157,
 			'CAT' => 163,
 			'CMPOP' => 164,
+			'DIV' => 159,
 			'MOD' => 165,
-			"/" => 166
+			"/" => 166,
+			'BINOP' => 161
 		},
 		DEFAULT => -140
 	},
 	{#State 239
 		ACTIONS => {
-			'DIV' => 159,
 			"+" => 157,
+			'DIV' => 159,
 			'MOD' => 165,
 			"/" => 166
 		},
@@ -5375,34 +5353,34 @@ $STATES = [
 	},
 	{#State 240
 		ACTIONS => {
-			'DIV' => 159,
-			'BINOP' => 161,
 			"+" => 157,
 			'CAT' => 163,
 			'CMPOP' => 164,
+			'DIV' => 159,
 			'MOD' => 165,
-			"/" => 166
+			"/" => 166,
+			'BINOP' => 161
 		},
 		DEFAULT => -141
 	},
 	{#State 241
 		ACTIONS => {
-			'DIV' => 159,
-			'BINOP' => 161,
 			"+" => 157,
 			'CMPOP' => 164,
+			'DIV' => 159,
 			'MOD' => 165,
-			"/" => 166
+			"/" => 166,
+			'BINOP' => 161
 		},
 		DEFAULT => -139
 	},
 	{#State 242
 		ACTIONS => {
-			'DIV' => 159,
-			'BINOP' => 161,
 			"+" => 157,
+			'DIV' => 159,
 			'MOD' => 165,
-			"/" => 166
+			"/" => 166,
+			'BINOP' => 161
 		},
 		DEFAULT => -138
 	},
@@ -5452,7 +5430,8 @@ $STATES = [
 	},
 	{#State 249
 		ACTIONS => {
-			'NOT' => 38,
+			"{" => 30,
+			'COMMA' => 258,
 			'LITERAL' => 256,
 			'IDENT' => 2,
 			"\"" => 60,
@@ -5460,20 +5439,16 @@ $STATES = [
 			"[" => 9,
 			'NUMBER' => 26,
 			'REF' => 27,
-			"{" => 30,
-			'COMMA' => 258,
-			"(" => 53,
 			"\${" => 37
 		},
 		DEFAULT => -162,
 		GOTOS => {
-			'expr' => 257,
 			'sterm' => 68,
 			'item' => 254,
 			'param' => 255,
 			'node' => 23,
 			'ident' => 253,
-			'term' => 58,
+			'term' => 257,
 			'lterm' => 56
 		}
 	},
@@ -5485,13 +5460,11 @@ $STATES = [
 	},
 	{#State 252
 		ACTIONS => {
-			'NOT' => 38,
 			"{" => 30,
 			'COMMA' => 258,
 			'LITERAL' => 256,
 			'IDENT' => 2,
 			"\"" => 60,
-			"(" => 53,
 			"\$" => 43,
 			"[" => 9,
 			'NUMBER' => 26,
@@ -5500,13 +5473,12 @@ $STATES = [
 			"\${" => 37
 		},
 		GOTOS => {
-			'expr' => 257,
 			'sterm' => 68,
 			'item' => 254,
 			'param' => 255,
 			'node' => 23,
 			'ident' => 253,
-			'term' => 58,
+			'term' => 257,
 			'lterm' => 56
 		}
 	},
@@ -5534,18 +5506,6 @@ $STATES = [
 		DEFAULT => -112
 	},
 	{#State 257
-		ACTIONS => {
-			"+" => 157,
-			'CAT' => 163,
-			'CMPOP' => 164,
-			"?" => 158,
-			'DIV' => 159,
-			'MOD' => 165,
-			"/" => 166,
-			'AND' => 160,
-			'BINOP' => 161,
-			'OR' => 162
-		},
 		DEFAULT => -152
 	},
 	{#State 258
@@ -5625,10 +5585,10 @@ $STATES = [
 			'WRAPPER' => 55,
 			";" => -18,
 			'FOR' => 21,
-			'LITERAL' => 57,
 			'NEXT' => 22,
-			"\"" => 60,
+			'LITERAL' => 57,
 			'TEXT' => 24,
+			"\"" => 60,
 			'PROCESS' => 61,
 			'RETURN' => 64,
 			'FILTER' => 25,
@@ -5680,9 +5640,9 @@ $STATES = [
 	},
 	{#State 269
 		ACTIONS => {
+			'COMMA' => -96,
 			'IDENT' => -96,
-			")" => -96,
-			'COMMA' => -96
+			")" => -96
 		},
 		DEFAULT => -130
 	},
@@ -5732,10 +5692,10 @@ $STATES = [
 			'WRAPPER' => 55,
 			";" => -18,
 			'FOR' => 21,
-			'LITERAL' => 57,
 			'NEXT' => 22,
-			"\"" => 60,
+			'LITERAL' => 57,
 			'TEXT' => 24,
+			"\"" => 60,
 			'PROCESS' => 61,
 			'RETURN' => 64,
 			'FILTER' => 25,
@@ -5806,31 +5766,31 @@ $STATES = [
 	},
 	{#State 278
 		ACTIONS => {
-			'DIV' => 159,
-			'AND' => 160,
-			'BINOP' => 161,
-			'OR' => 162,
 			"+" => 157,
 			'CAT' => 163,
 			'CMPOP' => 164,
 			"?" => 158,
+			'DIV' => 159,
 			'MOD' => 165,
-			"/" => 166
+			"/" => 166,
+			'AND' => 160,
+			'BINOP' => 161,
+			'OR' => 162
 		},
 		DEFAULT => -124
 	},
 	{#State 279
 		ACTIONS => {
-			'DIV' => 159,
-			'AND' => 160,
-			'BINOP' => 161,
-			'OR' => 162,
 			"+" => 157,
 			'CAT' => 163,
 			'CMPOP' => 164,
 			"?" => 158,
+			'DIV' => 159,
 			'MOD' => 165,
-			"/" => 166
+			"/" => 166,
+			'AND' => 160,
+			'BINOP' => 161,
+			'OR' => 162
 		},
 		DEFAULT => -123
 	},
@@ -5861,10 +5821,10 @@ $STATES = [
 			'WRAPPER' => 55,
 			";" => -18,
 			'FOR' => 21,
-			'LITERAL' => 57,
 			'NEXT' => 22,
-			"\"" => 60,
+			'LITERAL' => 57,
 			'TEXT' => 24,
+			"\"" => 60,
 			'PROCESS' => 61,
 			'RETURN' => 64,
 			'FILTER' => 25,
@@ -5997,10 +5957,10 @@ $STATES = [
 			'WRAPPER' => 55,
 			";" => -18,
 			'FOR' => 21,
-			'LITERAL' => 57,
 			'NEXT' => 22,
-			"\"" => 60,
+			'LITERAL' => 57,
 			'TEXT' => 24,
+			"\"" => 60,
 			'PROCESS' => 61,
 			'RETURN' => 64,
 			'FILTER' => 25,
@@ -6138,10 +6098,10 @@ $STATES = [
 			'WRAPPER' => 55,
 			";" => -18,
 			'FOR' => 21,
-			'LITERAL' => 57,
 			'NEXT' => 22,
-			"\"" => 60,
+			'LITERAL' => 57,
 			'TEXT' => 24,
+			"\"" => 60,
 			'PROCESS' => 61,
 			'RETURN' => 64,
 			'FILTER' => 25,
@@ -6227,10 +6187,10 @@ $STATES = [
 			'WRAPPER' => 55,
 			";" => -18,
 			'FOR' => 21,
-			'LITERAL' => 57,
 			'NEXT' => 22,
-			"\"" => 60,
+			'LITERAL' => 57,
 			'TEXT' => 24,
+			"\"" => 60,
 			'PROCESS' => 61,
 			'RETURN' => 64,
 			'FILTER' => 25,
@@ -6352,13 +6312,13 @@ $STATES = [
 			'atomexpr' => 48,
 			'atomdir' => 12,
 			'mdir' => 328,
-			'filter' => 29,
 			'sterm' => 68,
+			'filter' => 29,
 			'ident' => 149,
 			'perl' => 31,
 			'setlist' => 70,
-			'try' => 35,
 			'switch' => 34,
+			'try' => 35,
 			'assign' => 19,
 			'directive' => 196,
 			'condition' => 73,
@@ -6370,13 +6330,11 @@ $STATES = [
 	},
 	{#State 305
 		ACTIONS => {
-			'NOT' => 38,
 			"{" => 30,
 			'COMMA' => 258,
 			'LITERAL' => 256,
 			'IDENT' => 2,
 			"\"" => 60,
-			"(" => 53,
 			"\$" => 43,
 			"[" => 9,
 			'NUMBER' => 26,
@@ -6385,25 +6343,22 @@ $STATES = [
 		},
 		DEFAULT => -62,
 		GOTOS => {
-			'expr' => 257,
 			'sterm' => 68,
 			'item' => 254,
 			'param' => 255,
 			'node' => 23,
 			'ident' => 253,
-			'term' => 58,
+			'term' => 257,
 			'lterm' => 56
 		}
 	},
 	{#State 306
 		ACTIONS => {
-			'NOT' => 38,
 			"{" => 30,
 			'COMMA' => 258,
 			'LITERAL' => 256,
 			'IDENT' => 2,
 			"\"" => 60,
-			"(" => 53,
 			"\$" => 43,
 			"[" => 9,
 			'NUMBER' => 26,
@@ -6412,13 +6367,12 @@ $STATES = [
 		},
 		DEFAULT => -63,
 		GOTOS => {
-			'expr' => 257,
 			'sterm' => 68,
 			'item' => 254,
 			'param' => 255,
 			'node' => 23,
 			'ident' => 253,
-			'term' => 58,
+			'term' => 257,
 			'lterm' => 56
 		}
 	},
@@ -6479,16 +6433,16 @@ $STATES = [
 	},
 	{#State 316
 		ACTIONS => {
-			'DIV' => 159,
-			'AND' => 160,
-			'BINOP' => 161,
-			'OR' => 162,
 			"+" => 157,
 			'CAT' => 163,
 			'CMPOP' => 164,
 			"?" => 158,
+			'DIV' => 159,
 			'MOD' => 165,
-			"/" => 166
+			"/" => 166,
+			'AND' => 160,
+			'BINOP' => 161,
+			'OR' => 162
 		},
 		DEFAULT => -143
 	},
@@ -6524,10 +6478,10 @@ $STATES = [
 			'WRAPPER' => 55,
 			";" => -18,
 			'FOR' => 21,
-			'LITERAL' => 57,
 			'NEXT' => 22,
-			"\"" => 60,
+			'LITERAL' => 57,
 			'TEXT' => 24,
+			"\"" => 60,
 			'PROCESS' => 61,
 			'RETURN' => 64,
 			'FILTER' => 25,
@@ -6640,10 +6594,10 @@ $STATES = [
 			'WRAPPER' => 55,
 			";" => -18,
 			'FOR' => 21,
-			'LITERAL' => 57,
 			'NEXT' => 22,
-			"\"" => 60,
+			'LITERAL' => 57,
 			'TEXT' => 24,
+			"\"" => 60,
 			'PROCESS' => 61,
 			'RETURN' => 64,
 			'FILTER' => 25,
@@ -6730,10 +6684,10 @@ $STATES = [
 			'WRAPPER' => 55,
 			";" => -18,
 			'FOR' => 21,
-			'LITERAL' => 57,
 			'NEXT' => 22,
-			"\"" => 60,
+			'LITERAL' => 57,
 			'TEXT' => 24,
+			"\"" => 60,
 			'PROCESS' => 61,
 			'RETURN' => 64,
 			'FILTER' => 25,
@@ -6828,10 +6782,10 @@ $STATES = [
 			'WRAPPER' => 55,
 			";" => -18,
 			'FOR' => 21,
-			'LITERAL' => 57,
 			'NEXT' => 22,
-			"\"" => 60,
+			'LITERAL' => 57,
 			'TEXT' => 24,
+			"\"" => 60,
 			'PROCESS' => 61,
 			'RETURN' => 64,
 			'FILTER' => 25,
@@ -6927,10 +6881,10 @@ $STATES = [
 			'WRAPPER' => 55,
 			";" => -18,
 			'FOR' => 21,
-			'LITERAL' => 57,
 			'NEXT' => 22,
-			"\"" => 60,
+			'LITERAL' => 57,
 			'TEXT' => 24,
+			"\"" => 60,
 			'PROCESS' => 61,
 			'RETURN' => 64,
 			'FILTER' => 25,
@@ -7033,10 +6987,10 @@ $STATES = [
 			'WRAPPER' => 55,
 			";" => -18,
 			'FOR' => 21,
-			'LITERAL' => 57,
 			'NEXT' => 22,
-			"\"" => 60,
+			'LITERAL' => 57,
 			'TEXT' => 24,
+			"\"" => 60,
 			'PROCESS' => 61,
 			'RETURN' => 64,
 			'FILTER' => 25,
@@ -7113,10 +7067,10 @@ $STATES = [
 			'WRAPPER' => 55,
 			";" => -18,
 			'FOR' => 21,
-			'LITERAL' => 57,
 			'NEXT' => 22,
-			"\"" => 60,
+			'LITERAL' => 57,
 			'TEXT' => 24,
+			"\"" => 60,
 			'PROCESS' => 61,
 			'RETURN' => 64,
 			'FILTER' => 25,
@@ -7227,7 +7181,7 @@ sub
 		 'chunks', 2,
 sub
 { push(@{$_[1]}, $_[2]) 
-                                        if defined $_[2]; $_[1]           }
+					if defined $_[2]; $_[1]           }
 	],
 	[#Rule 5
 		 'chunks', 1,
@@ -7243,8 +7197,8 @@ sub
 		 'chunk', 2,
 sub
 { return '' unless $_[1];
-                                      $_[0]->location() . $_[1];
-                                    }
+                           $_[0]->location() . $_[1];
+                         }
 	],
 	[#Rule 8
 		 'statement', 1, undef
@@ -7380,8 +7334,8 @@ sub
 		 'atomdir', 1,
 sub
 { $_[0]->{ INFOR }
-                                        ? $factory->next()
-                                        : ($_[0]->{ INWHILE }
+					? $factory->next()
+				        : ($_[0]->{ INWHILE }
                                            ? 'next LOOP;'
                                            : 'next;')                     }
 	],
@@ -7389,13 +7343,13 @@ sub
 		 'atomdir', 2,
 sub
 { if ($_[2]->[0]->[0] =~ /^'(on|off)'$/) {
-                                          $_[0]->{ DEBUG_DIRS } = ($1 eq 'on');
-                                          $factory->debug($_[2]);
-                                      }
-                                      else {
-                                          $_[0]->{ DEBUG_DIRS } ? $factory->debug($_[2]) : '';
-                                      }
-                                    }
+				          $_[0]->{ DEBUG_DIRS } = ($1 eq 'on');
+					  $factory->debug($_[2]);
+				      }
+				      else {
+					  $_[0]->{ DEBUG_DIRS } ? $factory->debug($_[2]) : '';
+				      }
+				    }
 	],
 	[#Rule 42
 		 'atomdir', 1, undef
@@ -7427,7 +7381,7 @@ sub
 		 'else', 5,
 sub
 { unshift(@{$_[5]}, [ @_[2, 4] ]);
-                                      $_[5];                              }
+				      $_[5];                              }
 	],
 	[#Rule 49
 		 'else', 3,
@@ -7448,7 +7402,7 @@ sub
 		 'case', 5,
 sub
 { unshift(@{$_[5]}, [ @_[2, 4] ]); 
-                                      $_[5];                              }
+				      $_[5];                              }
 	],
 	[#Rule 53
 		 'case', 4,
@@ -7474,7 +7428,7 @@ sub
 		 'loop', 6,
 sub
 { $_[0]->{ INFOR }--;
-                                      $factory->foreach(@{$_[2]}, $_[5])  }
+				      $factory->foreach(@{$_[2]}, $_[5])  }
 	],
 	[#Rule 58
 		 'loop', 3,
@@ -7531,19 +7485,19 @@ sub
 		 'final', 5,
 sub
 { unshift(@{$_[5]}, [ @_[2,4] ]);
-                                      $_[5];                              }
+				      $_[5];                              }
 	],
 	[#Rule 69
 		 'final', 5,
 sub
 { unshift(@{$_[5]}, [ undef, $_[4] ]);
-                                      $_[5];                              }
+				      $_[5];                              }
 	],
 	[#Rule 70
 		 'final', 4,
 sub
 { unshift(@{$_[4]}, [ undef, $_[3] ]);
-                                      $_[4];                              }
+				      $_[4];                              }
 	],
 	[#Rule 71
 		 'final', 3,
@@ -7563,13 +7517,13 @@ sub
 	[#Rule 74
 		 '@3-3', 0,
 sub
-{ $_[0]->push_defblock();             }
+{ $_[0]->push_defblock();		  }
 	],
 	[#Rule 75
 		 'view', 6,
 sub
 { $factory->view(@_[2,5], 
-                                                     $_[0]->pop_defblock) }
+						     $_[0]->pop_defblock) }
 	],
 	[#Rule 76
 		 '@4-2', 0,
@@ -7580,23 +7534,23 @@ sub
 		 'perl', 5,
 sub
 { ${$_[0]->{ INPERL }}--;
-                                      $_[0]->{ EVAL_PERL } 
-                                      ? $factory->perl($_[4])             
-                                      : $factory->no_perl();              }
+				      $_[0]->{ EVAL_PERL } 
+				      ? $factory->perl($_[4])             
+				      : $factory->no_perl();              }
 	],
 	[#Rule 78
 		 '@5-1', 0,
 sub
 { ${$_[0]->{ INPERL }}++; 
-                                      $rawstart = ${$_[0]->{'LINE'}};     }
+				      $rawstart = ${$_[0]->{'LINE'}};     }
 	],
 	[#Rule 79
 		 'rawperl', 5,
 sub
 { ${$_[0]->{ INPERL }}--;
-                                      $_[0]->{ EVAL_PERL } 
-                                      ? $factory->rawperl($_[4], $rawstart)
-                                      : $factory->no_perl();              }
+				      $_[0]->{ EVAL_PERL } 
+				      ? $factory->rawperl($_[4], $rawstart)
+				      : $factory->no_perl();              }
 	],
 	[#Rule 80
 		 'filter', 5,
@@ -7612,17 +7566,17 @@ sub
 		 'defblock', 5,
 sub
 { my $name = join('/', @{ $_[0]->{ DEFBLOCKS } });
-                                      pop(@{ $_[0]->{ DEFBLOCKS } });
-                                      $_[0]->define_block($name, $_[4]); 
-                                      undef
-                                    }
+				      pop(@{ $_[0]->{ DEFBLOCKS } });
+				      $_[0]->define_block($name, $_[4]); 
+				      undef
+				    }
 	],
 	[#Rule 83
 		 'defblockname', 2,
 sub
 { push(@{ $_[0]->{ DEFBLOCKS } }, $_[2]);
-                                      $_[2];
-                                    }
+				      $_[2];
+				    }
 	],
 	[#Rule 84
 		 'blockname', 1, undef
@@ -7642,9 +7596,9 @@ sub
 		 'anonblock', 5,
 sub
 { local $" = ', ';
-                                      print STDERR "experimental block args: [@{ $_[2] }]\n"
-                                          if $_[2];
-                                      $factory->anon_block($_[4])         }
+				      print STDERR "experimental block args: [@{ $_[2] }]\n"
+					  if $_[2];
+				      $factory->anon_block($_[4])         }
 	],
 	[#Rule 89
 		 'capture', 3,
@@ -7699,8 +7653,8 @@ sub
 		 'meta', 3,
 sub
 { for ($_[3]) { s/^'//; s/'$//; 
-                                                       s/\\'/'/g  }; 
-                                         [ @_[1,3] ] }
+						       s/\\'/'/g  }; 
+					 [ @_[1,3] ] }
 	],
 	[#Rule 101
 		 'meta', 5,
@@ -7813,8 +7767,8 @@ sub
 		 'ident', 3,
 sub
 { push(@{$_[1]}, 
-                                           map {($_, 0)} split(/\./, $_[3]));
-                                      $_[1];                              }
+					   map {($_, 0)} split(/\./, $_[3]));
+				      $_[1];			          }
 	],
 	[#Rule 127
 		 'ident', 1, undef
@@ -7843,8 +7797,8 @@ sub
 		 'item', 2,
 sub
 { $_[0]->{ V1DOLLAR }
-                                       ? "'$_[2]'" 
-                                       : $factory->ident(["'$_[2]'", 0])  }
+				       ? "'$_[2]'" 
+				       : $factory->ident(["'$_[2]'", 0])  }
 	],
 	[#Rule 133
 		 'expr', 3,
@@ -7949,7 +7903,7 @@ sub
 		 'args', 4,
 sub
 { push(@{$_[1]->[0]}, "'', " . 
-                                      $factory->assign(@_[2,4])); $_[1]  }
+				      $factory->assign(@_[2,4])); $_[1]  }
 	],
 	[#Rule 155
 		 'args', 2,
@@ -8039,7 +7993,7 @@ sub
 		 'quoted', 2,
 sub
 { push(@{$_[1]}, $_[2]) 
-                                          if defined $_[2]; $_[1]         }
+				          if defined $_[2]; $_[1]         }
 	],
 	[#Rule 176
 		 'quoted', 0,
@@ -8089,17 +8043,21 @@ BEGIN {
 
 package Template::Directive;
 
+require 5.004;
+
 use strict;
-use warnings;
-use base 'Template::Base';
+use Template::Base;
 use Template::Constants;
 use Template::Exception;
 
-our $VERSION   = 2.20;
-our $DEBUG     = 0 unless defined $DEBUG;
-our $WHILE_MAX = 1000 unless defined $WHILE_MAX;
-our $PRETTY    = 0 unless defined $PRETTY;
-our $OUTPUT    = '$output .= ';
+use base qw( Template::Base );
+use vars qw( $VERSION $DEBUG $PRETTY $WHILE_MAX $OUTPUT );
+
+$VERSION = sprintf("%d.%02d", q$Revision: 2.19 $ =~ /(\d+)\.(\d+)/);
+
+$WHILE_MAX = 1000 unless defined $WHILE_MAX;
+$PRETTY    = 0 unless defined $PRETTY;
+$OUTPUT    = '$output .= ';
 
 
 sub _init {
@@ -8891,9 +8849,12 @@ BEGIN {
 
 package Template::Parser;
 
+require 5.004;
+
 use strict;
-use warnings;
-use base 'Template::Base';
+use vars qw( $VERSION $DEBUG $ERROR );
+use base qw( Template::Base );
+use vars qw( $TAG_STYLE $DEFAULT_STYLE $QUOTED_ESCAPES );
 
 use Template::Constants qw( :status :chomp );
 use Template::Directive;
@@ -8904,13 +8865,13 @@ use constant ACCEPT   => 1;
 use constant ERROR    => 2;
 use constant ABORT    => 3;
 
-our $VERSION = 2.89;
-our $DEBUG   = 0 unless defined $DEBUG;
-our $ERROR   = '';
+$VERSION = sprintf("%d.%02d", q$Revision: 2.82 $ =~ /(\d+)\.(\d+)/);
+$DEBUG   = 0 unless defined $DEBUG;
+$ERROR   = '';
 
 
 
-our $TAG_STYLE   = {
+$TAG_STYLE   = {
     'default'   => [ '\[%',    '%\]'    ],
     'template1' => [ '[\[%]%', '%[\]%]' ],
     'metatext'  => [ '%%',     '%%'     ],
@@ -8923,7 +8884,7 @@ our $TAG_STYLE   = {
 $TAG_STYLE->{ template } = $TAG_STYLE->{ tt2 } = $TAG_STYLE->{ default };
 
 
-our $DEFAULT_STYLE = {
+$DEFAULT_STYLE = {
     START_TAG   => $TAG_STYLE->{ default }->[0],
     END_TAG     => $TAG_STYLE->{ default }->[1],
     ANYCASE     => 0,
@@ -8934,14 +8895,11 @@ our $DEFAULT_STYLE = {
     EVAL_PERL   => 0,
 };
 
-our $QUOTED_ESCAPES = {
+$QUOTED_ESCAPES = {
 	n => "\n",
 	r => "\r",
 	t => "\t",
 };
-
-our $CHOMP_FLAGS  = qr/[-=~+]/;
-
 
 
 
@@ -9064,7 +9022,6 @@ sub parse {
     # store for blocks defined in the template (see define_block())
     my $defblock = $self->{ DEFBLOCK } = { };
     my $metadata = $self->{ METADATA } = [ ];
-    $self->{ DEFBLOCKS } = [ ];
 
     $self->{ _ERROR } = '';
 
@@ -9121,53 +9078,43 @@ sub split_text {
         $pre = '' unless defined $pre;
         $dir = '' unless defined $dir;
         
-        $prelines  = ($pre =~ tr/\n//);  # newlines in preceeding text
-        $dirlines  = ($dir =~ tr/\n//);  # newlines in directive tag
-        $postlines = 0;                  # newlines chomped after tag
+        $postlines = 0;                      # denotes lines chomped
+        $prelines  = ($pre =~ tr/\n//);      # NULL - count only
+        $dirlines  = ($dir =~ tr/\n//);      # ditto
         
+        # the directive CHOMP options may modify the preceding text
         for ($dir) {
-            if (/^\#/) {
-                # comment out entire directive except for any end chomp flag
-                $dir = ($dir =~ /($CHOMP_FLAGS)$/o) ? $1 : '';
+            # remove leading whitespace and check for a '-' chomp flag
+            s/^([-+\#])?\s*//s;
+            if ($1 && $1 eq '#') {
+                # comment out entire directive except for any chomp flag
+                $dir = ($dir =~ /([-+])$/) ? $1 : '';
             }
             else {
-                s/^($CHOMP_FLAGS)?\s*//so;
-                # PRE_CHOMP: process whitespace before tag
-                $chomp = $1 ? $1 : $prechomp;
-                $chomp =~ tr/-=~+/1230/;
-                if ($chomp && $pre) {
-                    # chomp off whitespace and newline preceding directive
-                    if ($chomp == CHOMP_ALL) { 
-                        $pre =~ s{ (\n|^) [^\S\n]* \z }{}mx;
-                    }
-                    elsif ($chomp == CHOMP_COLLAPSE) { 
-                        $pre =~ s{ (\s+) \z }{ }x;
-                    }
-                    elsif ($chomp == CHOMP_GREEDY) { 
-                        $pre =~ s{ (\s+) \z }{}x;
-                    }
-                }
+                $chomp = ($1 && $1 eq '+') ? 0 : ($1 || $prechomp);
+                my $space = $prechomp == CHOMP_COLLAPSE 
+                    ? ' ' : '';
+                
+                # chomp off whitespace and newline preceding directive
+                $chomp and $pre =~ s/(\n|^)([ \t]*)\Z/($1||$2) ? $space : ''/me
+                    and $1 eq "\n"
+                    and $prelines++;
             }
             
-            # POST_CHOMP: process whitespace after tag
-            s/\s*($CHOMP_FLAGS)?\s*$//so;
-            $chomp = $1 ? $1 : $postchomp;
-            $chomp =~ tr/-=~+/1230/;
-            if ($chomp) {
-                if ($chomp == CHOMP_ALL) { 
-                    $text =~ s{ ^ ([^\S\n]* \n) }{}x  
-                        && $postlines++;
-                }
-                elsif ($chomp == CHOMP_COLLAPSE) { 
-                    $text =~ s{ ^ (\s+) }{ }x  
-                        && ($postlines += $1=~y/\n//);
-                }
-                # any trailing whitespace
-                elsif ($chomp == CHOMP_GREEDY) { 
-                    $text =~ s{ ^ (\s+) }{}x  
-                        && ($postlines += $1=~y/\n//);
-                }
-            }
+            # remove trailing whitespace and check for a '-' chomp flag
+            s/\s*([-+])?\s*$//s;
+            $chomp = ($1 && $1 eq '+') ? 0 : ($1 || $postchomp);
+            my $space = $postchomp == &Template::Constants::CHOMP_COLLAPSE 
+                ? ' ' : '';
+            
+            $postlines++ 
+                if $chomp and $text =~ s/ 
+                ^
+                ([ \t]*)\n    # whitespace to newline
+                (?:(.|\n)|$)      # any char (not EOF)
+                 / 
+                 (($1||$2) ? $space : '') . (defined $2 ? $2 : '')
+                 /ex;
         }
             
         # any text preceding the directive can now be added
@@ -9175,8 +9122,8 @@ sub split_text {
             push(@tokens, $interp
                  ? [ $pre, $line, 'ITEXT' ]
                  : ('TEXT', $pre) );
+            $line += $prelines;
         }
-        $line += $prelines;
             
         # and now the directive, along with line number information
         if (length $dir) {

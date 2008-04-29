@@ -8,7 +8,7 @@ JEMPLATE_MODULES=$(GRAMMAR_MODULE) $(RUNTIME_MODULE) $(RUNTIME_COMPACT_MODULE)
 
 all: $(JEMPLATE_SCRIPT)
 
-$(JEMPLATE_SCRIPT): $(JEMPLATE_MODULES)
+$(JEMPLATE_SCRIPT): $(JEMPLATE_MODULES) _force
 	./bin/make-standalone-script ../jemplate > $@
 	chmod +x $@
 
@@ -20,10 +20,10 @@ $(GRAMMAR_MODULE): parser _force
 	rm parser/Parser.output
 
 #$(RUNTIME_MODULE): Makefile Runtime.pm Jemplate.js Jemplate
-$(RUNTIME_MODULE): Runtime.pm _force
-	tpage Runtime.pm > $@
+$(RUNTIME_MODULE): lib/Jemplate/Runtime.pm _force
+	tpage $< > $@
 
-$(RUNTIME_COMPACT_MODULE): Runtime_Compact.pm _force
-	tpage Runtime_Compact.pm > $@
+$(RUNTIME_COMPACT_MODULE): lib/Jemplate/Runtime/Compact.pm _force
+	tpage $< > $@
 
 _force:
