@@ -1,8 +1,9 @@
-.PHONY: check fetch compact
+.PHONY: check fetch compact clean
 
 CURL := curl
 JS := js
 JAVA := java
+RM := rm
 
 DOT_JS := ajax-jquery.js ajax-xhr.js ajax-yui.js json-json2-internal.js json-json2.js json-yui.js json2.js kernel.js xhr-gregory.js xhr-ilinsky.js xxx.js
 
@@ -26,3 +27,6 @@ xhr-ilinsky.js:
 
 json2.js:
 	$(CURL) http://www.json.org/json2.js -o $@
+
+clean:
+	$(RM) -f $(DOT_COMPACT_JS)

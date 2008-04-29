@@ -1,4 +1,4 @@
-.PHONY: fetch runtime
+.PHONY: fetch runtime js
 
 JEMPLATE_SCRIPT=../bin/jemplate
 GRAMMAR_MODULE=../lib/Jemplate/Grammar.pm
@@ -6,7 +6,10 @@ RUNTIME_MODULE=../lib/Jemplate/Runtime.pm
 RUNTIME_COMPACT_MODULE=../lib/Jemplate/Runtime/Compact.pm
 JEMPLATE_MODULES=$(GRAMMAR_MODULE) $(RUNTIME_MODULE) $(RUNTIME_COMPACT_MODULE)
 
-all: $(JEMPLATE_SCRIPT)
+all: js $(JEMPLATE_SCRIPT)
+
+js:
+	$(MAKE) -C js
 
 $(JEMPLATE_SCRIPT): $(JEMPLATE_MODULES) _force
 	./bin/make-standalone-script ../jemplate > $@
