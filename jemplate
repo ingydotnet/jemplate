@@ -4,7 +4,7 @@
 # This section of code will be replaced by lots of inline Perl modules
 # to make the standalone jemplate script.
 use lib 'lib';
-use Jemplate 0.21;
+use Jemplate 0.22;
 #BOOTSTRAP-END
 
 Jemplate->main(@ARGV);

@@ -19,6 +19,9 @@ use IO::All;
 sub guts {
     my $output = '';
     for (qw(
+        Number::Compare
+        Text::Glob
+        File::Find::Rule
         Template::Constants
         Template::Base
         Template::Config
@@ -61,7 +64,10 @@ sub disable_libs {
 
 use Config;
 BEGIN {
-    @INC = $Config::Config{privlib};
+    @INC = (
+        $Config::Config{archlib},
+        $Config::Config{privlib},
+    );
 }
 use strict;
 use warnings;

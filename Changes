@@ -1,4 +1,10 @@
 ---
+version: 0.22
+date:    Mon Apr 28 21:52:03 PDT 2008
+changes:
+- Fixed a few buglets found in 0.21
+
+---
 version: 0.21
 date:    Mon Apr 28 12:44:13 CST 2008
 changes:
