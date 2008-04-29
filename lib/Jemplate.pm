@@ -394,8 +394,6 @@ if (typeof(Jemplate) == 'undefined')
 
 1;
 
-=encoding utf8
-
 =head1 NAME
 
 Jemplate - JavaScript Templating with Template Toolkit
