@@ -861,9 +861,8 @@ Jemplate.Ajax = {
     },
 
     processGet: function(url, processor) {
-        var me = this;
         this.get(url, function(responseText){
-            me.process(Jemplate.JSON.parse(responseText));
+            Jemplate.process(Jemplate.JSON.parse(responseText));
         });
     },
 
@@ -916,9 +915,8 @@ Jemplate.Ajax = {
     },
 
     processGet: function(url, processor) {
-        var me = this;
         this.get(url, function(responseText){
-            me.process(YAHOO.lang.JSON.parse(responseText));
+            Jemplate.process(YAHOO.lang.JSON.parse(responseText));
         });
     },
 
