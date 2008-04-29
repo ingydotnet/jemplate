@@ -11,7 +11,7 @@ Jemplate.Ajax = {
 
     processGet: function(url, processor) {
         this.get(url, function(responseText){
-            Jemplate.process(YAHOO.lang.JSON.parse(responseText));
+            processor(YAHOO.lang.JSON.parse(responseText));
         });
     },
 
