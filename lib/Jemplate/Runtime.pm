@@ -861,8 +861,9 @@ Jemplate.Ajax = {
     },
 
     processGet: function(url, processor) {
+        var me = this;
         this.get(url, function(responseText){
-            process(Jemplate.JSON.parse(responseText));
+            me.process(Jemplate.JSON.parse(responseText));
         });
     },
 
@@ -915,8 +916,9 @@ Jemplate.Ajax = {
     },
 
     processGet: function(url, processor) {
+        var me = this;
         this.get(url, function(responseText){
-            process(YAHOO.lang.JSON.parse(responseText));
+            me.process(YAHOO.lang.JSON.parse(responseText));
         });
     },
 
@@ -2498,6 +2500,8 @@ sub xhr_ilinsky {
 	// Register new object with window
 	window.XMLHttpRequest	= cXMLHttpRequest;
 })();
+
+
 ...
 }
 

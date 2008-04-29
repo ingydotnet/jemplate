@@ -10,8 +10,9 @@ Jemplate.Ajax = {
     },
 
     processGet: function(url, processor) {
+        var me = this;
         this.get(url, function(responseText){
-            process(Jemplate.JSON.parse(responseText));
+            me.process(Jemplate.JSON.parse(responseText));
         });
     },
 
