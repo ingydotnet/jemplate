@@ -29,6 +29,8 @@ if (typeof Jemplate == 'undefined') {
     };
 }
 
+Jemplate.VERSION = '0.22';
+
 Jemplate.process = function() {
     var jemplate = new Jemplate();
     return jemplate.process.apply(jemplate, arguments);
