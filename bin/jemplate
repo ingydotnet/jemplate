@@ -87,9 +87,9 @@ use strict;
 use Exporter;
 use vars qw/$VERSION @ISA @EXPORT_OK
             $strict_leading_dot $strict_wildcard_slash/;
-$VERSION = '0.07';
+$VERSION = '0.08';
 @ISA = 'Exporter';
-@EXPORT_OK = qw( glob_to_regex match_glob );
+@EXPORT_OK = qw( glob_to_regex glob_to_regex_string match_glob );
 
 $strict_leading_dot    = 1;
 $strict_wildcard_slash = 1;
@@ -97,6 +97,13 @@ $strict_wildcard_slash = 1;
 use constant debug => 0;
 
 sub glob_to_regex {
+    my $glob = shift;
+    my $regex = glob_to_regex_string($glob);
+    return qr/^$regex$/;
+}
+
+sub glob_to_regex_string
+{
     my $glob = shift;
     my ($regex, $in_curlies, $escaping);
     local $_;
@@ -151,7 +158,8 @@ sub glob_to_regex {
         $escaping = 0;
     }
     print "# $glob $regex\n" if debug;
-    qr/^$regex$/;
+
+    return $regex;
 }
 
 sub match_glob {
@@ -849,13 +857,13 @@ $PARSER    = 'Template::Parser';
 $PLUGINS   = 'Template::Plugins';
 $PROVIDER  = 'Template::Provider';
 $SERVICE   = 'Template::Service';
-$STASH     = 'Template::Stash';
+$STASH     = 'Template::Stash::XS';
 $CONSTANTS = 'Template::Namespace::Constants';
 
 @PRELOAD   = ( $CONTEXT, $FILTERS, $ITERATOR, $PARSER,
                $PLUGINS, $PROVIDER, $SERVICE, $STASH );
 
-$INSTDIR  = '';
+$INSTDIR  = '/usr/local/tt2';
 
 
 
