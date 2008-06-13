@@ -4,6 +4,29 @@ var filters = {
     jemplate: 'jemplate_process'
 };
 
+/*
+#     Failed test
+#          got: "my%20file.html
+# my%3Cfile%20%26%20your%3Efile.html
+# my%3Cfile%20%26%20your%3Efile.html
+# guitar%26amp%3Bfile.html
+# guitar%26amp%3Bfile.html
+# "
+#     expected: "my%20file.html
+# my%3Cfile%20&amp;%20your%3Efile.html
+# my%3Cfile%20&amp;amp;%20your%3Efile.html
+# guitar&amp;amp;file.html
+# guitar&amp;amp;amp;file.html
+# "
+
+my%20file.html
+my%3Cfile%20&%20your%3Efile.html
+my%3Cfile%20&amp;%20your%3Efile.html
+guitar&amp;file.html
+guitar&amp;amp;file.html
+
+*/
+
 t.plan(7);
 t.filters(filters);
 t.run_is('jemplate', 'output');
@@ -96,11 +119,10 @@ filters_uri.html
 [% "guitar&amp;file.html" | uri | html %]
 --- output
 my%20file.html
-my%3Cfile%20&%20your%3Efile.html
-my%3Cfile%20&amp;%20your%3Efile.html
-guitar&amp;file.html
-guitar&amp;amp;file.html
-
+my%3Cfile%20%26%20your%3Efile.html
+my%3Cfile%20%26%20your%3Efile.html
+guitar%26amp%3Bfile.html
+guitar%26amp%3Bfile.html
 === Test html 
 --- jemplate
 filters_html.html

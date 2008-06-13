@@ -249,6 +249,10 @@ proto.filters.html_line_break = function(text) {
 }
 
 proto.filters.uri = function(text) {
+     return encodeURIComponent(text);
+}
+ 
+proto.filters.url = function(text) {
     return encodeURI(text);
 }
 

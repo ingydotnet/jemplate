@@ -1,4 +1,10 @@
 ---
+version: 0.23
+date: Friday June 06 12:51:18 PDT 2008
+changes:
+- Incorporated 'jemplate-url.patch' to match uri/url filtering behavior to TT, thanks leedo
+
+---
 version: 0.22
 date:    Mon Apr 28 21:52:03 PDT 2008
 changes:
