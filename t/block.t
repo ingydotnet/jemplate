@@ -1,14 +1,20 @@
-use t::TestJemplate tests => 2;
+use t::TestJemplate tests => 3;
 
 filters {
+    'empty_template_body' => 'compile',
     'tt_to_full' => 'compile',
     'tt' => 'compile_lite',
 };
+run_is 'empty_template_body' => 'js';
 run_is 'tt_to_full' => 'js';
 run_is 'tt' => 'js';
 
 __END__
 
+===
+--- empty_template_body
+--- js -trim
+Jemplate.templateMap['test_template'] = function() { return ''; }
 ===
 --- tt_to_full
 Foo
