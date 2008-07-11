@@ -893,12 +893,11 @@ proto.hash_functions.exists = function(hash, key) {
 //
 // import(hash2)   import contents of hash2
 // import          import into current namespace hash
-//proto.hash_functions.import = function(hash, args) {
-//    var hash2 = args[0];
-//    for ( var key in hash2 )
-//        hash[key] = hash2[key];
-//    return '';
-//}
+proto.hash_functions['import'] = function(hash, hash2) {    
+    for ( var key in hash2 )
+        hash[key] = hash2[key];
+    return '';
+}
 
 // keys            list of keys
 proto.hash_functions.keys = function(hash) {
@@ -990,6 +989,9 @@ if (typeof Jemplate.Iterator == 'undefined') {
             this.object_keys = object_keys.sort();
             this.size = object_keys.length;
             this.max  = this.size -1;
+        } else if (typeof object == 'undefined' || object == null || object == '') {
+            this.object = null;
+            this.max  = -1;
         }
     }
 }
@@ -1026,7 +1028,7 @@ proto.get_next = function(should_init) {
             return [this.object_keys[index], false];
         }
     } else {
-        if (index < object.length) {
+        if (index <= this.max) {
             this.prev = index > 0 ? object[index - 1] : "";
             this.next = index < this.max ? object[index +1] : "";
             return [object[index], false];
