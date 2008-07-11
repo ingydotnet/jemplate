@@ -32,7 +32,7 @@ if (typeof Jemplate == 'undefined') {
 Jemplate.VERSION = '0.22';
 
 Jemplate.process = function() {
-    var jemplate = new Jemplate();
+    var jemplate = new Jemplate(Jemplate.prototype.config);
     return jemplate.process.apply(jemplate, arguments);
 }
 
@@ -43,30 +43,73 @@ if (! Jemplate.templateMap)
 
 var proto = Jemplate.prototype = {};
 
+proto.config = {
+    AUTO_RESET: true,
+    BLOCKS: {},
+    CONTEXT: null,
+    DEBUG_UNDEF: false,
+    DEFAULT: null,
+    ERROR: null,
+    EVAL_JAVASCRIPT: false,
+    FILTERS: {},
+    INCLUDE_PATH: [''],
+    INTERPOLATE: false,
+    OUTPUT: null,
+    PLUGINS: {},
+    POST_PROCESS: [],
+    PRE_PROCESS: [],
+    PROCESS: null,
+    RECURSION: false,
+    STASH: null,
+    TOLERANT: null,
+    VARIABLES: {},
+    WRAPPER: []
+};
+
+proto.defaults = {
+    AUTO_RESET: true,
+    BLOCKS: {},
+    CONTEXT: null,
+    DEBUG_UNDEF: false,
+    DEFAULT: null,
+    ERROR: null,
+    EVAL_JAVASCRIPT: false,
+    FILTERS: {},
+    INCLUDE_PATH: [''],
+    INTERPOLATE: false,
+    OUTPUT: null,
+    PLUGINS: {},
+    POST_PROCESS: [],
+    PRE_PROCESS: [],
+    PROCESS: null,
+    RECURSION: false,
+    STASH: null,
+    TOLERANT: null,
+    VARIABLES: {},
+    WRAPPER: []
+};
+
+
+Jemplate.init = function(config) {
+ 
+    Jemplate.prototype.config = config || {};
+    
+    for (var i in Jemplate.prototype.defaults) {
+        if(typeof Jemplate.prototype.config[i] == "undefined") {
+            Jemplate.prototype.config[i] = Jemplate.prototype.defaults[i];
+        }
+    }
+}
+
 proto.init = function(config) {
-    this.config = config ||
-    {
-        AUTO_RESET: true,
-        BLOCKS: {},
-        CONTEXT: null,
-        DEBUG_UNDEF: false,
-        DEFAULT: null,
-        ERROR: null,
-        EVAL_JAVASCRIPT: false,
-        FILTERS: {},
-        INCLUDE_PATH: [''],
-        INTERPOLATE: false,
-        OUTPUT: null,
-        PLUGINS: {},
-        POST_PROCESS: [],
-        PRE_PROCESS: [],
-        PROCESS: null,
-        RECURSION: false,
-        STASH: null,
-        TOLERANT: null,
-        VARIABLES: {},
-        WRAPPER: []
-    };
+    
+    this.config = config || {};
+    
+    for (var i in Jemplate.prototype.defaults) {
+        if(typeof this.config[i] == "undefined") {
+            this.config[i] = Jemplate.prototype.defaults[i];
+        }
+    }
 }
 
 proto.process = function(template, data, output) {
@@ -86,7 +129,17 @@ proto.process = function(template, data, output) {
 
     var proc = function(input) {
         try {
+            if (typeof context.config.PRE_PROCESS == 'string') context.config.PRE_PROCESS = [context.config.PRE_PROCESS];                
+            for (var i = 0; i < context.config.PRE_PROCESS.length; i++) {
+                context.process(context.config.PRE_PROCESS[i]);
+            }
+            
             result = context.process(template, input);
+            
+            if (typeof context.config.POST_PROCESS == 'string') context.config.PRE_PROCESS = [context.config.POST_PROCESS];
+            for (i = 0; i < context.config.POST_PROCESS.length; i++) {
+                context.process(context.config.POST_PROCESS[i]);
+            }
         }
         catch(e) {
             if (! String(e).match(/Jemplate\.STOP\n/))
