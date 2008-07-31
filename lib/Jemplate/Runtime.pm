@@ -23,6 +23,8 @@ modify it under the same terms as Perl itself.
 // Main Jemplate class
 //------------------------------------------------------------------------------
 
+this.JEMPLATE_GLOBAL = this;
+
 if (typeof Jemplate == 'undefined') {
     var Jemplate = function() {
         this.init.apply(this, arguments);
@@ -30,6 +32,7 @@ if (typeof Jemplate == 'undefined') {
 }
 
 Jemplate.VERSION = '0.22';
+Jemplate.GLOBAL = this;
 
 Jemplate.process = function() {
     var jemplate = new Jemplate(Jemplate.prototype.config);
@@ -51,6 +54,7 @@ proto.config = {
     DEFAULT: null,
     ERROR: null,
     EVAL_JAVASCRIPT: false,
+    GLOBAL_ACCESS : 1,
     FILTERS: {},
     INCLUDE_PATH: [''],
     INTERPOLATE: false,
@@ -74,6 +78,7 @@ proto.defaults = {
     DEFAULT: null,
     ERROR: null,
     EVAL_JAVASCRIPT: false,
+    GLOBAL_ACCESS : 1,
     FILTERS: {},
     INCLUDE_PATH: [''],
     INTERPOLATE: false,
@@ -221,7 +226,7 @@ proto.plugin = function(name, args) {
         throw "Unknown plugin name ':" + name + "'";
 
     // The Context object (this) is passed as the first argument to the plugin.
-    return new window[name](this, args);
+    return new Jemplate.GLOBAL[name](this, args);
 }
 
 proto.filter = function(text, name, args) {
@@ -434,7 +439,7 @@ proto.get = function(ident, args) {
 
     if (typeof value == 'undefined' || value == null) {
         if (this.__config__.DEBUG_UNDEF)
-            throw("undefined value found while using DEGUG_UNDEF");
+            throw("undefined value found while using DEBUG_UNDEF");
         value = '';
     }
 
@@ -516,12 +521,19 @@ proto._dotop = function(root, item, args, lvalue) {
     }
 
 
-    if (atroot || (root.constructor == Object.prototype.constructor)) {
+    if (atroot || root.constructor == Object.prototype.constructor || root == Jemplate.GLOBAL) {
         if (typeof root[item] != 'undefined' && root[item] != null && (!is_function_call || !this.hash_functions[item])) { //consider undefined == null
             if (typeof root[item] == 'function') {
-                result = root[item].apply(this,args);
+                result = root[item].apply(root,args);
             } else {
                 return root[item];
+            }
+        } else if (atroot && typeof Jemplate.GLOBAL[item] != 'undefined' && this.__config__.GLOBAL_ACCESS && (lvalue ? this.__config__.GLOBAL_ACCESS == 2 : true)) {
+            
+            if (typeof Jemplate.GLOBAL[item] == 'function') {
+                result = Jemplate.GLOBAL[item].apply(Jemplate.GLOBAL,args);
+            } else {
+                return Jemplate.GLOBAL[item];
             }
         } else if (lvalue) {
             return root[item] = {};
@@ -668,7 +680,7 @@ proto.string_functions.chunk = function(string, size) {
         size = 1;
     if (size < 0) {
         size = 0 - size;
-        for (i = string.length - size; i >= 0; i = i - size)
+        for (var i = string.length - size; i >= 0; i = i - size)
             list.unshift(string.substr(i, size));
         if (string.length % size)
             list.unshift(string.substr(0, string.length % size));
