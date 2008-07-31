@@ -23,8 +23,6 @@ modify it under the same terms as Perl itself.
 // Main Jemplate class
 //------------------------------------------------------------------------------
 
-this.JEMPLATE_GLOBAL = this;
-
 if (typeof Jemplate == 'undefined') {
     var Jemplate = function() {
         this.init.apply(this, arguments);

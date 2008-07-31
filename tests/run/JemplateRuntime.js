@@ -6,7 +6,7 @@ compiled Jemplate templates.
 
 AUTHOR - Ingy döt Net <ingy@cpan.org>
 
-Copyright 2006 Ingy döt Net. All Rights Reserved.
+Copyright 2006,2008 Ingy döt Net.
 
 This module is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself.
@@ -16,14 +16,19 @@ modify it under the same terms as Perl itself.
 // Main Jemplate class
 //------------------------------------------------------------------------------
 
+this.JEMPLATE_GLOBAL = this;
+
 if (typeof Jemplate == 'undefined') {
     var Jemplate = function() {
         this.init.apply(this, arguments);
     };
 }
 
+Jemplate.VERSION = '0.22';
+Jemplate.GLOBAL = this;
+
 Jemplate.process = function() {
-    var jemplate = new Jemplate();
+    var jemplate = new Jemplate(Jemplate.prototype.config);
     return jemplate.process.apply(jemplate, arguments);
 }
 
@@ -34,30 +39,75 @@ if (! Jemplate.templateMap)
 
 var proto = Jemplate.prototype = {};
 
+proto.config = {
+    AUTO_RESET: true,
+    BLOCKS: {},
+    CONTEXT: null,
+    DEBUG_UNDEF: false,
+    DEFAULT: null,
+    ERROR: null,
+    EVAL_JAVASCRIPT: false,
+    GLOBAL_ACCESS : 1,
+    FILTERS: {},
+    INCLUDE_PATH: [''],
+    INTERPOLATE: false,
+    OUTPUT: null,
+    PLUGINS: {},
+    POST_PROCESS: [],
+    PRE_PROCESS: [],
+    PROCESS: null,
+    RECURSION: false,
+    STASH: null,
+    TOLERANT: null,
+    VARIABLES: {},
+    WRAPPER: []
+};
+
+proto.defaults = {
+    AUTO_RESET: true,
+    BLOCKS: {},
+    CONTEXT: null,
+    DEBUG_UNDEF: false,
+    DEFAULT: null,
+    ERROR: null,
+    EVAL_JAVASCRIPT: false,
+    GLOBAL_ACCESS : 1,
+    FILTERS: {},
+    INCLUDE_PATH: [''],
+    INTERPOLATE: false,
+    OUTPUT: null,
+    PLUGINS: {},
+    POST_PROCESS: [],
+    PRE_PROCESS: [],
+    PROCESS: null,
+    RECURSION: false,
+    STASH: null,
+    TOLERANT: null,
+    VARIABLES: {},
+    WRAPPER: []
+};
+
+
+Jemplate.init = function(config) {
+ 
+    Jemplate.prototype.config = config || {};
+    
+    for (var i in Jemplate.prototype.defaults) {
+        if(typeof Jemplate.prototype.config[i] == "undefined") {
+            Jemplate.prototype.config[i] = Jemplate.prototype.defaults[i];
+        }
+    }
+}
+
 proto.init = function(config) {
-    this.config = config ||
-    {
-        AUTO_RESET: true,
-        BLOCKS: {},
-        CONTEXT: null,
-        DEBUG_UNDEF: false,
-        DEFAULT: null,
-        ERROR: null,
-        EVAL_JAVASCRIPT: false,
-        FILTERS: {},
-        INCLUDE_PATH: [''],
-        INTERPOLATE: false,
-        OUTPUT: null,
-        PLUGINS: {},
-        POST_PROCESS: [],
-        PRE_PROCESS: [],
-        PROCESS: null,
-        RECURSION: false,
-        STASH: null,
-        TOLERANT: null,
-        VARIABLES: {},
-        WRAPPER: []
-    };
+    
+    this.config = config || {};
+    
+    for (var i in Jemplate.prototype.defaults) {
+        if(typeof this.config[i] == "undefined") {
+            this.config[i] = Jemplate.prototype.defaults[i];
+        }
+    }
 }
 
 proto.process = function(template, data, output) {
@@ -77,7 +127,17 @@ proto.process = function(template, data, output) {
 
     var proc = function(input) {
         try {
+            if (typeof context.config.PRE_PROCESS == 'string') context.config.PRE_PROCESS = [context.config.PRE_PROCESS];                
+            for (var i = 0; i < context.config.PRE_PROCESS.length; i++) {
+                context.process(context.config.PRE_PROCESS[i]);
+            }
+            
             result = context.process(template, input);
+            
+            if (typeof context.config.POST_PROCESS == 'string') context.config.PRE_PROCESS = [context.config.POST_PROCESS];
+            for (i = 0; i < context.config.POST_PROCESS.length; i++) {
+                context.process(context.config.POST_PROCESS[i]);
+            }
         }
         catch(e) {
             if (! String(e).match(/Jemplate\.STOP\n/))
@@ -159,7 +219,7 @@ proto.plugin = function(name, args) {
         throw "Unknown plugin name ':" + name + "'";
 
     // The Context object (this) is passed as the first argument to the plugin.
-    return new window[name](this, args);
+    return new Jemplate.GLOBAL[name](this, args);
 }
 
 proto.filter = function(text, name, args) {
@@ -247,6 +307,10 @@ proto.filters.html_line_break = function(text) {
 }
 
 proto.filters.uri = function(text) {
+     return encodeURIComponent(text);
+}
+ 
+proto.filters.url = function(text) {
     return encodeURI(text);
 }
 
@@ -336,82 +400,280 @@ proto.update = function(args) {
     }
 }
 
-proto.get = function(key) {
+proto.get = function(ident, args) {
     var root = this.data;
-    if (key instanceof Array) {
-        for (var i = 0; i < key.length; i += 2) {
-            var args = key.slice(i, i+2);
-            args.unshift(root);
-            value = this._dotop.apply(this, args);
+    
+    var value;
+    
+    if ( (ident instanceof Array) || (typeof ident == 'string' && /\./.test(ident) ) ) {
+        
+        if (typeof ident == 'string') {
+            ident = ident.split('.');
+            var newIdent = [];
+            for (var i = 0; i < ident.length; i++) {
+                newIdent.push(ident.replace(/\(.*$/,''));
+                newIdent.push(0);
+            }
+            ident = newIdent;
+        }
+        
+        for (var i = 0; i < ident.length; i += 2) {
+            var dotopArgs = ident.slice(i, i+2);
+            dotopArgs.unshift(root);
+            value = this._dotop.apply(this, dotopArgs);
             if (typeof value == 'undefined')
                 break;
             root = value;
         }
     }
     else {
-        value = this._dotop(root, key);
+        value = this._dotop(root, ident, args);
     }
 
-    if (typeof value == 'undefined') {
+    if (typeof value == 'undefined' || value == null) {
         if (this.__config__.DEBUG_UNDEF)
-            throw("undefined value found while using DEGUG_UNDEF");
+            throw("undefined value found while using DEBUG_UNDEF");
         value = '';
     }
 
     return value;
 }
 
-proto.set = function(key, value, set_default) {
-    if (key instanceof Array) {
-        var data = this.get(key[0]) || {};
-        key = key[2];
+
+
+proto.set = function(ident, value, set_default) {
+    
+    var root, result, error;
+    
+    root = this.data;
+    
+    while (true) {
+        if ( (ident instanceof Array) || (typeof ident == 'string' && /\./.test(ident) ) ) {
+            
+            if (typeof ident == 'string') {
+                ident = ident.split('.');
+                var newIdent = [];
+                for (var i = 0; i < ident.length; i++) {
+                    newIdent.push(ident.replace(/\(.*$/,''));
+                    newIdent.push(0);
+                }
+                ident = newIdent;
+            }
+            
+            for (var i = 0; i < ident.length - 2; i += 2) {
+                var dotopArgs = ident.slice(i, i+2);
+                dotopArgs.unshift(root);
+                dotopArgs.push(1);
+                result = this._dotop.apply(this, dotopArgs);
+                if (typeof value == 'undefined')
+                    break;
+                root = result;
+            }
+            
+            var assignArgs = ident.slice(ident.length-2, ident.length);
+            assignArgs.unshift(root);
+            assignArgs.push(value);
+            assignArgs.push(set_default);
+            
+            
+            result = this._assign.apply(this, assignArgs);
+        } else {
+            result = this._assign(root, ident, 0, value, set_default);
+        }
+        break;
     }
-    else {
-        data = this.data;
-    }
-    if (! (set_default && (typeof data[key] != 'undefined')))
-        data[key] = value;
+    
+    return (typeof result != 'undefined') ? result : '';
+    
+    
+    //if (key instanceof Array) {
+    //    var data = this.get(key[0]) || {};
+    //    key = key[2];
+    //}
+    //else {
+    //    data = this.data;
+    //}
+    //if (! (set_default && (typeof data[key] != 'undefined')))
+    //    data[key] = value;
 }
 
-proto._dotop = function(root, item, args) {
-    if (typeof item == 'undefined' ||
-        typeof item == 'string' && item.match(/^[\._]/)) {
+
+
+proto._dotop = function(root, item, args, lvalue) {
+    
+    var atroot = root == this.data;
+    
+    var value,result = undefined;
+    
+   	var is_function_call = args instanceof Array;
+   	
+   	args = args || [];
+    
+    if (typeof root == 'undefined' || typeof item == 'undefined' || typeof item == 'string' && item.match(/^[\._]/)) {
         return undefined;
     }
 
-    if ((! args) &&
-        (typeof root == 'object') &&
-        (!(root instanceof Array) || (typeof item == 'number')) &&
-        (typeof root[item] != 'undefined')) {
-        var value = root[item];
-        if (typeof value == 'function')
-            value = value.apply(root);
-        return value;
+
+    if (atroot || root.constructor == Object.prototype.constructor || root == Jemplate.GLOBAL) {
+        if (typeof root[item] != 'undefined' && root[item] != null && (!is_function_call || !this.hash_functions[item])) { //consider undefined == null
+            if (typeof root[item] == 'function') {
+                result = root[item].apply(root,args);
+            } else {
+                return root[item];
+            }
+        } else if (atroot && typeof Jemplate.GLOBAL[item] != 'undefined' && this.__config__.GLOBAL_ACCESS && (lvalue ? this.__config__.GLOBAL_ACCESS == 2 : true)) {
+            
+            if (typeof Jemplate.GLOBAL[item] == 'function') {
+                result = Jemplate.GLOBAL[item].apply(Jemplate.GLOBAL,args);
+            } else {
+                return Jemplate.GLOBAL[item];
+            }
+        } else if (lvalue) {
+            return root[item] = {};
+        } else if (this.hash_functions[item] && !atroot || item == 'import') {
+            args.unshift(root);
+            result = this.hash_functions[item].apply(this,args);
+        } else if (item instanceof Array) {
+            result = {};
+            
+            for (var i = 0; i < item.length; i++) result[item[i]] = root[item[i]];
+            return result;
+        }
+    } else if (root instanceof Array) {
+        if (this.list_functions[item]) {
+            args.unshift(root);
+            result = this.list_functions[item].apply(this,args);
+        } else if (typeof item == 'string' && /^-?\d+$/.test(item) || typeof item == 'number' ) {
+            if (typeof root[item] != 'function') return root[item];
+            result = root[item].apply(this, args);
+        } else if (item instanceof Array) {
+            for (var i = 0; i < item.length; i++) result.push(root[item[i]]);
+            return result;
+        }
+    } else if ( (root.constructor != Object.prototype.constructor) && (root instanceof Object) ) {
+        try {
+            result = root[item].apply(root,args);
+        } catch (e) {
+            var my_class = root.constructor.name;
+            
+            if (false) throw "Cant locate method"; //XXX to-do?
+            
+            if (root instanceof Array) {
+                if (this.list_functions[item]) {
+                    args.unshift(root);
+                    result = this.list_functions[item].apply(this,args);
+                } else if (typeof item == 'string' && /^-?\d+$/.test(item) || typeof item == 'number' ) {
+                    if (typeof root[item] != 'function') return root[item];
+                    result = root[item].apply(this, args);
+                } else if (item instanceof Array) {
+                    for (var i = 0; i < item.length; i++) result.push(root[item[i]]);
+                    return result;
+                }
+            } else if (typeof root == 'object') {
+                if (typeof root[item] != 'undefined' && root[item] != null) {//consider undefined == null
+                    if (typeof root[item] == 'function') {
+                        result = root[item].apply(this,args);
+                    } else {
+                        return root[item];
+                    }
+                } else if (this.hash_functions[item]) {
+                    args.unshift(root);
+                    result = this.hash_functions[item].apply(this,args);
+                } 
+            } else if (this.string_functions[item]) {
+                args.unshift(root);
+                result = this.string_functions[item].apply(this, args);
+            } else if (this.list_functions[item]) {
+                args.unshift([root]);
+                result = this.list_functions[item].apply(this,args);
+            } 
+            
+        }
+    } else if (this.string_functions[item] && !lvalue) {
+        args.unshift(root);
+        result = this.string_functions[item].apply(this, args);
+    } else if (this.list_functions[item] && !lvalue) {
+        args.unshift([root]);
+        result = this.list_functions[item].apply(this,args);
+    } else {
+        result = undefined;
     }
+    
+    
+    if (result instanceof Array) {
+		if (typeof result[0] == 'undefined' && typeof result[1] != 'undefined') {
+	        throw result[1];
+	    }
+	}
+    
+    return result;
 
-    if (typeof root == 'string' && this.string_functions[item])
-        return this.string_functions[item](root, args);
-    if (root instanceof Array && this.list_functions[item])
-        return this.list_functions[item](root, args);
-    if (typeof root == 'object' && this.hash_functions[item])
-        return this.hash_functions[item](root, args);
-    if (typeof root[item] == 'function')
-        return root[item].apply(root, args);
 
+    //if ((! args) &&
+    //    (typeof root == 'object') &&
+    //    (!(root instanceof Array) || (typeof item == 'number')) &&
+    //    (typeof root[item] != 'undefined')) {
+    //    var value = root[item];
+    //    if (typeof value == 'function')
+    //        value = value.apply(root);
+    //    return value;
+    //}
+    //
+    //if (typeof root == 'string' && this.string_functions[item])
+    //    return this.string_functions[item](root, args);
+    //if (root instanceof Array && this.list_functions[item])
+    //    return this.list_functions[item](root, args);
+    //if (typeof root == 'object' && this.hash_functions[item])
+    //    return this.hash_functions[item](root, args);
+    //if (typeof root[item] == 'function')
+    //    return root[item].apply(root, args);
+
+    //return undefined;
+}
+
+
+proto._assign = function(root, item, args, value, set_default) {
+    var atroot = root == this.data;
+    var result;
+    
+    args = args || [];
+    
+    if (typeof root == 'undefined' || typeof item == 'undefined' || typeof item == 'string' && item.match(/^[\._]/)) {
+        return undefined;
+    }
+    
+    if (atroot || (root.constructor == Object.prototype.constructor)) {
+        if (!(set_default && typeof root[item] != 'undefined')) {
+            return root[item] = value;
+        }
+    } else if ((root instanceof Array) && (typeof item == 'string' && /^-?\d+$/.test(item) || typeof item == 'number' )) {
+        if (!(set_default && typeof root[item] != 'undefined')) {
+            return root[item] = value;
+        }
+    } else if ( (root.constructor != Object.prototype.constructor) && (root instanceof Object) ) {
+        try {
+            result = root[item].apply(root,args);
+        } catch (e) {
+        }
+    } else {
+        throw 'dont know how to assign to [' + root + '.' + item +']';
+    }
+    
     return undefined;
 }
+
 
 proto.string_functions = {};
 
 // chunk(size)     negative size chunks from end
-proto.string_functions.chunk = function(string, args) {
-    var size = args[0];
+proto.string_functions.chunk = function(string, size) {
+    //var size = args;
     var list = new Array();
     if (! size)
         size = 1;
     if (size < 0) {
         size = 0 - size;
-        for (i = string.length - size; i >= 0; i = i - size)
+        for (var i = string.length - size; i >= 0; i = i - size)
             list.unshift(string.substr(i, size));
         if (string.length % size)
             list.unshift(string.substr(0, string.length % size));
@@ -443,15 +705,15 @@ proto.string_functions.list = function(string) {
 }
 
 // match(re)       get list of matches
-proto.string_functions.match = function(string, args) {
-    var regexp = new RegExp(args[0], 'gm');
+proto.string_functions.match = function(string, re, modifiers) {
+    var regexp = new RegExp(re, modifiers);
     var list = string.match(regexp);
     return list;
 }
 
 // repeat(n)       repeated n times
 proto.string_functions.repeat = function(string, args) {
-    var n = args[0] || 1;
+    var n = args || 1;
     var output = '';
     for (var i = 0; i < n; i++) {
         output += string;
@@ -459,19 +721,17 @@ proto.string_functions.repeat = function(string, args) {
     return output;
 }
 
-// replace(re, sub)    replace instances of re with sub
-proto.string_functions.replace = function(string, args) {
-    var regexp = new RegExp(args[0], 'gm');
-    var sub = args[1];
-    if (! sub)
-        sub  = '';
-    var output = string.replace(regexp, sub);
-    return output;
+// replace(re, sub, global)    replace instances of re with sub
+proto.string_functions.replace = function(string, re, sub, modifiers) {
+    var regexp = new RegExp(re,modifiers);    
+    if (! sub) sub  = '';
+
+    return string.replace(regexp, sub);
 }
 
 // search(re)      true if value matches re
-proto.string_functions.search = function(string, args) {
-    var regexp = new RegExp(args[0]);
+proto.string_functions.search = function(string, re) {
+    var regexp = new RegExp(re);
     return (string.search(regexp) >= 0) ? 1 : 0;
 }
 
@@ -481,8 +741,8 @@ proto.string_functions.size = function(string) {
 }
 
 // split(re)       split string on re
-proto.string_functions.split = function(string, args) {
-    var regexp = new RegExp(args[0]);
+proto.string_functions.split = function(string, re) {
+    var regexp = new RegExp(re);
     var list = string.split(regexp);
     return list;
 }
@@ -491,8 +751,12 @@ proto.string_functions.split = function(string, args) {
 
 proto.list_functions = {};
 
-proto.list_functions.join = function(list, args) {
-    return list.join(args[0]);
+proto.list_functions.list = function(list) {
+    return list;
+};
+
+proto.list_functions.join = function(list, str) {
+    return list.join(str);
 };
 
 proto.list_functions.sort = function(list,key) {
@@ -520,8 +784,8 @@ proto.list_functions.nsort = function(list) {
     return list.sort(function(a, b) { return (a-b) });
 }
 
-proto.list_functions.grep = function(list, args) {
-    var regexp = new RegExp(args[0]);
+proto.list_functions.grep = function(list, re) {
+    var regexp = new RegExp(re);
     var result = [];
     for (var i = 0; i < list.length; i++) {
         if (list[i].match(regexp))
@@ -550,7 +814,7 @@ proto.list_functions.reverse = function(list) {
     return result;
 }
 
-proto.list_functions.merge = function(list, args) {
+proto.list_functions.merge = function(list /*, ... args */) {
     var result = [];
     var push_all = function(elem) {
         if (elem instanceof Array) {
@@ -563,28 +827,25 @@ proto.list_functions.merge = function(list, args) {
         }
     }
     push_all(list);
-    for (var i = 0; i < args.length; i++) {
-        push_all(args[i]);
+    for (var i = 1; i < arguments.length; i++) {
+        push_all(arguments[i]);
     }
     return result;
 }
 
-proto.list_functions.slice = function(list, args) {
-    return list.slice(args[0], args[1]);
+proto.list_functions.slice = function(list, start, end) {
+    return list.slice(start, end);
 }
 
-proto.list_functions.splice = function(list, args) {
-    if (args.length == 1)
-        return list.splice(args[0]);
-    if (args.length == 2)
-        return list.splice(args[0], args[1]);
-    if (args.length == 3)
-        return list.splice(args[0], args[1], args[2]);
-    return null;
+proto.list_functions.splice = function(list /*, ... args */ ) {
+    var args = Array.prototype.slice.call(arguments);
+    args.shift();
+    
+    return list.splice.apply(list,args);
 }
 
-proto.list_functions.push = function(list, args) {
-    list.push(args[0]);
+proto.list_functions.push = function(list, value) {
+    list.push(value);
     return list;
 }
 
@@ -592,8 +853,8 @@ proto.list_functions.pop = function(list) {
     return list.pop();
 }
 
-proto.list_functions.unshift = function(list, args) {
-    list.unshift(args[0]);
+proto.list_functions.unshift = function(list, value) {
+    list.unshift(value);
     return list;
 }
 
@@ -629,20 +890,19 @@ proto.hash_functions.each = function(hash) {
 }
 
 // exists(key)     does key exist?
-proto.hash_functions.exists = function(hash, args) {
-    return ( typeof( hash[args[0]] ) == "undefined" ) ? 0 : 1;
+proto.hash_functions.exists = function(hash, key) {
+    return ( typeof( hash[key] ) == "undefined" ) ? 0 : 1;
 }
 
 // FIXME proto.hash_functions.import blows everything up
 //
 // import(hash2)   import contents of hash2
 // import          import into current namespace hash
-//proto.hash_functions.import = function(hash, args) {
-//    var hash2 = args[0];
-//    for ( var key in hash2 )
-//        hash[key] = hash2[key];
-//    return '';
-//}
+proto.hash_functions['import'] = function(hash, hash2) {    
+    for ( var key in hash2 )
+        hash[key] = hash2[key];
+    return '';
+}
 
 // keys            list of keys
 proto.hash_functions.keys = function(hash) {
@@ -653,10 +913,10 @@ proto.hash_functions.keys = function(hash) {
 }
 
 // list            returns alternating key, value
-proto.hash_functions.list = function(hash, args) {
-    var what = '';
-    if ( args )
-        what = args[0];
+proto.hash_functions.list = function(hash, what) {
+    //var what = '';
+    //if ( args )
+        //what = args[0];
 
     var list = new Array();
     var key;
@@ -710,8 +970,8 @@ proto.hash_functions.values = function(hash) {
 }
 
 //  delete
-proto.hash_functions.remove = function(hash, args) {
-    return delete hash[args[0]];
+proto.hash_functions.remove = function(hash, key) {
+    return delete hash[key];
 }
 proto.hash_functions['delete'] = proto.hash_functions.remove;
 
@@ -734,6 +994,9 @@ if (typeof Jemplate.Iterator == 'undefined') {
             this.object_keys = object_keys.sort();
             this.size = object_keys.length;
             this.max  = this.size -1;
+        } else if (typeof object == 'undefined' || object == null || object == '') {
+            this.object = null;
+            this.max  = -1;
         }
     }
 }
@@ -770,7 +1033,7 @@ proto.get_next = function(should_init) {
             return [this.object_keys[index], false];
         }
     } else {
-        if (index < object.length) {
+        if (index <= this.max) {
             this.prev = index > 0 ? object[index - 1] : "";
             this.next = index < this.max ? object[index +1] : "";
             return [object[index], false];
@@ -824,7 +1087,7 @@ Jemplate.Ajax = {
 
     processGet: function(url, processor) {
         this.get(url, function(responseText){
-            process(YAHOO.lang.JSON.parse(responseText));
+            processor(YAHOO.lang.JSON.parse(responseText));
         });
     },
 
@@ -855,4 +1118,3 @@ Jemplate.JSON = {
 
 }());
 
-1
