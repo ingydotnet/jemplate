@@ -64,7 +64,8 @@ global-scope-access.html
 [% JEMPLATE_GLOBAL.global_multiply(1,10) %]
 [% 
 	global_foo = 'local_foo'; #defaults to read-only access level, creates new local "global_foo"
-	global_foo
+	global_foo;'\n';
+	JEMPLATE_GLOBAL.global_foo
  %]
 --- output
 global_foo
@@ -76,5 +77,6 @@ global_object_foo
 2
 10
 local_foo
+global_foo
 
 */
