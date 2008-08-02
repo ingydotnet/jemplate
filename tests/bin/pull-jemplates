@@ -8,7 +8,7 @@ my $output_dir = 'jemplate';
 
 my %jemplates;
 
-for my $test (glob '../t/*.t.js') {
+for my $test (glob 't/*.t.js') {
     my $file_contents = io($test)->all;
     my (@jemplates) = ($file_contents =~ /(^--- jemplate\n.*?)(?=^---|\z)/gsm);
     for my $jemplate (@jemplates) {

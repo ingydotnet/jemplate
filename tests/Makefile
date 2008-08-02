@@ -1,12 +1,12 @@
-.PHONY: all clean jemplate
+.PHONY: all clean purge jemplate
 
-ALL_T_HTML:=$(shell ls -1 ../t/*.t.js | perl -pe 's/js$$/html/;s/.*\///')
+ALL_T_HTML:=$(shell ls -1 t/*.t.js | perl -pe 's/js$$/html/;s/.*\///')
 
 ALL_TARGETS=$(ALL_T_HTML) index.html JemplateRuntime.js jemplate.js jemplate2.js
 
-JEMPLATES=../t/*.t.js
-JEMPLATE=../../jemplate
-LIB=../../LIB
+JEMPLATES=t/*.t.js
+JEMPLATE=../jemplate
+LIB=../lib
 
 all: $(ALL_TARGETS)
 
@@ -30,7 +30,7 @@ jemplate2.js: jemplate2
 jemplate: $(JEMPLATES)
 	perl bin/pull-jemplates
 
-clean:
+clean purge:
 	rm -fr $(ALL_TARGETS) jemplate/* *.t.js
 
 html:

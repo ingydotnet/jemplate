@@ -9,7 +9,7 @@ use YAML;
 my ($template_path, $output_path) = @ARGV;
 
 my $test_file_name = $output_path;
-$test_file_name =~ s/^/..\/t\// or die;
+$test_file_name =~ s/^/t\// or die;
 $test_file_name =~ s/\.html$/.js/ or die;
 
 my $t = Template->new(
@@ -18,12 +18,11 @@ my $t = Template->new(
     }
 );
 
-my $config = YAML::LoadFile('../config.yaml');
+my $config = YAML::LoadFile('config.yaml');
 my $data = {
     %$config,
     test_file => $test_file_name,
     all_test_files => [ glob('*.t.html') ],
-#    all_test_files => [ grep { !m/plugins/ } glob('*.t.html') ]
 };
 my $result;
 
