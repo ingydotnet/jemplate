@@ -6,7 +6,7 @@ var filters = {
     raw_context: 'raw_context'
 };
 
-t.plan(3);
+t.plan(4);
 t.filters(filters);
 t.run_is('jemplate', 'output');
 
@@ -48,5 +48,35 @@ stash-functions3.html
 noarg
 noarg
 arg: abc
+
+=== Global Scope Access
+--- raw_context
+{}
+--- jemplate
+global-scope-access.html
+[% global_foo %]
+[% global_object.str %]
+[% global_object.func_sum(1,1) %]
+[% global_multiply(1,10) %]
+[% JEMPLATE_GLOBAL.global_foo %]
+[% JEMPLATE_GLOBAL.global_object.str %]
+[% JEMPLATE_GLOBAL.global_object.func_sum(1,1) %]
+[% JEMPLATE_GLOBAL.global_multiply(1,10) %]
+[% 
+	global_foo = 'local_foo'; #defaults to read-only access level, creates new local "global_foo"
+	global_foo;'\n';
+	JEMPLATE_GLOBAL.global_foo
+ %]
+--- output
+global_foo
+global_object_foo
+2
+10
+global_foo
+global_object_foo
+2
+10
+local_foo
+global_foo
 
 */

@@ -18,6 +18,20 @@
     <script type="text/javascript">
         var testBaseCurrentScript = '../hello.t.js';
     </script>
+    
+    <script type="text/javascript">
+    	global_foo = 'global_foo';
+    	global_object = {
+    		str : 'global_object_foo',
+    		func_sum : function (a,b) {
+    			return a+b;
+    		}
+    	};
+    	global_multiply = function (a,b) {
+    		return a*b;
+    	}
+    </script>
+    
     <script type="text/javascript" src="../hello.t.js"></script>
 </head>
 <body>

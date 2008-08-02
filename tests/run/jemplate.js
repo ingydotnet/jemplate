@@ -742,6 +742,54 @@ output += '\n';
     return output;
 }
 
+Jemplate.templateMap['global-scope-access.html'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+//line 1 "global-scope-access.html"
+output += stash.get('global_foo');
+output += '\n';
+//line 2 "global-scope-access.html"
+output += stash.get(['global_object', 0, 'str', 0]);
+output += '\n';
+//line 3 "global-scope-access.html"
+output += stash.get(['global_object', 0, 'func_sum', [ 1, 1 ]]);
+output += '\n';
+//line 4 "global-scope-access.html"
+output += stash.get(['global_multiply', [ 1, 10 ]]);
+output += '\n';
+//line 5 "global-scope-access.html"
+output += stash.get(['JEMPLATE_GLOBAL', 0, 'global_foo', 0]);
+output += '\n';
+//line 6 "global-scope-access.html"
+output += stash.get(['JEMPLATE_GLOBAL', 0, 'global_object', 0, 'str', 0]);
+output += '\n';
+//line 7 "global-scope-access.html"
+output += stash.get(['JEMPLATE_GLOBAL', 0, 'global_object', 0, 'func_sum', [ 1, 1 ]]);
+output += '\n';
+//line 8 "global-scope-access.html"
+output += stash.get(['JEMPLATE_GLOBAL', 0, 'global_multiply', [ 1, 10 ]]);
+output += '\n';
+//line 9 "global-scope-access.html"
+stash.set('global_foo', 'local_foo');
+//line 9 "global-scope-access.html"
+output += stash.get('global_foo');
+//line 9 "global-scope-access.html"
+output += '\n';
+//line 9 "global-scope-access.html"
+output += stash.get(['JEMPLATE_GLOBAL', 0, 'global_foo', 0]);
+output += '\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
 Jemplate.templateMap['hash_each.html'] = function(context) {
     if (! context) throw('Jemplate function called without context\n');
     var stash = context.stash;
