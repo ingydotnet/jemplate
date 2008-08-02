@@ -9,7 +9,6 @@ JEMPLATE=../../jemplate
 LIB=../../LIB
 
 all: $(ALL_TARGETS)
-	ln -fs ../Test .
 
 %.t.html: template/test.html
 	perl bin/render-template $< $@
@@ -32,7 +31,7 @@ jemplate: $(JEMPLATES)
 	perl bin/pull-jemplates
 
 clean:
-	rm -fr $(ALL_TARGETS) jemplate/* *.t.js Test
+	rm -fr $(ALL_TARGETS) jemplate/* *.t.js
 
 html:
 	mkdir html

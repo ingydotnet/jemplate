@@ -761,16 +761,16 @@ output += '\n';
 output += stash.get(['global_multiply', [ 1, 10 ]]);
 output += '\n';
 //line 5 "global-scope-access.html"
-output += stash.get(['JEMPLATE_GLOBAL', 0, 'global_foo', 0]);
+output += stash.get(['Jemplate', 0, 'GLOBAL', 0, 'global_foo', 0]);
 output += '\n';
 //line 6 "global-scope-access.html"
-output += stash.get(['JEMPLATE_GLOBAL', 0, 'global_object', 0, 'str', 0]);
+output += stash.get(['Jemplate', 0, 'GLOBAL', 0, 'global_object', 0, 'str', 0]);
 output += '\n';
 //line 7 "global-scope-access.html"
-output += stash.get(['JEMPLATE_GLOBAL', 0, 'global_object', 0, 'func_sum', [ 1, 1 ]]);
+output += stash.get(['Jemplate', 0, 'GLOBAL', 0, 'global_object', 0, 'func_sum', [ 1, 1 ]]);
 output += '\n';
 //line 8 "global-scope-access.html"
-output += stash.get(['JEMPLATE_GLOBAL', 0, 'global_multiply', [ 1, 10 ]]);
+output += stash.get(['Jemplate', 0, 'GLOBAL', 0, 'global_multiply', [ 1, 10 ]]);
 output += '\n';
 //line 9 "global-scope-access.html"
 stash.set('global_foo', 'local_foo');
@@ -779,7 +779,7 @@ output += stash.get('global_foo');
 //line 9 "global-scope-access.html"
 output += '\n';
 //line 9 "global-scope-access.html"
-output += stash.get(['JEMPLATE_GLOBAL', 0, 'global_foo', 0]);
+output += stash.get(['Jemplate', 0, 'GLOBAL', 0, 'global_foo', 0]);
 output += '\n';
     }
     catch(e) {

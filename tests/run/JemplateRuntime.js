@@ -16,8 +16,6 @@ modify it under the same terms as Perl itself.
 // Main Jemplate class
 //------------------------------------------------------------------------------
 
-this.JEMPLATE_GLOBAL = this;
-
 if (typeof Jemplate == 'undefined') {
     var Jemplate = function() {
         this.init.apply(this, arguments);
@@ -47,6 +45,7 @@ proto.config = {
     DEFAULT: null,
     ERROR: null,
     EVAL_JAVASCRIPT: false,
+    GLOBAL_ACCESS : 1,
     FILTERS: {},
     INCLUDE_PATH: [''],
     INTERPOLATE: false,
@@ -70,6 +69,7 @@ proto.defaults = {
     DEFAULT: null,
     ERROR: null,
     EVAL_JAVASCRIPT: false,
+    GLOBAL_ACCESS : 1,
     FILTERS: {},
     INCLUDE_PATH: [''],
     INTERPOLATE: false,
@@ -512,16 +512,17 @@ proto._dotop = function(root, item, args, lvalue) {
     }
 
 
-    if (atroot || root.constructor == Object.prototype.constructor || root == Jemplate.GLOBAL) {
+    if (atroot || root.constructor == Object.prototype.constructor || root == Jemplate.GLOBAL || root == Jemplate) {
         if (typeof root[item] != 'undefined' && root[item] != null && (!is_function_call || !this.hash_functions[item])) { //consider undefined == null
             if (typeof root[item] == 'function') {
                 result = root[item].apply(root,args);
             } else {
                 return root[item];
             }
-        } else if (atroot && typeof Jemplate.GLOBAL[item] != 'undefined' && !lvalue) {
-            if (typeof Jemplate.GLOBAL[item] == 'function') {
-                result = Jemplate.GLOBAL[item].apply(Jemplate.GLOBAL,args);
+        } else if (atroot && typeof Jemplate.GLOBAL[item] != 'undefined' && this.__config__.GLOBAL_ACCESS /*&& (lvalue ? this.__config__.GLOBAL_ACCESS == 2 : true)*/ ) {
+            
+            if (typeof Jemplate.GLOBAL[item] == 'function' && !(atroot && item == 'Jemplate') ) {
+                result = Jemplate.GLOBAL[item].apply(root,args);
             } else {
                 return Jemplate.GLOBAL[item];
             }
@@ -670,7 +671,7 @@ proto.string_functions.chunk = function(string, size) {
         size = 1;
     if (size < 0) {
         size = 0 - size;
-        for (i = string.length - size; i >= 0; i = i - size)
+        for (var i = string.length - size; i >= 0; i = i - size)
             list.unshift(string.substr(i, size));
         if (string.length % size)
             list.unshift(string.substr(0, string.length % size));
