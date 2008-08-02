@@ -2,7 +2,11 @@
 
 ALL_T_HTML:=$(shell ls -1 t/*.t.js | perl -pe 's/js$$/html/;s/.*\///')
 
-ALL_TARGETS=$(ALL_T_HTML) index.html JemplateRuntime.js jemplate.js jemplate2.js
+ALL_TARGETS=$(ALL_T_HTML) \
+	    index.html \
+	    js/JemplateRuntime.js \
+	    js/jemplate.js \
+	    js/jemplate2.js \
 
 JEMPLATES=t/*.t.js
 JEMPLATE=../jemplate
@@ -16,14 +20,13 @@ all: $(ALL_TARGETS)
 index.html: template/index.html $(JEMPLATES)
 	perl bin/render-template $< $@
 
-JemplateRuntime.js:
+js/JemplateRuntime.js:
 	perl -I$(LIB) $(JEMPLATE) --runtime=yui > $@
-#	perl -I$(LIB) $(JEMPLATE) --runtime > $@
 
-jemplate.js: jemplate $(JEMPLATES)
+js/jemplate.js: jemplate $(JEMPLATES)
 	perl -I$(LIB) $(JEMPLATE) --compile jemplate/* > $@
 
-jemplate2.js: jemplate2
+js/jemplate2.js: jemplate2
 	perl -I$(LIB) $(JEMPLATE) --compile jemplate2 \
 		--start-tag='<!' --end-tag='!>' --any-case --post-chomp > $@
 
