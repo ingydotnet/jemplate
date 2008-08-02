@@ -58,14 +58,14 @@ global-scope-access.html
 [% global_object.str %]
 [% global_object.func_sum(1,1) %]
 [% global_multiply(1,10) %]
-[% JEMPLATE_GLOBAL.global_foo %]
-[% JEMPLATE_GLOBAL.global_object.str %]
-[% JEMPLATE_GLOBAL.global_object.func_sum(1,1) %]
-[% JEMPLATE_GLOBAL.global_multiply(1,10) %]
+[% Jemplate.GLOBAL.global_foo %]
+[% Jemplate.GLOBAL.global_object.str %]
+[% Jemplate.GLOBAL.global_object.func_sum(1,1) %]
+[% Jemplate.GLOBAL.global_multiply(1,10) %]
 [% 
 	global_foo = 'local_foo'; #defaults to read-only access level, creates new local "global_foo"
 	global_foo;'\n';
-	JEMPLATE_GLOBAL.global_foo
+	Jemplate.GLOBAL.global_foo
  %]
 --- output
 global_foo

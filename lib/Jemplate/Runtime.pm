@@ -519,17 +519,17 @@ proto._dotop = function(root, item, args, lvalue) {
     }
 
 
-    if (atroot || root.constructor == Object.prototype.constructor || root == Jemplate.GLOBAL) {
+    if (atroot || root.constructor == Object.prototype.constructor || root == Jemplate.GLOBAL || root == Jemplate) {
         if (typeof root[item] != 'undefined' && root[item] != null && (!is_function_call || !this.hash_functions[item])) { //consider undefined == null
             if (typeof root[item] == 'function') {
                 result = root[item].apply(root,args);
             } else {
                 return root[item];
             }
-        } else if (atroot && typeof Jemplate.GLOBAL[item] != 'undefined' && this.__config__.GLOBAL_ACCESS && (lvalue ? this.__config__.GLOBAL_ACCESS == 2 : true)) {
+        } else if (atroot && typeof Jemplate.GLOBAL[item] != 'undefined' && this.__config__.GLOBAL_ACCESS /*&& (lvalue ? this.__config__.GLOBAL_ACCESS == 2 : true)*/ ) {
             
-            if (typeof Jemplate.GLOBAL[item] == 'function') {
-                result = Jemplate.GLOBAL[item].apply(Jemplate.GLOBAL,args);
+            if (typeof Jemplate.GLOBAL[item] == 'function' && !(atroot && item == 'Jemplate') ) {
+                result = Jemplate.GLOBAL[item].apply(root,args);
             } else {
                 return Jemplate.GLOBAL[item];
             }
