@@ -1,3 +1,3 @@
 [% SET a = 'aaa12aaa34aaa56' -%]
-[% a.replace('\\\d\\\d', 'bb') %]
-[% a.replace('\\\d\\\d') %]
+[% a.replace('\\\d\\\d', 'bb', 'g') %]
+[% a.replace('\\\d\\\d', '', 'g') %]

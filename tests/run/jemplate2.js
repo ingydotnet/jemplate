@@ -76,7 +76,7 @@ Jemplate.templateMap['hello'] = function(context) {
     try {
 output += 'Hello, ';
 //line 1 "hello"
-output += stash.get('name');
+output += stash.get('who');
 output += '!\n';
     }
     catch(e) {

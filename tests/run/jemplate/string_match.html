@@ -1,2 +1,2 @@
 [% SET a = 'aaa12aaa34aaa56' -%]
-[% a.match('\\\d\\\d').join(' ') %]
+[% a.match('\\\d\\\d','g').join(' ') %]

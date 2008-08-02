@@ -1949,7 +1949,7 @@ Jemplate.templateMap['string_match.html'] = function(context) {
 //line 1 "string_match.html"
 stash.set('a', 'aaa12aaa34aaa56');
 //line 2 "string_match.html"
-output += stash.get(['a', 0, 'match', [ '\\\d\\\d' ], 'join', [ ' ' ]]);
+output += stash.get(['a', 0, 'match', [ '\\\d\\\d', 'g' ], 'join', [ ' ' ]]);
 output += '\n';
     }
     catch(e) {
@@ -1992,10 +1992,10 @@ Jemplate.templateMap['string_replace.html'] = function(context) {
 //line 1 "string_replace.html"
 stash.set('a', 'aaa12aaa34aaa56');
 //line 2 "string_replace.html"
-output += stash.get(['a', 0, 'replace', [ '\\\d\\\d', 'bb' ]]);
+output += stash.get(['a', 0, 'replace', [ '\\\d\\\d', 'bb', 'g' ]]);
 output += '\n';
 //line 3 "string_replace.html"
-output += stash.get(['a', 0, 'replace', [ '\\\d\\\d' ]]);
+output += stash.get(['a', 0, 'replace', [ '\\\d\\\d', '', 'g' ]]);
 output += '\n';
     }
     catch(e) {

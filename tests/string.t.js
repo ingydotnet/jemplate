@@ -63,7 +63,7 @@ Hi
 --- jemplate
 string_match.html
 [% SET a = 'aaa12aaa34aaa56' -%]
-[% a.match('\\\d\\\d').join(' ') %]
+[% a.match('\\\d\\\d','g').join(' ') %]
 --- output
 12 34 56
 
@@ -81,8 +81,8 @@ aaa
 --- jemplate
 string_replace.html
 [% SET a = 'aaa12aaa34aaa56' -%]
-[% a.replace('\\\d\\\d', 'bb') %]
-[% a.replace('\\\d\\\d') %]
+[% a.replace('\\\d\\\d', 'bb', 'g') %]
+[% a.replace('\\\d\\\d', '', 'g') %]
 --- output
 aaabbaaabbaaabb
 aaaaaaaaa

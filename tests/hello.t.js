@@ -8,7 +8,7 @@ var j = new Jemplate();
 
 var test1 = t.state.blocks.shift();
 t.is(
-    j.process('hello', {name: 'Wally'}),
+    j.process('hello', {who: 'Wally'}),
     test1.data.output,
     test1.name
 );
@@ -20,14 +20,15 @@ t.is(
     test2.name
 );
 
-var j = new Jemplate({DEBUG_UNDEF: true});
+var j2 = new Jemplate({DEBUG_UNDEF: true});
 try {
-    j.process('hello', {namexxx: 'Bogey'});
+    j2.process('hello', {whoxxx: 'Bogey'});
+    t.fail('undefined value did not throw error');
 }
 catch(e) {
     t.is(
         String(e),
-        "undefined value found while using DEGUG_UNDEF",
+        "undefined value found while using DEBUG_UNDEF",
         "undefined value throws error"
     );
 }
