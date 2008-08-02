@@ -825,10 +825,22 @@ Jemplate.templateMap['hash_import.html'] = function(context) {
     var output = '';
 
     try {
-output += '1\n';
-output += '1\n';
-output += '2\n';
-output += '5\n';
+//line 1 "hash_import.html"
+stash.set('a', { 'a': 1, 'b': 2, 'c': 3  });
+//line 2 "hash_import.html"
+stash.get(['a', 0, 'import', [ { 'a': 2, 'b': 1, 'd': 4, 'e': 5  } ]]);
+//line 3 "hash_import.html"
+output += stash.get(['a', 0, 'exists', [ 'c' ]]) ? 1 : 0;
+output += '\n';
+//line 4 "hash_import.html"
+output += stash.get(['a', 0, 'exists', [ 'd' ]]) ? 1 : 0;
+output += '\n';
+//line 5 "hash_import.html"
+output += stash.get(['a', 0, 'a', 0]);
+output += '\n';
+//line 6 "hash_import.html"
+output += stash.get(['a', 0, 'e', 0]);
+output += '\n';
     }
     catch(e) {
         var error = context.set_error(e, output);

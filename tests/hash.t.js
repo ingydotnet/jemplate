@@ -36,15 +36,15 @@ hash_exists.html
 1
 0
 
-=== Test import method TODO
+=== Test import method
 --- jemplate
 hash_import.html
-[%# SET a = { a=1 b=2 c=3 } -%]
-[%# CALL a.import({ a=2 b=1 d=4 e=5 }) -%]
-[%# a.exists('c') ? 1 : 0 %]1
-[%# a.exists('d') ? 1 : 0 %]1
-[%# a.a %]2
-[%# a.e %]5
+[% SET a = { a=1 b=2 c=3 } -%]
+[% CALL a.import({ a=2 b=1 d=4 e=5 }) -%]
+[% a.exists('c') ? 1 : 0 %]
+[% a.exists('d') ? 1 : 0 %]
+[% a.a %]
+[% a.e %]
 --- output
 1
 1
