@@ -9,7 +9,6 @@ LIB=../../LIB
 
 all: $(ALL_TARGETS)
 	ln -fs ../Test .
-	ln -fs ../jquery*.js .
 
 %.t.html: template/test.html
 	perl bin/render-template $< $@
