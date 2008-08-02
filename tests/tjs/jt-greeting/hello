@@ -2,4 +2,4 @@
     Message is <b><! message !></b>
 <! END !>
 <!- CLEAR !>
-Hello, <! nameUniq !>!
+Hello, <! who !>!
