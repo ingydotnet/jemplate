@@ -1,8 +1,9 @@
 .PHONY: all clean purge jemplate
 
-ALL_T_HTML:=$(shell ls -1 t/*.t.js | perl -pe 's/js$$/html/;s/.*\///')
+T_JS := $(wildcard t/*t.js)
+T_HTML := $(T_JS:t/%.t.js=%.t.html)
 
-ALL_TARGETS=$(ALL_T_HTML) \
+ALL_TARGETS=$(T_HTML) \
 	    index.html \
 	    js/JemplateRuntime.js \
 	    js/jemplate.js \
