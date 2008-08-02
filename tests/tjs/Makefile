@@ -17,7 +17,7 @@ help:
 	@echo
 
 all: var $(T_HTML) var/index.html var/runtime.js var/jt.js var/jt-greeting.js
-	(cd var && ln -snf ../js . && ln -snf ../t/*.js .)
+	(cd var && ln -snf ../js . && ln -s ../t t)
 
 test-all:
 	./bin/test-run

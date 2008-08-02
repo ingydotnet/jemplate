@@ -11,7 +11,7 @@ my ($template_path, $output_path) = @ARGV;
 my $test_file_name = $output_path;
 #$test_file_name =~ s/^/..\// or die;
 $test_file_name =~ s/\.html$/.js/ or die;
-$test_file_name =~ s/^var\///;
+$test_file_name =~ s/^var\//t\//;
 
 my $t = Template->new(
     {
