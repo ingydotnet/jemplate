@@ -3,7 +3,7 @@
 
 T_JS := $(wildcard t/*t.js)
 T_HTML := $(T_JS:t/%.t.js=var/%.t.html)
-JEMPLATE := perl -I../lib ../jemplate
+JEMPLATE := perl -I../../lib ../../jemplate
 RUNTIME_JS := var/runtime.js
 
 help:
