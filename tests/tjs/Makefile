@@ -36,7 +36,7 @@ var/t:
 	(cd var && ln -s ../../t t)
 
 test-all:
-	./bin/test-run
+	../bin/test-run
 
 test: all runtime run
 
@@ -45,7 +45,7 @@ test-jquery: all runtime-jquery run
 test-yui: all runtime-yui run
 
 run:
-	(cd var && ../bin/daemon -p 8081)
+	(cd var && ../../bin/daemon -p 8081)
 
 runtime:
 	$(JEMPLATE) --runtime=standard > $(RUNTIME_JS)
@@ -63,10 +63,10 @@ var/test.html:
 	(cd var && ln -s ../../t/test.html)
 
 $(T_HTML): var/%.t.html: ../template/test.html ../t/%.t.js
-	./bin/render-template test.html $@
+	../bin/render-template test.html $@
 
 var/index.html: ../template/index.html ../t/*.t.js
-	./bin/render-template index.html $@
+	../bin/render-template index.html $@
 
 $(RUNTIME_JS):
 	$(JEMPLATE) --runtime > $(RUNTIME_JS)
@@ -78,7 +78,7 @@ var/jt-greeting.js:
 	$(JEMPLATE) --compile ../jemplate2 --start-tag='<!' --end-tag='!>' --any-case --post-chomp > $@
 
 prepare-var-jt:
-	./bin/prepare-var-jt
+	../bin/prepare-var-jt
 
 clean:
 	rm -rf var
