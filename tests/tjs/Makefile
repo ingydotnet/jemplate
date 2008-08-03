@@ -35,13 +35,13 @@ var/t:
 test-all:
 	./bin/test-run
 
-test: all runtime
-	(cd var && ../bin/daemon -p 8081)
+test: all runtime run
 
-test-jquery: all runtime-jquery
-	(cd var && ../bin/daemon -p 8081)
+test-jquery: all runtime-jquery run
 
-test-yui: all runtime-yui
+test-yui: all runtime-yui run
+
+run:
 	(cd var && ../bin/daemon -p 8081)
 
 runtime:
