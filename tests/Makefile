@@ -22,7 +22,7 @@ index.html: template/index.html $(JEMPLATES)
 	perl bin/render-template $< $@
 
 js/JemplateRuntime.js:
-	perl -I$(LIB) $(JEMPLATE) --runtime=yui > $@
+	perl -I$(LIB) $(JEMPLATE) --runtime=standard > $@
 
 js/jemplate.js: jemplate $(JEMPLATES)
 	perl -I$(LIB) $(JEMPLATE) --compile jemplate/* > $@

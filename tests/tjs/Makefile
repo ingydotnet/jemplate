@@ -32,7 +32,7 @@ test-yui: all runtime-yui
 	(cd var && ../bin/daemon -p 8081)
 
 runtime:
-	$(JEMPLATE) --runtime > $(RUNTIME_JS)
+	$(JEMPLATE) --runtime=standard > $(RUNTIME_JS)
 
 runtime-jquery:
 	$(JEMPLATE) --runtime=jquery > $(RUNTIME_JS)
