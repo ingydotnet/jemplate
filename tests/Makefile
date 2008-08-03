@@ -10,8 +10,7 @@ ALL_TARGETS=$(T_HTML) \
 	    js/jemplate2.js \
 
 JEMPLATES=t/*.t.js
-JEMPLATE=../jemplate
-LIB=../lib
+JEMPLATE := perl -I../lib ../jemplate
 
 all: $(ALL_TARGETS)
 
@@ -22,13 +21,13 @@ index.html: template/index.html $(JEMPLATES)
 	perl bin/render-template $< $@
 
 js/JemplateRuntime.js:
-	perl -I$(LIB) $(JEMPLATE) --runtime=standard > $@
+	$(JEMPLATE) --runtime=standard > $@
 
 js/jemplate.js: jemplate $(JEMPLATES)
-	perl -I$(LIB) $(JEMPLATE) --compile jemplate/* > $@
+	$(JEMPLATE) --compile jemplate/* > $@
 
 js/jemplate2.js: jemplate2
-	perl -I$(LIB) $(JEMPLATE) --compile jemplate2 \
+	$(JEMPLATE) --compile jemplate2 \
 		--start-tag='<!' --end-tag='!>' --any-case --post-chomp > $@
 
 jemplate: $(JEMPLATES)
