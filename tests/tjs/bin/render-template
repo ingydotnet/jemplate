@@ -4,14 +4,13 @@ use strict;
 use warnings;
 use Template;
 use IO::All;
-#use YAML;
+use YAML;
 
 my ($template_path, $output_path) = @ARGV;
 
 my $test_file_name = $output_path;
-#$test_file_name =~ s/^/..\// or die;
+$test_file_name =~ s/^var\//t\// or die;
 $test_file_name =~ s/\.html$/.js/ or die;
-$test_file_name =~ s/^var\//t\//;
 
 my $t = Template->new(
     {
@@ -19,20 +18,11 @@ my $t = Template->new(
     }
 );
 
-my %config = (
-    import_libs => [qw{
-      js/Test/Jemplate.js
-      runtime.js
-      jt.js
-      jt-greeting.js
-    }]
-);
-#my $config = YAML::LoadFile('../config.yaml');
+my $config = YAML::LoadFile('config.yaml');
 my $data = {
-    %config,
+    %$config,
     test_file => $test_file_name,
     all_test_files => [ map { s/^var\///; $_ } glob('var/*.t.html') ],
-#    all_test_files => [ grep { !m/plugins/ } glob('*.t.html') ]
 };
 my $result;
 
