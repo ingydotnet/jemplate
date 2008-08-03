@@ -13,6 +13,8 @@ help:
 	@echo -e "\t$(MAKE) test"
 	@echo -e "\t$(MAKE) test-jquery"
 	@echo -e "\t$(MAKE) test-yui"
+	@echo
+	@echo -e "\t$(MAKE) run"
 	@echo -e "\t$(MAKE) clean"
 	@echo
 
