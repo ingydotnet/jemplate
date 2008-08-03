@@ -20,6 +20,7 @@ help:
 
 all: \
 	var \
+	var/test.html \
 	var/js \
 	var/t \
 	$(T_HTML) \
@@ -57,7 +58,9 @@ runtime-yui:
 
 var:
 	mkdir -p var
-	rsync -aC htdocs/ var/
+
+var/test.html:
+	(cd var && ln -s ../../t/test.html)
 
 $(T_HTML): var/%.t.html: template/test.html ../t/%.t.js
 	./bin/render-template $< $@
