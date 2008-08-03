@@ -4,3 +4,4 @@ import_libs:
   - js/JemplateRuntime.js
   - js/jemplate.js
   - js/jemplate2.js
+templates: template

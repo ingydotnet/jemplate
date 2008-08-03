@@ -16,7 +16,7 @@ $test_file_name =~ s/\.html$/.js/ or die;
 
 my $t = Template->new(
     {
-        INCLUDE_PATH => ['.', 'template/'],
+        INCLUDE_PATH => [$config->{templates}],
     }
 );
 

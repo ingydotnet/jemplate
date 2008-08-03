@@ -15,10 +15,10 @@ JEMPLATE := perl -I../lib ../jemplate
 all: $(ALL_TARGETS)
 
 %.t.html: template/test.html
-	perl bin/render-template $< $@
+	perl bin/render-template test.html $@
 
 index.html: template/index.html $(JEMPLATES)
-	perl bin/render-template $< $@
+	perl bin/render-template index.html $@
 
 js/JemplateRuntime.js:
 	$(JEMPLATE) --runtime=standard > $@

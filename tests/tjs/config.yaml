@@ -4,3 +4,4 @@ import_libs:
   - runtime.js
   - jt.js
   - jt-greeting.js
+templates: ../template
