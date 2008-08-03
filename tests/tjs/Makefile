@@ -57,10 +57,10 @@ var:
 	mkdir -p var
 	rsync -aC htdocs/ var/
 
-$(T_HTML): var/%.t.html: tt/test.html ../t/%.t.js
+$(T_HTML): var/%.t.html: template/test.html ../t/%.t.js
 	./bin/render-template $< $@
 
-var/index.html: tt/index.html ../t/*.t.js
+var/index.html: template/index.html ../t/*.t.js
 	./bin/render-template $< $@
 
 $(RUNTIME_JS):
