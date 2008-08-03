@@ -1,8 +1,8 @@
 .PHONY: all prepare-var-jt var clean help
 .PHONY: test-all test test-jquery test-yui runtime runtime-jquery runtime-yui
 
-T_JS := $(wildcard t/*t.js)
-T_HTML := $(T_JS:t/%.t.js=var/%.t.html)
+T_JS := $(wildcard ../t/*t.js)
+T_HTML := $(T_JS:../t/%.t.js=var/%.t.html)
 JEMPLATE := perl -I../../lib ../../jemplate
 RUNTIME_JS := var/runtime.js
 
@@ -16,8 +16,21 @@ help:
 	@echo -e "\t$(MAKE) clean"
 	@echo
 
-all: var $(T_HTML) var/index.html var/runtime.js var/jt.js var/jt-greeting.js
-	(cd var && ln -snf ../js . && ln -s ../t t)
+all: \
+	var \
+	var/js \
+	var/t \
+	$(T_HTML) \
+	var/index.html \
+	var/runtime.js \
+	var/jt.js \
+	var/jt-greeting.js
+
+var/js:
+	(cd var && ln -s ../../js js)
+
+var/t:
+	(cd var && ln -s ../../t t)
 
 test-all:
 	./bin/test-run
@@ -42,12 +55,12 @@ runtime-yui:
 
 var:
 	mkdir -p var
-	rsync -Cav htdocs/ var/
+	rsync -aC htdocs/ var/
 
-$(T_HTML): var/%.t.html: tt/test.html t/%.t.js
+$(T_HTML): var/%.t.html: tt/test.html ../t/%.t.js
 	./bin/render-template $< $@
 
-var/index.html: tt/index.html t/*.t.js
+var/index.html: tt/index.html ../t/*.t.js
 	./bin/render-template $< $@
 
 $(RUNTIME_JS):
