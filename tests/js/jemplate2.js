@@ -74,10 +74,32 @@ Jemplate.templateMap['hello'] = function(context) {
     var output = '';
 
     try {
+
+//line 4 "hello"
+output = '';
 output += 'Hello, ';
-//line 1 "hello"
+//line 5 "hello"
 output += stash.get('who');
 output += '!\n';
+    }
+    catch(e) {
+        var error = context.set_error(e, output);
+        throw(error);
+    }
+
+    return output;
+}
+
+Jemplate.templateMap['importantMessage'] = function(context) {
+    if (! context) throw('Jemplate function called without context\n');
+    var stash = context.stash;
+    var output = '';
+
+    try {
+output += '    Message is <b>';
+//line 2 "hello"
+output += stash.get('message');
+output += '</b>\n';
     }
     catch(e) {
         var error = context.set_error(e, output);

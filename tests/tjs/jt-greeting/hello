@@ -1,5 +1,0 @@
-<! BLOCK importantMessage !>
-    Message is <b><! message !></b>
-<! END !>
-<!- CLEAR !>
-Hello, <! who !>!

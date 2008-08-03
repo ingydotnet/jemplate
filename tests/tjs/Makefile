@@ -75,7 +75,7 @@ var/jt.js: prepare-var-jt
 	$(JEMPLATE) --compile var/jt/* > $@
 
 var/jt-greeting.js:
-	$(JEMPLATE) --compile jt-greeting --start-tag='<!' --end-tag='!>' --any-case --post-chomp > $@
+	$(JEMPLATE) --compile ../jemplate2 --start-tag='<!' --end-tag='!>' --any-case --post-chomp > $@
 
 prepare-var-jt:
 	./bin/prepare-var-jt
