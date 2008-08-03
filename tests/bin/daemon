@@ -10,6 +10,7 @@ use HTTP::Status    qw[RC_FORBIDDEN];
 use LWP::MediaTypes qw[guess_media_type];
 use Path::Class     qw[];
 use Pod::Usage      qw[];
+use JSON;
 
 $SIG{'PIPE'} = 'IGNORE';
 
@@ -22,7 +23,8 @@ Getopt::Long::GetOptions(
     'm|man'    => sub { Pod::Usage::pod2usage( { -verbose => 2, -exitval => 0 } ) },
 ) or exit 1;
 
-my $base = Path::Class::File->new($0)->parent->parent->absolute;
+#my $base = Path::Class::File->new($0)->parent->parent->absolute;
+my $base = Path::Class::Dir->new; # Use the CWD
 my %args = ( LocalPort => $port, ReuseAddr => 1 );
 
 if ( defined $host ) {
@@ -37,6 +39,21 @@ print "Please contact me at: <URL:", $daemon->url, ">\n";
 while ( my $connection = $daemon->accept ) {
 
     while ( my $request = $connection->get_request ) {
+
+        if ( $request->url->path =~ /^\/ajax\b/ ) {
+            my $response = HTTP::Response->new( 200, 'OK' );
+            $response->header( 'Connection'    => 'close' );
+            $response->header( 'Cache-Control' => 'no-cache, max-age=0' );
+            my $content = encode_json { message => 'abcdefghijklmnopqrstuvwxy' };
+            $response->content( $content );
+            $response->content_length( length $content );
+            $response->content_type( "text/plain" );
+            $response->last_modified( time );
+
+            $connection->send_response( $response );
+
+            next;
+        }
 
         my $file = $request->url->path =~ m|^/share|
           ? $base->parent->file( $request->url->path )

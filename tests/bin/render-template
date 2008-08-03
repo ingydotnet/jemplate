@@ -7,9 +7,11 @@ use IO::All;
 use YAML;
 
 my ($template_path, $output_path) = @ARGV;
+my $config = YAML::LoadFile('config.yaml');
 
 my $test_file_name = $output_path;
-$test_file_name =~ s/^/t\// or die;
+($test_file_name =~ s/^var\//t\//) or
+($test_file_name =~ s/^/t\//) or die;
 $test_file_name =~ s/\.html$/.js/ or die;
 
 my $t = Template->new(
@@ -18,11 +20,14 @@ my $t = Template->new(
     }
 );
 
-my $config = YAML::LoadFile('config.yaml');
+my $all_test_files = [ glob('*.t.html') ];
+$all_test_files = [ map { s/^var\///; $_ } glob('var/*.t.html') ]
+    unless @$all_test_files;
+
 my $data = {
     %$config,
     test_file => $test_file_name,
-    all_test_files => [ glob('*.t.html') ],
+    all_test_files => $all_test_files,
 };
 my $result;
 
