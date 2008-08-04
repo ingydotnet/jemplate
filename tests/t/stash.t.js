@@ -6,7 +6,7 @@ var filters = {
     raw_context: 'raw_context'
 };
 
-t.plan(4);
+t.plan(5);
 t.filters(filters);
 t.run_is('jemplate', 'output');
 
@@ -49,7 +49,7 @@ noarg
 noarg
 arg: abc
 
-=== Global Scope Access
+=== Basic Global Scope Access
 --- raw_context
 {}
 --- jemplate
@@ -58,15 +58,10 @@ global-scope-access.html
 [% global_object.str %]
 [% global_object.func_sum(1,1) %]
 [% global_multiply(1,10) %]
-[% Jemplate.GLOBAL.global_foo %]
-[% Jemplate.GLOBAL.global_object.str %]
-[% Jemplate.GLOBAL.global_object.func_sum(1,1) %]
-[% Jemplate.GLOBAL.global_multiply(1,10) %]
-[% 
-	global_foo = 'local_foo'; #defaults to read-only access level, creates new local "global_foo"
-	global_foo;'\n';
-	Jemplate.GLOBAL.global_foo
- %]
+[% GLOBAL.global_foo %]
+[% GLOBAL.global_object.str %]
+[% GLOBAL.global_object.func_sum(1,1) %]
+[% GLOBAL.global_multiply(1,10) %]
 --- output
 global_foo
 global_object_foo
@@ -76,7 +71,37 @@ global_foo
 global_object_foo
 2
 10
+
+=== Advanced Global Scope Access
+--- raw_context
+{}
+--- jemplate
+global-scope-access2.html
+[% 
+	global_foo = 'local_foo'; #modification of existing global variable
+	global_foo;
+%]
+[% 
+	local_var = "foo"; #new variables are always local
+	GLOBAL.local_var; #empty	
+%]
+[% 
+	GLOBAL.new_global_var = "foo"; #new global vars could be created only this way
+	new_global_var; #and accessed both ways
+	GLOBAL.new_global_var;
+	new_global_var = "|foo2";
+	GLOBAL.new_global_var; 
+%]
+[% 
+	GLOBAL.global_foo = "global_foo";
+	LOCAL.global_foo = "|masked"; #masking global variable	
+	GLOBAL.global_foo;
+	global_foo; 
+%]
+--- output
 local_foo
-global_foo
+
+foofoo|foo2
+global_foo|masked
 
 */

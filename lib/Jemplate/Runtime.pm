@@ -30,7 +30,6 @@ if (typeof Jemplate == 'undefined') {
 }
 
 Jemplate.VERSION = '0.22';
-Jemplate.GLOBAL = this;
 
 Jemplate.process = function() {
     var jemplate = new Jemplate(Jemplate.prototype.config);
@@ -52,7 +51,8 @@ proto.config = {
     DEFAULT: null,
     ERROR: null,
     EVAL_JAVASCRIPT: false,
-    GLOBAL_ACCESS : 1,
+    GLOBAL : true,
+	SCOPE : this,
     FILTERS: {},
     INCLUDE_PATH: [''],
     INTERPOLATE: false,
@@ -76,8 +76,8 @@ proto.defaults = {
     DEFAULT: null,
     ERROR: null,
     EVAL_JAVASCRIPT: false,
-    GLOBAL_ACCESS : 1,
-    FILTERS: {},
+    GLOBAL : true,
+	SCOPE : this,
     INCLUDE_PATH: [''],
     INTERPOLATE: false,
     OUTPUT: null,
@@ -119,8 +119,7 @@ proto.process = function(template, data, output) {
     var context = this.config.CONTEXT || new Jemplate.Context();
     context.config = this.config;
 
-    context.stash = this.config.STASH || new Jemplate.Stash();
-    context.stash.__config__ = this.config;
+    context.stash = new Jemplate.Stash(this.config.STASH, this.config);
 
     context.__filter__ = new Jemplate.Filter();
     context.__filter__.config = this.config;
@@ -224,7 +223,8 @@ proto.plugin = function(name, args) {
         throw "Unknown plugin name ':" + name + "'";
 
     // The Context object (this) is passed as the first argument to the plugin.
-    return new Jemplate.GLOBAL[name](this, args);
+	var func = eval(name);
+    return new func(this, args);
 }
 
 proto.filter = function(text, name, args) {
@@ -378,8 +378,16 @@ proto.filters.replace = function(text, args) {
 // Jemplate.Stash class
 //------------------------------------------------------------------------------
 if (typeof Jemplate.Stash == 'undefined') {
-    Jemplate.Stash = function() {
-        this.data = {};
+    Jemplate.Stash = function(stash, config) {
+        this.__config__ = config;
+		
+		this.data = {
+			GLOBAL : this.__config__.SCOPE			
+		};
+		this.LOCAL_ANCHOR = {};
+		this.data.LOCAL = this.LOCAL_ANCHOR;
+		
+		this.update(stash);
     };
 }
 
@@ -387,7 +395,10 @@ proto = Jemplate.Stash.prototype;
 
 proto.clone = function(args) {
     var data = this.data;
-    this.data = {};
+    this.data = {
+		GLOBAL : this.__config__.SCOPE
+	};
+	this.data.LOCAL = this.LOCAL_ANCHOR;
     this.update(data);
     this.update(args);
     this.data._PARENT = data;
@@ -400,8 +411,9 @@ proto.declone = function(args) {
 proto.update = function(args) {
     if (typeof args == 'undefined') return;
     for (var key in args) {
-        var value = args[key];
-        this.set(key, value);
+        if (key != 'GLOBAL' && key != 'LOCAL') {
+	        this.set(key, args[key]);
+		}
     }
 }
 
@@ -489,24 +501,13 @@ proto.set = function(ident, value, set_default) {
     }
     
     return (typeof result != 'undefined') ? result : '';
-    
-    
-    //if (key instanceof Array) {
-    //    var data = this.get(key[0]) || {};
-    //    key = key[2];
-    //}
-    //else {
-    //    data = this.data;
-    //}
-    //if (! (set_default && (typeof data[key] != 'undefined')))
-    //    data[key] = value;
 }
 
 
 
-proto._dotop = function(root, item, args, lvalue) {
-    
-    var atroot = root == this.data;
+proto._dotop = function(root, item, args, lvalue) {    
+    if (root == this.LOCAL_ANCHOR) root = this.data;
+	var atroot = root == this.data;
     
     var value,result = undefined;
     
@@ -519,19 +520,20 @@ proto._dotop = function(root, item, args, lvalue) {
     }
 
 
-    if (atroot || root.constructor == Object.prototype.constructor || root == Jemplate.GLOBAL || root == Jemplate) {
-        if (typeof root[item] != 'undefined' && root[item] != null && (!is_function_call || !this.hash_functions[item])) { //consider undefined == null
+    if (atroot || root.constructor == Object || root == this.data.GLOBAL) {
+        
+		if (typeof root[item] != 'undefined' && root[item] != null && (!is_function_call || !this.hash_functions[item])) { //consider undefined == null
             if (typeof root[item] == 'function') {
                 result = root[item].apply(root,args);
             } else {
                 return root[item];
             }
-        } else if (atroot && typeof Jemplate.GLOBAL[item] != 'undefined' && this.__config__.GLOBAL_ACCESS /*&& (lvalue ? this.__config__.GLOBAL_ACCESS == 2 : true)*/ ) {
+        } else if (atroot && typeof this.data.GLOBAL[item] != 'undefined' && this.__config__.GLOBAL && item != 'LOCAL' ) {
             
-            if (typeof Jemplate.GLOBAL[item] == 'function' && !(atroot && item == 'Jemplate') ) {
-                result = Jemplate.GLOBAL[item].apply(root,args);
+            if (typeof this.data.GLOBAL[item] == 'function' ) {
+                result = this.data.GLOBAL[item].apply(root,args);
             } else {
-                return Jemplate.GLOBAL[item];
+                return this.data.GLOBAL[item];
             }
         } else if (lvalue) {
             return root[item] = {};
@@ -555,13 +557,15 @@ proto._dotop = function(root, item, args, lvalue) {
             for (var i = 0; i < item.length; i++) result.push(root[item[i]]);
             return result;
         }
-    } else if ( (root.constructor != Object.prototype.constructor) && (root instanceof Object) ) {
-        try {
+    } else if ( (root.constructor != Object) && (root instanceof Object) ) {
+        //this section was proposed for calling method on blessed reference in Perl
+		//not sure how well it is playing with javascript
+		try {
             result = root[item].apply(root,args);
         } catch (e) {
             var my_class = root.constructor.name;
             
-            if (false) throw "Cant locate method"; //XXX to-do?
+            if (false) throw "Cant locate method"; 
             
             if (root instanceof Array) {
                 if (this.list_functions[item]) {
@@ -613,27 +617,6 @@ proto._dotop = function(root, item, args, lvalue) {
     
     return result;
 
-
-    //if ((! args) &&
-    //    (typeof root == 'object') &&
-    //    (!(root instanceof Array) || (typeof item == 'number')) &&
-    //    (typeof root[item] != 'undefined')) {
-    //    var value = root[item];
-    //    if (typeof value == 'function')
-    //        value = value.apply(root);
-    //    return value;
-    //}
-    //
-    //if (typeof root == 'string' && this.string_functions[item])
-    //    return this.string_functions[item](root, args);
-    //if (root instanceof Array && this.list_functions[item])
-    //    return this.list_functions[item](root, args);
-    //if (typeof root == 'object' && this.hash_functions[item])
-    //    return this.hash_functions[item](root, args);
-    //if (typeof root[item] == 'function')
-    //    return root[item].apply(root, args);
-
-    //return undefined;
 }
 
 
@@ -647,15 +630,24 @@ proto._assign = function(root, item, args, value, set_default) {
         return undefined;
     }
     
-    if (atroot || (root.constructor == Object.prototype.constructor)) {
-        if (!(set_default && typeof root[item] != 'undefined')) {
-            return root[item] = value;
+    if (atroot || root.constructor == Object || root == this.data.GLOBAL) {
+		if (atroot && this.__config__.GLOBAL && typeof root[item] == 'undefined' && typeof this.data.GLOBAL[item] != 'undefined' && !set_default) { 
+            return this.data.GLOBAL[item] = value;
         }
+		
+		if (root == this.LOCAL_ANCHOR) root = this.data;
+			 
+		if (!(set_default && typeof root[item] != 'undefined')) {
+            if (atroot && item == 'GLOBAL') throw "Attempt to modify GLOBAL access modifier"
+			if (atroot && item == 'LOCAL') throw "Attempt to modify LOCAL access modifier"
+			
+			return root[item] = value;
+        } 
     } else if ((root instanceof Array) && (typeof item == 'string' && /^-?\d+$/.test(item) || typeof item == 'number' )) {
         if (!(set_default && typeof root[item] != 'undefined')) {
             return root[item] = value;
         }
-    } else if ( (root.constructor != Object.prototype.constructor) && (root instanceof Object) ) {
+    } else if ( (root.constructor != Object) && (root instanceof Object) ) {
         try {
             result = root[item].apply(root,args);
         } catch (e) {
