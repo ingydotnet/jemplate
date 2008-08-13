@@ -529,6 +529,24 @@ sub use {
 
 
 #------------------------------------------------------------------------
+# raw(\@lnameargs)                         [% RAW alias = plugin(args) %]
+#     # => [ [$file, ...], \@args, $alias ]
+#------------------------------------------------------------------------
+
+sub raw {
+    my ($class, $lnameargs) = @_;
+    my ($file, $args, $alias) = @$lnameargs;
+    $file = shift @$file;       # same production rule as INCLUDE
+    $alias ||= $file;
+    $args = &args($class, $args);
+#    $file .= ", $args" if $args;
+    $file =~ s/'|"//g;
+    return "// RAW\n"
+         . "stash.set($alias, $file);";
+}
+
+
+#------------------------------------------------------------------------
 # stubs()                                                      [% STOP %]
 #------------------------------------------------------------------------
 
@@ -576,16 +594,17 @@ sub macro {
 //MACRO
 stash.set('$ident', function () {
     var output = '';
-    var args = {};   
+    var args = {};
     var fargs = Array.prototype.slice.call(arguments);
     $args;
-    
+    args.arguments = Array.prototype.slice.call(arguments);
+
     var params = fargs.shift() || {};
-    
+
     for (var key in params) {
         args[key] = params[key];
     }
-    
+
     context.stash.clone(args);
     try {
 $block
@@ -595,7 +614,7 @@ $block
         throw(error);
     }
 
-    context.stash.declone(); 
+    context.stash.declone();
     return output;
 });
 
@@ -609,7 +628,10 @@ EOF
 
 stash.set('$ident', function () {
     var output = '';
-    var args = {};   
+    var args = {};
+    
+    var fargs = Array.prototype.slice.call(arguments);
+    args.arguments = Array.prototype.slice.call(arguments);   
     
     if (typeof arguments[0] == 'object') args = arguments[0];
     

@@ -89,6 +89,7 @@ statement:  directive
 	|   capture
 	|   macro
 	|   use       
+	|   raw
 	|   view       
 	|   rawperl
 	|   expr		    { $factory->get($_[1])                }
@@ -208,6 +209,9 @@ final:	    CATCH filename ';'
 ;
 
 use:	    USE lnameargs	    { $factory->use($_[2])                }
+;
+
+raw:	    RAW lnameargs	    { $factory->raw($_[2])                }
 ;
 
 view:	    VIEW nameargs ';'	    { $_[0]->push_defblock();		  }

@@ -521,14 +521,14 @@ proto._dotop = function(root, item, args, lvalue) {
             } else {
                 return root[item];
             }
-        } else if (atroot && typeof this.data.GLOBAL[item] != 'undefined' && this.__config__.GLOBAL && item != 'LOCAL' ) {
+        } /*else if (atroot && typeof this.data.GLOBAL[item] != 'undefined' && this.__config__.GLOBAL && item != 'LOCAL' ) {
             
             if (typeof this.data.GLOBAL[item] == 'function' ) {
                 result = this.data.GLOBAL[item].apply(root,args);
             } else {
                 return this.data.GLOBAL[item];
             }
-        } else if (lvalue) {
+        }*/ else if (lvalue) {
             return root[item] = {};
         } else if (this.hash_functions[item] && !atroot || item == 'import') {
             args.unshift(root);
@@ -624,9 +624,9 @@ proto._assign = function(root, item, args, value, set_default) {
     }
     
     if (atroot || root.constructor == Object || root == this.data.GLOBAL) {
-		if (atroot && this.__config__.GLOBAL && typeof root[item] == 'undefined' && typeof this.data.GLOBAL[item] != 'undefined' && !set_default) { 
-            return this.data.GLOBAL[item] = value;
-        }
+//		if (atroot && this.__config__.GLOBAL && typeof root[item] == 'undefined' && typeof this.data.GLOBAL[item] != 'undefined' && !set_default) { 
+//            return this.data.GLOBAL[item] = value;
+//        }
 		
 		if (root == this.LOCAL_ANCHOR) root = this.data;
 			 
@@ -654,6 +654,11 @@ proto._assign = function(root, item, args, value, set_default) {
 
 
 proto.string_functions = {};
+
+// typeof
+proto.string_functions['typeof'] = function(value) {
+    return typeof value;
+}
 
 // chunk(size)     negative size chunks from end
 proto.string_functions.chunk = function(string, size) {
@@ -740,6 +745,12 @@ proto.string_functions.split = function(string, re) {
 
 
 proto.list_functions = {};
+
+// typeof
+proto.list_functions['typeof'] = function(list) {
+    return 'array';
+};
+
 
 proto.list_functions.list = function(list) {
     return list;
@@ -870,6 +881,11 @@ proto.list_functions.last = function(list) {
 
 proto.hash_functions = {};
 
+// typeof
+proto.hash_functions['typeof'] = function(hash) {
+    return 'object';
+};
+
 
 // each            list of alternating keys/values
 proto.hash_functions.each = function(hash) {
@@ -884,8 +900,6 @@ proto.hash_functions.exists = function(hash, key) {
     return ( typeof( hash[key] ) == "undefined" ) ? 0 : 1;
 }
 
-// FIXME proto.hash_functions.import blows everything up
-//
 // import(hash2)   import contents of hash2
 // import          import into current namespace hash
 proto.hash_functions['import'] = function(hash, hash2) {    

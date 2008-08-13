@@ -24,16 +24,17 @@ __END__
 //MACRO
 stash.set('simple', function () {
     var output = '';
-    var args = {};   
+    var args = {};
     var fargs = Array.prototype.slice.call(arguments);
     args['param1'] = fargs.shift();args['param2'] = fargs.shift();
-    
+    args.arguments = Array.prototype.slice.call(arguments);
+
     var params = fargs.shift() || {};
-    
+
     for (var key in params) {
         args[key] = params[key];
     }
-    
+
     context.stash.clone(args);
     try {
 //line 1 "test_template"

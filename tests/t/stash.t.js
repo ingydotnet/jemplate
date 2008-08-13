@@ -6,7 +6,7 @@ var filters = {
     raw_context: 'raw_context'
 };
 
-t.plan(5);
+t.plan(6);
 t.filters(filters);
 t.run_is('jemplate', 'output');
 
@@ -54,23 +54,27 @@ arg: abc
 {}
 --- jemplate
 global-scope-access.html
-[% global_foo %]
-[% global_object.str %]
-[% global_object.func_sum(1,1) %]
-[% global_multiply(1,10) %]
 [% GLOBAL.global_foo %]
 [% GLOBAL.global_object.str %]
 [% GLOBAL.global_object.func_sum(1,1) %]
 [% GLOBAL.global_multiply(1,10) %]
+[% global_foo %]
+[% 1 %]
+[% global_object.str %]
+[% global_object.func_sum(1,1) %]
+[% global_multiply(1,10) %]
+[% 1 %]
 --- output
 global_foo
 global_object_foo
 2
 10
-global_foo
-global_object_foo
-2
-10
+
+1
+
+
+
+1
 
 === Advanced Global Scope Access
 --- raw_context
@@ -78,7 +82,8 @@ global_object_foo
 --- jemplate
 global-scope-access2.html
 [% 
-	global_foo = 'local_foo'; #modification of existing global variable
+	global_foo = '|local_foo'; #creates new local variable
+	GLOBAL.global_foo;
 	global_foo;
 %]
 [% 
@@ -86,10 +91,11 @@ global-scope-access2.html
 	GLOBAL.local_var; #empty	
 %]
 [% 
-	GLOBAL.new_global_var = "foo"; #new global vars could be created only this way
-	new_global_var; #and accessed both ways
+	GLOBAL.new_global_var = "|foo"; #new global vars could be created only this way
+	new_global_var; #empty
 	GLOBAL.new_global_var;
 	new_global_var = "|foo2";
+	new_global_var; #not empty
 	GLOBAL.new_global_var; 
 %]
 [% 
@@ -99,9 +105,36 @@ global-scope-access2.html
 	global_foo; 
 %]
 --- output
-local_foo
+global_foo|local_foo
 
-foofoo|foo2
+|foo|foo2|foo
 global_foo|masked
+
+=== RAW directive
+--- raw_context
+{}
+--- jemplate
+global-scope-access3.html
+[% 
+	RAW global_foo;
+	global_foo;
+	RAW global_object;
+	'\n';global_object.str;
+	'\n';global_object.func_sum(1,1);
+	RAW global_multiply;	
+	'\n';global_multiply(1,10);
+%]
+[% 
+	RAW global_object;
+	global_object.str = 'new_str';
+	'\n';global_object.str;	
+%]
+--- output
+global_foo
+global_object_foo
+2
+10
+
+new_str
 
 */
