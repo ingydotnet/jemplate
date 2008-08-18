@@ -1,13 +1,10 @@
+[% GLOBAL.global_foo %]
+[% GLOBAL.global_object.str %]
+[% GLOBAL.global_object.func_sum(1,1) %]
+[% GLOBAL.global_multiply(1,10) %]
 [% global_foo %]
+[% 1 %]
 [% global_object.str %]
 [% global_object.func_sum(1,1) %]
 [% global_multiply(1,10) %]
-[% Jemplate.GLOBAL.global_foo %]
-[% Jemplate.GLOBAL.global_object.str %]
-[% Jemplate.GLOBAL.global_object.func_sum(1,1) %]
-[% Jemplate.GLOBAL.global_multiply(1,10) %]
-[% 
-	global_foo = 'local_foo'; #defaults to read-only access level, creates new local "global_foo"
-	global_foo;'\n';
-	Jemplate.GLOBAL.global_foo
- %]
+[% 1 %]
