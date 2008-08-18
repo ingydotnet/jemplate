@@ -3,6 +3,19 @@ use inc::Module::Install;
 name            'Jemplate';
 all_from        'lib/Jemplate.pm';
 
+{
+    require ExtUtils::MakeMaker;
+    use strict;
+    no strict 'refs';
+
+    my $libscan = \&{"ExtUtils::MM_Any::libscan"};
+    *{"ExtUtils::MM_Any::libscan"} = sub {
+        return '' unless $libscan->(@_);
+        return '' if $_[1] =~ /\.sw[p-z]$/;
+        return $_[1];
+    };
+}
+
 #build_requires        'Directory::Scratch';
 
 requires        'Template' => '2.19';
