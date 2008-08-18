@@ -597,7 +597,6 @@ BEGIN {
 package Template::Constants;
 
 require Exporter;
-
 use strict;
 use warnings;
 use base 'Exporter';
@@ -605,7 +604,7 @@ use base 'Exporter';
 use vars qw( @EXPORT_OK %EXPORT_TAGS );
 use vars qw( $DEBUG_OPTIONS @STATUS @ERROR @CHOMP @DEBUG);
 
-our $VERSION = 2.74;
+our $VERSION = 2.75;
 
 
 
@@ -739,7 +738,7 @@ use strict;
 use warnings;
 use Template::Constants;
 
-our $VERSION = 2.77;
+our $VERSION = 2.78;
 
 
 
@@ -747,7 +746,8 @@ sub new {
     my $class = shift;
     my ($argnames, @args, $arg, $cfg);
 
-    {	no strict qw( refs );
+    {   no strict 'refs';
+        no warnings 'once';
         $argnames = \@{"$class\::BASEARGS"} || [ ];
     }
 
@@ -762,7 +762,7 @@ sub new {
     $cfg  = defined $_[0] && UNIVERSAL::isa($_[0], 'HASH') ? shift : { @_ };
 
     my $self = bless {
-        map { ($_ => shift @args) } @$argnames,
+        (map { ($_ => shift @args) } @$argnames),
         _ERROR  => '',
         DEBUG   => 0,
     }, $class;
@@ -796,11 +796,6 @@ sub _init {
     return $self;
 }
 
-
-sub DEBUG {
-    my $self = shift;
-    print STDERR "DEBUG: ", @_;
-}
 
 sub debug {
     my $self = shift;
@@ -847,7 +842,7 @@ use vars qw( $VERSION $DEBUG $ERROR $INSTDIR
              $LATEX_PATH $PDFLATEX_PATH $DVIPS_PATH
              $STASH $SERVICE $CONTEXT $CONSTANTS @PRELOAD );
 
-$VERSION   = 2.74;
+$VERSION   = 2.75;
 $DEBUG     = 0 unless defined $DEBUG;
 $ERROR     = '';
 $CONTEXT   = 'Template::Context';
@@ -883,9 +878,7 @@ sub load {
     my ($class, $module) = @_;
     $module =~ s[::][/]g;
     $module .= '.pm';
-    eval {
-	require $module;
-    };
+    eval { require $module; };
     return $@ ? $class->error("failed to load $module: $@") : 1;
 }
 
@@ -894,11 +887,11 @@ sub load {
 sub parser {
     my $class  = shift;
     my $params = defined($_[0]) && UNIVERSAL::isa($_[0], 'HASH')
-	       ? shift : { @_ };
+               ? shift : { @_ };
 
     return undef unless $class->load($PARSER);
     return $PARSER->new($params) 
-	|| $class->error("failed to create parser: ", $PARSER->error);
+        || $class->error("failed to create parser: ", $PARSER->error);
 }
 
 
@@ -906,7 +899,7 @@ sub parser {
 sub provider {
     my $class  = shift;
     my $params = defined($_[0]) && UNIVERSAL::isa($_[0], 'HASH') 
-	       ? shift : { @_ };
+               ? shift : { @_ };
 
     return undef unless $class->load($PROVIDER);
     return $PROVIDER->new($params) 
@@ -919,12 +912,12 @@ sub provider {
 sub plugins {
     my $class  = shift;
     my $params = defined($_[0]) && UNIVERSAL::isa($_[0], 'HASH') 
-	       ? shift : { @_ };
+               ? shift : { @_ };
 
     return undef unless $class->load($PLUGINS);
     return $PLUGINS->new($params)
-	|| $class->error("failed to create plugin provider: ",
-			 $PLUGINS->error);
+        || $class->error("failed to create plugin provider: ",
+                         $PLUGINS->error);
 }
 
 
@@ -932,12 +925,12 @@ sub plugins {
 sub filters {
     my $class  = shift;
     my $params = defined($_[0]) && UNIVERSAL::isa($_[0], 'HASH') 
-	       ? shift : { @_ };
+               ? shift : { @_ };
 
     return undef unless $class->load($FILTERS);
     return $FILTERS->new($params)
-	|| $class->error("failed to create filter provider: ",
-			 $FILTERS->error);
+        || $class->error("failed to create filter provider: ",
+                         $FILTERS->error);
 }
 
 
@@ -948,7 +941,7 @@ sub iterator {
 
     return undef unless $class->load($ITERATOR);
     return $ITERATOR->new($list, @_)
-	|| $class->error("failed to create iterator: ", $ITERATOR->error);
+        || $class->error("failed to create iterator: ", $ITERATOR->error);
 }
 
 
@@ -956,11 +949,11 @@ sub iterator {
 sub stash {
     my $class  = shift;
     my $params = defined($_[0]) && UNIVERSAL::isa($_[0], 'HASH') 
-	       ? shift : { @_ };
+               ? shift : { @_ };
 
     return undef unless $class->load($STASH);
     return $STASH->new($params) 
-	|| $class->error("failed to create stash: ", $STASH->error);
+        || $class->error("failed to create stash: ", $STASH->error);
 }
 
 
@@ -968,11 +961,11 @@ sub stash {
 sub context {
     my $class  = shift;
     my $params = defined($_[0]) && UNIVERSAL::isa($_[0], 'HASH') 
-	       ? shift : { @_ };
+               ? shift : { @_ };
 
     return undef unless $class->load($CONTEXT);
     return $CONTEXT->new($params) 
-	|| $class->error("failed to create context: ", $CONTEXT->error);
+        || $class->error("failed to create context: ", $CONTEXT->error);
 }
 
 
@@ -980,11 +973,11 @@ sub context {
 sub service {
     my $class  = shift;
     my $params = defined($_[0]) && UNIVERSAL::isa($_[0], 'HASH') 
-	       ? shift : { @_ };
+               ? shift : { @_ };
 
     return undef unless $class->load($SERVICE);
     return $SERVICE->new($params) 
-	|| $class->error("failed to create context: ", $SERVICE->error);
+        || $class->error("failed to create context: ", $SERVICE->error);
 }
 
 
@@ -992,12 +985,12 @@ sub service {
 sub constants {
     my $class  = shift;
     my $params = defined($_[0]) && UNIVERSAL::isa($_[0], 'HASH') 
-	       ? shift : { @_ };
+               ? shift : { @_ };
 
     return undef unless $class->load($CONSTANTS);
     return $CONSTANTS->new($params) 
-	|| $class->error("failed to create constants namespace: ", 
-			 $CONSTANTS->error);
+        || $class->error("failed to create constants namespace: ", 
+                         $CONSTANTS->error);
 }
 
 
@@ -1005,7 +998,7 @@ sub constants {
 sub instdir {
     my ($class, $dir) = @_;
     my $inst = $INSTDIR 
-	|| return $class->error("no installation directory");
+        || return $class->error("no installation directory");
     $inst =~ s[/$][]g;
     $inst .= "/$dir" if $dir;
     return $inst;
@@ -1143,7 +1136,7 @@ sub process {
 
     die $context->catch($@)
         if $@;
-	
+        
     return $output;
 }
 
@@ -1170,9 +1163,9 @@ sub _dump {
     $output .= "BLOCK: $self->{ _BLOCK }\nDEFBLOCKS:\n";
 
     if ($dblks = $self->{ _DEFBLOCKS }) {
-	foreach my $b (keys %$dblks) {
-	    $output .= "    $b: $dblks->{ $b }\n";
-	}
+        foreach my $b (keys %$dblks) {
+            $output .= "    $b: $dblks->{ $b }\n";
+        }
     }
 
     return $output;
@@ -1224,7 +1217,7 @@ sub write_perl_file {
     my ($fh, $tmpfile);
     
     return $class->error("invalid filename: $file")
-	unless $file =~ /^(.+)$/s;
+        unless $file =~ /^(.+)$/s;
 
     eval {
         require File::Temp;
@@ -1273,7 +1266,7 @@ use constant INFO  => 1;
 use constant TEXT  => 2;
 use overload q|""| => "as_string", fallback => 1;
 
-our $VERSION = 2.69;
+our $VERSION = 2.70;
 
 
 
@@ -1390,6 +1383,7 @@ sub process {
     # localise the variable stash with any parameters passed
     # and set the 'template' variable
     $params ||= { };
+    # TODO: change this to C<||=> so we can use a template parameter
     $params->{ template } = $template 
         unless ref $template eq 'CODE';
     $context->localise($params);
@@ -1602,7 +1596,7 @@ use constant LOAD   => 3;   # mtime of template
 use constant NEXT   => 4;   # link to next item in cache linked list
 use constant STAT   => 5;   # Time last stat()ed
 
-our $VERSION = 2.93;
+our $VERSION = 2.94;
 our $DEBUG   = 0 unless defined $DEBUG;
 our $ERROR   = '';
 
@@ -1711,7 +1705,7 @@ sub load {
               || return ($self->error(), Template::Constants::STATUS_ERROR);
 
           foreach my $dir (@$paths) {
-              $path = "$dir/$name";
+              $path = File::Spec->catfile($dir, $name);
               last INCPATH
                   if $self->_template_modified($path);
           }
@@ -1768,7 +1762,7 @@ sub paths {
             unshift(@ipaths, @$dpaths);
             next;
         }
-        elsif (UNIVERSAL::can($dir, 'paths')) {
+        elsif (ref($dir) && UNIVERSAL::can($dir, 'paths')) {
             $dpaths = $dir->paths()
                 || return $self->error($dir->error());
             unshift(@ipaths, @$dpaths);
@@ -1852,8 +1846,8 @@ sub _init {
             my $wdir = $dir;
             $wdir =~ s[:][]g if $^O eq 'MSWin32';
             $wdir =~ /(.*)/;  # untaint
-            $wdir = $1;
-            $wdir = File::Spec->catfile($cdir, $1);
+            $wdir = "$1";     # quotes work around bug in Strawberry Perl
+            $wdir = File::Spec->catfile($cdir, $wdir);
             File::Path::mkpath($wdir) unless -d $wdir;
         }
     }
@@ -1927,19 +1921,26 @@ sub _fetch {
         warn($self->error(), "\n");
     }
 
-    # Now fetch template from source, compile, and cache.
+    # load template from source
     my ($template, $error) = $self->_load($name, $t_name);
-    unless ($error) {
-        ($template, $error) = $self->_compile($template, $self->_compiled_filename($name) );
 
-        # Store compiled template and return it
-        return $self->store( $name, $template->{data} ) unless $error;
+    if ($error) {
+        # Template could not be fetched.  Add to the negative/notfound cache.
+        $self->{ NOTFOUND }->{ $name } = time;
+        return ( $template, $error );
     }
 
-    # Template could not be fetched.  Add to the negative/notfound cache.
-    $self->{ NOTFOUND }->{ $name } = time;
+    # compile template source
+    ($template, $error) = $self->_compile($template, $self->_compiled_filename($name) );
 
-    return ( $template, $error );
+    if ($error) {
+        # return any compile time error
+        return ($template, $error);
+    }
+    else {
+        # Store compiled template and return it
+        return $self->store($name, $template->{data}) ;
+    }
 }
 
 
@@ -2334,6 +2335,7 @@ sub _template_content {
     local *FH;
     if (open(FH, "< $path")) {
         local $/;
+        binmode(FH);
         $data = <FH>;
         $mod_date = (stat($path))[9];
         close(FH);
@@ -2428,6 +2430,7 @@ sub _dump_cache {
 sub _decode_unicode {
     my $self   = shift;
     my $string = shift;
+    return undef unless defined $string;
 
     use bytes;
     require Encode;
@@ -2480,7 +2483,7 @@ use Template::Service;
 use File::Basename;
 use File::Path;
 
-our $VERSION = '2.19';
+our $VERSION = '2.20';
 our $ERROR   = '';
 our $DEBUG   = 0;
 our $BINMODE = 0 unless defined $BINMODE;
@@ -2510,7 +2513,7 @@ sub process {
         unless (ref $outstream) {
             my $outpath = $self->{ OUTPUT_PATH };
             $outstream = "$outpath/$outstream" if $outpath;
-        }	
+        }   
 
         # send processed template to output stream, checking for error
         return ($self->error($error))
@@ -8648,17 +8651,6 @@ sub
 1;
 
 
-
-
-
-
-
-
-
-
-
-
-
 }
 #
 # Inline include of Template/Directive.pm
@@ -8709,14 +8701,14 @@ sub {
     my \$context = shift || die "template sub called without context\\n";
     my \$stash   = \$context->stash;
     my \$output  = '';
-    my \$error;
+    my \$_tt_error;
     
     eval { BLOCK: {
 $block
     } };
     if (\$@) {
-        \$error = \$context->catch(\$@, \\\$output);
-        die \$error unless \$error->type eq 'return';
+        \$_tt_error = \$context->catch(\$@, \\\$output);
+        die \$_tt_error unless \$_tt_error->type eq 'return';
     }
 
     return \$output;
@@ -8734,14 +8726,14 @@ sub anon_block {
 
 $OUTPUT do {
     my \$output  = '';
-    my \$error;
+    my \$_tt_error;
     
     eval { BLOCK: {
 $block
     } };
     if (\$@) {
-        \$error = \$context->catch(\$@, \\\$output);
-        die \$error unless \$error->type eq 'return';
+        \$_tt_error = \$context->catch(\$@, \\\$output);
+        die \$_tt_error unless \$_tt_error->type eq 'return';
     }
 
     \$output;
@@ -8793,13 +8785,13 @@ sub ident {
     # does the first element of the identifier have a NAMESPACE
     # handler defined?
     if (ref $class && @$ident > 2 && ($ns = $class->{ NAMESPACE })) {
-	my $key = $ident->[0];
-	$key =~ s/^'(.+)'$/$1/s;
-	if ($ns = $ns->{ $key }) {
-	    return $ns->ident($ident);
-	}
+        my $key = $ident->[0];
+        $key =~ s/^'(.+)'$/$1/s;
+        if ($ns = $ns->{ $key }) {
+            return $ns->ident($ident);
+        }
     }
-	
+        
     if (scalar @$ident <= 2 && ! $ident->[1]) {
         $ident = $ident->[0];
     }
@@ -8965,14 +8957,14 @@ sub foreach {
 
     my ($loop_save, $loop_set, $loop_restore, $setiter);
     if ($target) {
-        $loop_save    = 'eval { $oldloop = ' . &ident($class, ["'loop'"]) . ' }';
-        $loop_set     = "\$stash->{'$target'} = \$value";
-        $loop_restore = "\$stash->set('loop', \$oldloop)";
+        $loop_save    = 'eval { $_tt_oldloop = ' . &ident($class, ["'loop'"]) . ' }';
+        $loop_set     = "\$stash->{'$target'} = \$_tt_value";
+        $loop_restore = "\$stash->set('loop', \$_tt_oldloop)";
     }
     else {
         $loop_save    = '$stash = $context->localise()';
-        $loop_set     = "\$stash->get(['import', [\$value]]) "
-                        . "if ref \$value eq 'HASH'";
+        $loop_set     = "\$stash->get(['import', [\$_tt_value]]) "
+                        . "if ref \$_tt_value eq 'HASH'";
         $loop_restore = '$stash = $context->delocalise()';
     }
     $block = pad($block, 3) if $PRETTY;
@@ -8980,28 +8972,28 @@ sub foreach {
     return <<EOF;
 
 do {
-    my (\$value, \$error, \$oldloop);
-    my \$list = $list;
+    my (\$_tt_value, \$_tt_error, \$_tt_oldloop);
+    my \$_tt_list = $list;
     
-    unless (UNIVERSAL::isa(\$list, 'Template::Iterator')) {
-        \$list = Template::Config->iterator(\$list)
+    unless (UNIVERSAL::isa(\$_tt_list, 'Template::Iterator')) {
+        \$_tt_list = Template::Config->iterator(\$_tt_list)
             || die \$Template::Config::ERROR, "\\n"; 
     }
 
-    (\$value, \$error) = \$list->get_first();
+    (\$_tt_value, \$_tt_error) = \$_tt_list->get_first();
     $loop_save;
-    \$stash->set('loop', \$list);
+    \$stash->set('loop', \$_tt_list);
     eval {
-LOOP:   while (! \$error) {
+LOOP:   while (! \$_tt_error) {
             $loop_set;
 $block;
-            (\$value, \$error) = \$list->get_next();
+            (\$_tt_value, \$_tt_error) = \$_tt_list->get_next();
         }
     };
     $loop_restore;
     die \$@ if \$@;
-    \$error = 0 if \$error && \$error eq Template::Constants::STATUS_DONE;
-    die \$error if \$error;
+    \$_tt_error = 0 if \$_tt_error && \$_tt_error eq Template::Constants::STATUS_DONE;
+    die \$_tt_error if \$_tt_error;
 };
 EOF
 }
@@ -9009,7 +9001,7 @@ EOF
 
 sub next {
     return <<EOF;
-(\$value, \$error) = \$list->get_next();
+(\$_tt_value, \$_tt_error) = \$_tt_list->get_next();
 next LOOP;
 EOF
 }
@@ -9073,13 +9065,13 @@ sub while {
     return <<EOF;
 
 do {
-    my \$failsafe = $WHILE_MAX;
+    my \$_tt_failsafe = $WHILE_MAX;
 LOOP:
-    while (--\$failsafe && ($expr)) {
+    while (--\$_tt_failsafe && ($expr)) {
 $block
     }
     die "WHILE loop terminated (> $WHILE_MAX iterations)\\n"
-        unless \$failsafe;
+        unless \$_tt_failsafe;
 };
 EOF
 }
@@ -9099,9 +9091,9 @@ sub switch {
         $block = $case->[1];
         $block = pad($block, 1) if $PRETTY;
         $caseblock .= <<EOF;
-\$match = $match;
-\$match = [ \$match ] unless ref \$match eq 'ARRAY';
-if (grep(/^\$result\$/, \@\$match)) {
+\$_tt_match = $match;
+\$_tt_match = [ \$_tt_match ] unless ref \$_tt_match eq 'ARRAY';
+if (grep(/^\\Q\$_tt_result\\E\$/, \@\$_tt_match)) {
 $block
     last SWITCH;
 }
@@ -9115,8 +9107,8 @@ EOF
 return <<EOF;
 
 do {
-    my \$result = $expr;
-    my \$match;
+    my \$_tt_result = $expr;
+    my \$_tt_match;
     SWITCH: {
 $caseblock
     }
@@ -9136,7 +9128,7 @@ sub try {
     $block = pad($block, 2) if $PRETTY;
     $final = pop @catch;
     $final = "# FINAL\n" . ($final ? "$final\n" : '')
-           . 'die $error if $error;' . "\n" . '$output;';
+           . 'die $_tt_error if $_tt_error;' . "\n" . '$output;';
     $final = pad($final, 1) if $PRETTY;
 
     $n = 0;
@@ -9149,14 +9141,14 @@ sub try {
         $mblock = pad($mblock, 1) if $PRETTY;
         push(@$handlers, "'$match'");
         $catchblock .= $n++ 
-            ? "elsif (\$handler eq '$match') {\n$mblock\n}\n" 
-               : "if (\$handler eq '$match') {\n$mblock\n}\n";
+            ? "elsif (\$_tt_handler eq '$match') {\n$mblock\n}\n" 
+               : "if (\$_tt_handler eq '$match') {\n$mblock\n}\n";
     }
-    $catchblock .= "\$error = 0;";
+    $catchblock .= "\$_tt_error = 0;";
     $catchblock = pad($catchblock, 3) if $PRETTY;
     if ($default) {
         $default = pad($default, 1) if $PRETTY;
-        $default = "else {\n    # DEFAULT\n$default\n    \$error = '';\n}";
+        $default = "else {\n    # DEFAULT\n$default\n    \$_tt_error = '';\n}";
     }
     else {
         $default = '# NO DEFAULT';
@@ -9168,16 +9160,16 @@ return <<EOF;
 
 $OUTPUT do {
     my \$output = '';
-    my (\$error, \$handler);
+    my (\$_tt_error, \$_tt_handler);
     eval {
 $block
     };
     if (\$@) {
-        \$error = \$context->catch(\$@, \\\$output);
-        die \$error if \$error->type =~ /^return|stop\$/;
-        \$stash->set('error', \$error);
-        \$stash->set('e', \$error);
-        if (defined (\$handler = \$error->select_handler($handlers))) {
+        \$_tt_error = \$context->catch(\$@, \\\$output);
+        die \$_tt_error if \$_tt_error->type =~ /^return|stop\$/;
+        \$stash->set('error', \$_tt_error);
+        \$stash->set('e', \$_tt_error);
+        if (defined (\$_tt_handler = \$_tt_error->select_handler($handlers))) {
 $catchblock
         }
 $default
@@ -9274,15 +9266,15 @@ sub view {
     return <<EOF;
 do {
     my \$output = '';
-    my \$oldv = \$stash->get('view');
-    my \$view = \$context->view($hash);
-    \$stash->set($name, \$view);
-    \$stash->set('view', \$view);
+    my \$_tt_oldv = \$stash->get('view');
+    my \$_tt_view = \$context->view($hash);
+    \$stash->set($name, \$_tt_view);
+    \$stash->set('view', \$_tt_view);
 
 $block
 
-    \$stash->set('view', \$oldv);
-    \$view->seal();
+    \$stash->set('view', \$_tt_oldv);
+    \$_tt_view->seal();
 };
 EOF
 }
@@ -9306,14 +9298,14 @@ $block
     local(\$Template::Perl::context) = \$context;
     local(\$Template::Perl::stash)   = \$stash;
 
-    my \$result = '';
-    tie *Template::Perl::PERLOUT, 'Template::TieString', \\\$result;
-    my \$save_stdout = select *Template::Perl::PERLOUT;
+    my \$_tt_result = '';
+    tie *Template::Perl::PERLOUT, 'Template::TieString', \\\$_tt_result;
+    my \$_tt_save_stdout = select *Template::Perl::PERLOUT;
 
     eval \$output;
-    select \$save_stdout;
+    select \$_tt_save_stdout;
     \$context->throw(\$@) if \$@;
-    \$result;
+    \$_tt_result;
 };
 EOF
 }
@@ -9358,12 +9350,12 @@ sub filter {
 
 $OUTPUT do {
     my \$output = '';
-    my \$filter = \$context->filter($name)
+    my \$_tt_filter = \$context->filter($name)
               || \$context->throw(\$context->error);
 
 $block
     
-    &\$filter(\$output);
+    &\$_tt_filter(\$output);
 };
 EOF
 }
@@ -9404,20 +9396,20 @@ sub macro {
         my $nargs = scalar @$args;
         $args = join(', ', map { "'$_'" } @$args);
         $args = $nargs > 1 
-            ? "\@args{ $args } = splice(\@_, 0, $nargs)"
-            : "\$args{ $args } = shift";
+            ? "\@_tt_args{ $args } = splice(\@_, 0, $nargs)"
+            : "\$_tt_args{ $args } = shift";
 
         return <<EOF;
 
 \$stash->set('$ident', sub {
     my \$output = '';
-    my (%args, \$params);
+    my (%_tt_args, \$_tt_params);
     $args;
-    \$params = shift;
-    \$params = { } unless ref(\$params) eq 'HASH';
-    \$params = { \%args, %\$params };
+    \$_tt_params = shift;
+    \$_tt_params = { } unless ref(\$_tt_params) eq 'HASH';
+    \$_tt_params = { \%_tt_args, %\$_tt_params };
 
-    my \$stash = \$context->localise(\$params);
+    my \$stash = \$context->localise(\$_tt_params);
     eval {
 $block
     };
@@ -9432,10 +9424,10 @@ EOF
         return <<EOF;
 
 \$stash->set('$ident', sub {
-    my \$params = \$_[0] if ref(\$_[0]) eq 'HASH';
+    my \$_tt_params = \$_[0] if ref(\$_[0]) eq 'HASH';
     my \$output = '';
 
-    my \$stash = \$context->localise(\$params);
+    my \$stash = \$context->localise(\$_tt_params);
     eval {
 $block
     };
@@ -9515,9 +9507,9 @@ our $DEFAULT_STYLE = {
 };
 
 our $QUOTED_ESCAPES = {
-	n => "\n",
-	r => "\r",
-	t => "\t",
+        n => "\n",
+        r => "\r",
+        t => "\t",
 };
 
 our $CHOMP_FLAGS  = qr/[-=~+]/;
@@ -9544,7 +9536,7 @@ sub new {
         FILE_INFO   => 1,
         GRAMMAR     => undef,
         _ERROR      => '',
-        FACTORY     => 'Template::Directive',
+        FACTORY     => $config->{ FACTORY } || 'Template::Directive',
     }, $class;
 
     # update self with any relevant keys in config
@@ -9590,7 +9582,7 @@ sub new {
     
     $self->new_style($config)
         || return $class->error($self->error());
-	
+        
     return $self;
 }
 
@@ -9638,7 +9630,7 @@ sub parse {
     my ($tokens, $block);
 
     $info->{ DEBUG } = $self->{ DEBUG_DIRS }
-	unless defined $info->{ DEBUG };
+        unless defined $info->{ DEBUG };
 
 
     # store for blocks defined in the template (see define_block())
@@ -9650,7 +9642,7 @@ sub parse {
 
     # split file into TEXT/DIRECTIVE chunks
     $tokens = $self->split_text($text)
-        || return undef;				    ## RETURN ##
+        || return undef;                                    ## RETURN ##
 
     push(@{ $self->{ FILEINFO } }, $info);
 
@@ -9659,7 +9651,7 @@ sub parse {
 
     pop(@{ $self->{ FILEINFO } });
 
-    return undef unless $block;				    ## RETURN ##
+    return undef unless $block;                             ## RETURN ##
 
     $self->debug("compiled main template document block:\n$block")
         if $self->{ DEBUG } & Template::Constants::DEBUG_PARSER;
@@ -9680,12 +9672,13 @@ sub split_text {
     my $style = $self->{ STYLE }->[-1];
     my ($start, $end, $prechomp, $postchomp, $interp ) = 
         @$style{ qw( START_TAG END_TAG PRE_CHOMP POST_CHOMP INTERPOLATE ) };
+    my $tags_dir = $self->{ANYCASE} ? qr<TAGS>i : qr<TAGS>;
 
     my @tokens = ();
     my $line = 1;
 
-    return \@tokens					    ## RETURN ##
-	unless defined $text && length $text;
+    return \@tokens                                         ## RETURN ##
+        unless defined $text && length $text;
 
     # extract all directives from the text
     while ($text =~ s/
@@ -9761,7 +9754,7 @@ sub split_text {
         # and now the directive, along with line number information
         if (length $dir) {
             # the TAGS directive is a compile-time switch
-            if ($dir =~ /^TAGS\s+(.*)/i) {
+            if ($dir =~ /^$tags_dir\s+(.*)/) {
                 my @tags = split(/\s+/, $1);
                 if (scalar @tags > 1) {
                     ($start, $end) = map { quotemeta($_) } @tags;
@@ -9796,7 +9789,7 @@ sub split_text {
          : ( 'TEXT', $text) )
         if length $text;
         
-    return \@tokens;					    ## RETURN ##
+    return \@tokens;                                        ## RETURN ##
 }
     
 
@@ -9812,32 +9805,32 @@ sub interpolate_text {
            /
            ( (?: \\. | [^\$] ){1,3000} ) # escaped or non-'$' character [$1]
            |
-	   ( \$ (?:		    # embedded variable	           [$2]
-	     (?: \{ ([^\}]*) \} )   # ${ ... }                     [$3]
-	     |
-	     ([\w\.]+)		    # $word                        [$4]
-	     )
-	   )
-	/gx) {
+           ( \$ (?:                 # embedded variable            [$2]
+             (?: \{ ([^\}]*) \} )   # ${ ... }                     [$3]
+             |
+             ([\w\.]+)              # $word                        [$4]
+             )
+           )
+        /gx) {
 
-	($pre, $var, $dir) = ($1, $3 || $4, $2);
+        ($pre, $var, $dir) = ($1, $3 || $4, $2);
 
-	# preceding text
-	if (defined($pre) && length($pre)) {
-	    $line += $pre =~ tr/\n//;
-	    $pre =~ s/\\\$/\$/g;
-	    push(@tokens, 'TEXT', $pre);
-	}
-	# $variable reference
+        # preceding text
+        if (defined($pre) && length($pre)) {
+            $line += $pre =~ tr/\n//;
+            $pre =~ s/\\\$/\$/g;
+            push(@tokens, 'TEXT', $pre);
+        }
+        # $variable reference
         if ($var) {
-	    $line += $dir =~ tr/\n/ /;
-	    push(@tokens, [ $dir, $line, $self->tokenise_directive($var) ]);
-	}
-	# other '$' reference - treated as text
-	elsif ($dir) {
-	    $line += $dir =~ tr/\n//;
-	    push(@tokens, 'TEXT', $dir);
-	}
+            $line += $dir =~ tr/\n/ /;
+            push(@tokens, [ $dir, $line, $self->tokenise_directive($var) ]);
+        }
+        # other '$' reference - treated as text
+        elsif ($dir) {
+            $line += $dir =~ tr/\n//;
+            push(@tokens, 'TEXT', $dir);
+        }
     }
 
     return \@tokens;
@@ -9855,108 +9848,108 @@ sub tokenise_directive {
     my @tokens = ( );
 
     while ($text =~ 
-	    / 
-		# strip out any comments
-	        (\#[^\n]*)
-	   |
-		# a quoted phrase matches in $3
-		(["'])                   # $2 - opening quote, ' or "
-		(                        # $3 - quoted text buffer
-		    (?:                  # repeat group (no backreference)
-			\\\\             # an escaped backslash \\
-		    |                    # ...or...
-			\\\2             # an escaped quote \" or \' (match $1)
-		    |                    # ...or...
-			.                # any other character
-		    |	\n
-		    )*?                  # non-greedy repeat
-		)                        # end of $3
-		\2                       # match opening quote
-	    |
-		# an unquoted number matches in $4
-		(-?\d+(?:\.\d+)?)       # numbers
-	    |
-		# filename matches in $5
-	    	( \/?\w+(?:(?:\/|::?)\w*)+ | \/\w+)
-	    |
-		# an identifier matches in $6
-		(\w+)                    # variable identifier
-	    |   
-		# an unquoted word or symbol matches in $7
-		(   [(){}\[\]:;,\/\\]    # misc parenthesis and symbols
-		|   [+\-*]               # math operations
-		|   \$\{?                # dollar with option left brace
-		|   =>			 # like '='
-		|   [=!<>]?= | [!<>]     # eqality tests
-		|   &&? | \|\|?          # boolean ops
-		|   \.\.?                # n..n sequence
- 		|   \S+                  # something unquoted
-		)                        # end of $7
-	    /gmxo) {
+            / 
+                # strip out any comments
+                (\#[^\n]*)
+           |
+                # a quoted phrase matches in $3
+                (["'])                   # $2 - opening quote, ' or "
+                (                        # $3 - quoted text buffer
+                    (?:                  # repeat group (no backreference)
+                        \\\\             # an escaped backslash \\
+                    |                    # ...or...
+                        \\\2             # an escaped quote \" or \' (match $1)
+                    |                    # ...or...
+                        .                # any other character
+                    |   \n
+                    )*?                  # non-greedy repeat
+                )                        # end of $3
+                \2                       # match opening quote
+            |
+                # an unquoted number matches in $4
+                (-?\d+(?:\.\d+)?)       # numbers
+            |
+                # filename matches in $5
+                ( \/?\w+(?:(?:\/|::?)\w*)+ | \/\w+)
+            |
+                # an identifier matches in $6
+                (\w+)                    # variable identifier
+            |   
+                # an unquoted word or symbol matches in $7
+                (   [(){}\[\]:;,\/\\]    # misc parenthesis and symbols
+                |   [+\-*]               # math operations
+                |   \$\{?                # dollar with option left brace
+                |   =>                   # like '='
+                |   [=!<>]?= | [!<>]     # eqality tests
+                |   &&? | \|\|?          # boolean ops
+                |   \.\.?                # n..n sequence
+                |   \S+                  # something unquoted
+                )                        # end of $7
+            /gmxo) {
 
-	# ignore comments to EOL
-	next if $1;
+        # ignore comments to EOL
+        next if $1;
 
-	# quoted string
-	if (defined ($token = $3)) {
+        # quoted string
+        if (defined ($token = $3)) {
             # double-quoted string may include $variable references
-	    if ($2 eq '"') {
-	        if ($token =~ /[\$\\]/) {
-		    $type = 'QUOTED';
-		    # unescape " and \ but leave \$ escaped so that 
-			# interpolate_text() doesn't incorrectly treat it
-		    # as a variable reference
-			for ($token) {
-				s/\\([^\$nrt])/$1/g;
-				s/\\([nrt])/$QUOTED_ESCAPES->{ $1 }/ge;
-			}
-		    push(@tokens, ('"') x 2,
-				  @{ $self->interpolate_text($token) },
-				  ('"') x 2);
-		    next;
-		}
+            if ($2 eq '"') {
+                if ($token =~ /[\$\\]/) {
+                    $type = 'QUOTED';
+                    # unescape " and \ but leave \$ escaped so that 
+                        # interpolate_text() doesn't incorrectly treat it
+                    # as a variable reference
+                        for ($token) {
+                                s/\\([^\$nrt])/$1/g;
+                                s/\\([nrt])/$QUOTED_ESCAPES->{ $1 }/ge;
+                        }
+                    push(@tokens, ('"') x 2,
+                                  @{ $self->interpolate_text($token) },
+                                  ('"') x 2);
+                    next;
+                }
                 else {
-	            $type = 'LITERAL';
-		    $token =~ s['][\\']g;
-		    $token = "'$token'";
-		}
-	    } 
-	    else {
-		$type = 'LITERAL';
-		$token = "'$token'";
-	    }
-	}
-	# number
-	elsif (defined ($token = $4)) {
-	    $type = 'NUMBER';
-	}
-	elsif (defined($token = $5)) {
-	    $type = 'FILENAME';
-	}
-	elsif (defined($token = $6)) {
-	    # reserved words may be in lower case unless case sensitive
-	    $uctoken = $anycase ? uc $token : $token;
-	    if (defined ($type = $lextable->{ $uctoken })) {
-		$token = $uctoken;
-	    }
-	    else {
-		$type = 'IDENT';
-	    }
-	}
-	elsif (defined ($token = $7)) {
-	    # reserved words may be in lower case unless case sensitive
-	    $uctoken = $anycase ? uc $token : $token;
-	    unless (defined ($type = $lextable->{ $uctoken })) {
-		$type = 'UNQUOTED';
-	    }
-	}
+                    $type = 'LITERAL';
+                    $token =~ s['][\\']g;
+                    $token = "'$token'";
+                }
+            } 
+            else {
+                $type = 'LITERAL';
+                $token = "'$token'";
+            }
+        }
+        # number
+        elsif (defined ($token = $4)) {
+            $type = 'NUMBER';
+        }
+        elsif (defined($token = $5)) {
+            $type = 'FILENAME';
+        }
+        elsif (defined($token = $6)) {
+            # reserved words may be in lower case unless case sensitive
+            $uctoken = $anycase ? uc $token : $token;
+            if (defined ($type = $lextable->{ $uctoken })) {
+                $token = $uctoken;
+            }
+            else {
+                $type = 'IDENT';
+            }
+        }
+        elsif (defined ($token = $7)) {
+            # reserved words may be in lower case unless case sensitive
+            $uctoken = $anycase ? uc $token : $token;
+            unless (defined ($type = $lextable->{ $uctoken })) {
+                $type = 'UNQUOTED';
+            }
+        }
 
-	push(@tokens, $type, $token);
+        push(@tokens, $type, $token);
 
     }
 
 
-    return \@tokens;					    ## RETURN ##
+    return \@tokens;                                        ## RETURN ##
 }
 
 
@@ -9967,7 +9960,7 @@ sub define_block {
         || return undef;
 
     $self->debug("compiled block '$name':\n$block")
-	if $self->{ DEBUG } & Template::Constants::DEBUG_PARSER;
+        if $self->{ DEBUG } & Template::Constants::DEBUG_PARSER;
 
     $defblock->{ $name } = $block;
     
@@ -10022,7 +10015,7 @@ sub _parse {
     my ($self, $tokens, $info) = @_;
     my ($token, $value, $text, $line, $inperl);
     my ($state, $stateno, $status, $action, $lookup, $coderet, @codevars);
-    my ($lhs, $len, $code);	    # rule contents
+    my ($lhs, $len, $code);         # rule contents
     my $stack = [ [ 0, undef ] ];   # DFA stack
 
 
@@ -10041,152 +10034,152 @@ sub _parse {
     my $in_string = 0;
 
     while(1) {
-	# get state number and state
-	$stateno =  $stack->[-1]->[0];
-	$state   = $states->[$stateno];
+        # get state number and state
+        $stateno =  $stack->[-1]->[0];
+        $state   = $states->[$stateno];
 
-	# see if any lookaheads exist for the current state
-	if (exists $state->{'ACTIONS'}) {
+        # see if any lookaheads exist for the current state
+        if (exists $state->{'ACTIONS'}) {
 
-	    # get next token and expand any directives (i.e. token is an 
-	    # array ref) onto the front of the token list
-	    while (! defined $token && @$tokens) {
-		$token = shift(@$tokens);
-		if (ref $token) {
-		    ($text, $line, $token) = @$token;
-		    if (ref $token) {
-			if ($info->{ DEBUG } && ! $in_string) {
+            # get next token and expand any directives (i.e. token is an 
+            # array ref) onto the front of the token list
+            while (! defined $token && @$tokens) {
+                $token = shift(@$tokens);
+                if (ref $token) {
+                    ($text, $line, $token) = @$token;
+                    if (ref $token) {
+                        if ($info->{ DEBUG } && ! $in_string) {
                             # - - - - - - - - - - - - - - - - - - - - - - - - -
-			    # This is gnarly.  Look away now if you're easily
+                            # This is gnarly.  Look away now if you're easily
                             # frightened.  We're pushing parse tokens onto the
                             # pending list to simulate a DEBUG directive like so:
-			    # [% DEBUG msg line='20' text='INCLUDE foo' %]
+                            # [% DEBUG msg line='20' text='INCLUDE foo' %]
                             # - - - - - - - - - - - - - - - - - - - - - - - - -
-			    my $dtext = $text;
-			    $dtext =~ s[(['\\])][\\$1]g;
-			    unshift(@$tokens, 
-				    DEBUG   => 'DEBUG',
-				    IDENT   => 'msg',
-				    IDENT   => 'line',
-				    ASSIGN  => '=',
-				    LITERAL => "'$line'",
-				    IDENT   => 'text',
-				    ASSIGN  => '=',
-				    LITERAL => "'$dtext'",
-				    IDENT   => 'file',
-				    ASSIGN  => '=',
-				    LITERAL => "'$info->{ name }'",
-				    (';') x 2,
-				    @$token, 
-				    (';') x 2);
-			}
-			else {
-			    unshift(@$tokens, @$token, (';') x 2);
-			}
-			$token = undef;  # force redo
-		    }
-		    elsif ($token eq 'ITEXT') {
-			if ($inperl) {
-			    # don't perform interpolation in PERL blocks
-			    $token = 'TEXT';
-			    $value = $text;
-			}
-			else {
-			    unshift(@$tokens, 
-				    @{ $self->interpolate_text($text, $line) });
-			    $token = undef; # force redo
-			}
-		    }
-		}
-		else {
-		    # toggle string flag to indicate if we're crossing
-		    # a string boundary
-		    $in_string = ! $in_string if $token eq '"';
-		    $value = shift(@$tokens);
-		}
-	    };
-	    # clear undefined token to avoid 'undefined variable blah blah'
-	    # warnings and let the parser logic pick it up in a minute
-	    $token = '' unless defined $token;
+                            my $dtext = $text;
+                            $dtext =~ s[(['\\])][\\$1]g;
+                            unshift(@$tokens, 
+                                    DEBUG   => 'DEBUG',
+                                    IDENT   => 'msg',
+                                    IDENT   => 'line',
+                                    ASSIGN  => '=',
+                                    LITERAL => "'$line'",
+                                    IDENT   => 'text',
+                                    ASSIGN  => '=',
+                                    LITERAL => "'$dtext'",
+                                    IDENT   => 'file',
+                                    ASSIGN  => '=',
+                                    LITERAL => "'$info->{ name }'",
+                                    (';') x 2,
+                                    @$token, 
+                                    (';') x 2);
+                        }
+                        else {
+                            unshift(@$tokens, @$token, (';') x 2);
+                        }
+                        $token = undef;  # force redo
+                    }
+                    elsif ($token eq 'ITEXT') {
+                        if ($inperl) {
+                            # don't perform interpolation in PERL blocks
+                            $token = 'TEXT';
+                            $value = $text;
+                        }
+                        else {
+                            unshift(@$tokens, 
+                                    @{ $self->interpolate_text($text, $line) });
+                            $token = undef; # force redo
+                        }
+                    }
+                }
+                else {
+                    # toggle string flag to indicate if we're crossing
+                    # a string boundary
+                    $in_string = ! $in_string if $token eq '"';
+                    $value = shift(@$tokens);
+                }
+            };
+            # clear undefined token to avoid 'undefined variable blah blah'
+            # warnings and let the parser logic pick it up in a minute
+            $token = '' unless defined $token;
 
-	    # get the next state for the current lookahead token
-	    $action = defined ($lookup = $state->{'ACTIONS'}->{ $token })
-	              ? $lookup
-		      : defined ($lookup = $state->{'DEFAULT'})
-		        ? $lookup
-		        : undef;
-	}
-	else {
-	    # no lookahead actions
-	    $action = $state->{'DEFAULT'};
-	}
+            # get the next state for the current lookahead token
+            $action = defined ($lookup = $state->{'ACTIONS'}->{ $token })
+                      ? $lookup
+                      : defined ($lookup = $state->{'DEFAULT'})
+                        ? $lookup
+                        : undef;
+        }
+        else {
+            # no lookahead actions
+            $action = $state->{'DEFAULT'};
+        }
 
-	# ERROR: no ACTION
-	last unless defined $action;
+        # ERROR: no ACTION
+        last unless defined $action;
 
-	# - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	# shift (+ive ACTION)
-	# - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	if ($action > 0) {
-	    push(@$stack, [ $action, $value ]);
-	    $token = $value = undef;
-	    redo;
-	};
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        # shift (+ive ACTION)
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        if ($action > 0) {
+            push(@$stack, [ $action, $value ]);
+            $token = $value = undef;
+            redo;
+        };
 
-	# - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	# reduce (-ive ACTION)
-	# - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	($lhs, $len, $code) = @{ $rules->[ -$action ] };
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        # reduce (-ive ACTION)
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        ($lhs, $len, $code) = @{ $rules->[ -$action ] };
 
-	# no action imples ACCEPTance
-	$action
-	    or $status = ACCEPT;
+        # no action imples ACCEPTance
+        $action
+            or $status = ACCEPT;
 
-	# use dummy sub if code ref doesn't exist
-	$code = sub { $_[1] }
-	    unless $code;
+        # use dummy sub if code ref doesn't exist
+        $code = sub { $_[1] }
+            unless $code;
 
-	@codevars = $len
-		?   map { $_->[1] } @$stack[ -$len .. -1 ]
-		:   ();
+        @codevars = $len
+                ?   map { $_->[1] } @$stack[ -$len .. -1 ]
+                :   ();
 
-	eval {
-	    $coderet = &$code( $self, @codevars );
-	};
-	if ($@) {
-	    my $err = $@;
-	    chomp $err;
-	    return $self->_parse_error($err);
-	}
+        eval {
+            $coderet = &$code( $self, @codevars );
+        };
+        if ($@) {
+            my $err = $@;
+            chomp $err;
+            return $self->_parse_error($err);
+        }
 
-	# reduce stack by $len
-	splice(@$stack, -$len, $len);
+        # reduce stack by $len
+        splice(@$stack, -$len, $len);
 
-	# ACCEPT
-	return $coderet					    ## RETURN ##
-	    if $status == ACCEPT;
+        # ACCEPT
+        return $coderet                                     ## RETURN ##
+            if $status == ACCEPT;
 
-	# ABORT
-	return undef					    ## RETURN ##
-	    if $status == ABORT;
+        # ABORT
+        return undef                                        ## RETURN ##
+            if $status == ABORT;
 
-	# ERROR
-	last 
-	    if $status == ERROR;
+        # ERROR
+        last 
+            if $status == ERROR;
     }
     continue {
-	push(@$stack, [ $states->[ $stack->[-1][0] ]->{'GOTOS'}->{ $lhs }, 
-	      $coderet ]), 
+        push(@$stack, [ $states->[ $stack->[-1][0] ]->{'GOTOS'}->{ $lhs }, 
+              $coderet ]), 
     }
 
-    # ERROR						    ## RETURN ##
+    # ERROR                                                 ## RETURN ##
     return $self->_parse_error('unexpected end of input')
-	unless defined $value;
+        unless defined $value;
 
     # munge text of last directive to make it readable
 
     return $self->_parse_error("unexpected end of directive", $text)
-	if $value eq ';';   # end of directive SEPARATOR
+        if $value eq ';';   # end of directive SEPARATOR
 
     return $self->_parse_error("unexpected token ($value)", $text);
 }
@@ -10201,7 +10194,7 @@ sub _parse_error {
     $line = 'unknown' unless $line;
 
     $msg .= "\n  [% $text %]"
-	if defined $text;
+        if defined $text;
 
     return $self->error("line $line: $msg");
 }
@@ -10215,10 +10208,10 @@ sub _dump {
     my $key;
 
     foreach $key (qw( START_TAG END_TAG TAG_STYLE ANYCASE INTERPOLATE 
-		      PRE_CHOMP POST_CHOMP V1DOLLAR )) {
-	my $val = $self->{ $key };
-	$val = '<undef>' unless defined $val;
-	$output .= sprintf($format, $key, $val);
+                      PRE_CHOMP POST_CHOMP V1DOLLAR )) {
+        my $val = $self->{ $key };
+        $val = '<undef>' unless defined $val;
+        $output .= sprintf($format, $key, $val);
     }
 
     $output .= '}';
@@ -10717,16 +10710,17 @@ sub macro {
 //MACRO
 stash.set('$ident', function () {
     var output = '';
-    var args = {};   
+    var args = {};
     var fargs = Array.prototype.slice.call(arguments);
     $args;
-    
+    args.arguments = Array.prototype.slice.call(arguments);
+
     var params = fargs.shift() || {};
-    
+
     for (var key in params) {
         args[key] = params[key];
     }
-    
+
     context.stash.clone(args);
     try {
 $block
@@ -10736,7 +10730,7 @@ $block
         throw(error);
     }
 
-    context.stash.declone(); 
+    context.stash.declone();
     return output;
 });
 
@@ -10750,7 +10744,10 @@ EOF
 
 stash.set('$ident', function () {
     var output = '';
-    var args = {};   
+    var args = {};
+    
+    var fargs = Array.prototype.slice.call(arguments);
+    args.arguments = Array.prototype.slice.call(arguments);   
     
     if (typeof arguments[0] == 'object') args = arguments[0];
     
@@ -19872,7 +19869,7 @@ sub main {
     my ($runtime, $compile, $list) = @$jemplate_options{qw/runtime compile list/};
 
     if ($runtime) {
-        runtime_source_code(@$jemplate_options{qw/runtime ajax json xhr xxx compact/});
+        print runtime_source_code(@$jemplate_options{qw/runtime ajax json xhr xxx compact/});
         return unless $compile;
     }
 
@@ -20106,7 +20103,7 @@ sub runtime_source_code {
 
     push @runtime, $Jemplate_Runtime->xxx if $xxx;
 
-    print join ";", @runtime;
+    return join ";", @runtime;
 }
 
 

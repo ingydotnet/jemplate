@@ -77,7 +77,7 @@ sub main {
     my ($runtime, $compile, $list) = @$jemplate_options{qw/runtime compile list/};
 
     if ($runtime) {
-        runtime_source_code(@$jemplate_options{qw/runtime ajax json xhr xxx compact/});
+        print runtime_source_code(@$jemplate_options{qw/runtime ajax json xhr xxx compact/});
         return unless $compile;
     }
 
@@ -311,7 +311,7 @@ sub runtime_source_code {
 
     push @runtime, $Jemplate_Runtime->xxx if $xxx;
 
-    print join ";", @runtime;
+    return join ";", @runtime;
 }
 
 #-------------------------------------------------------------------------------

@@ -36,7 +36,7 @@ var/t:
 	(cd var && ln -s ../../t t)
 
 test-all:
-	../bin/test-run
+	(cd ../bin && ../test-run)
 
 test: all runtime run
 
