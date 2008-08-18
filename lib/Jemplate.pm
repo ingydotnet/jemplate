@@ -5,7 +5,7 @@ use warnings;
 use Template 2.14;
 use Getopt::Long;
 
-our $VERSION = '0.24';
+our $VERSION = '0.24_1';
 
 use Jemplate::Parser;
 
@@ -261,6 +261,8 @@ sub print_usage_and_exit {
 sub runtime_source_code {
     require Jemplate::Runtime;
     require Jemplate::Runtime::Compact;
+
+    unshift @_, "standard" unless @_;
 
     my ($runtime, $ajax, $json, $xhr, $xxx, $compact) = map { defined $_ ? lc $_ : "" } @_[0 .. 5];
 
