@@ -1,4 +1,12 @@
 ---
+version: 0.24_1
+date: Monday August 18 15:22:03 PDT 2008
+changes:
+- Fixed issue with runtime_source_code that broke Catalyst::View::Jemplate
+- Some beta MACRO functionality
+- Ingy refactored tjs/ into tests/
+
+---
 version: 0.23
 date: Friday June 06 12:51:18 PDT 2008
 changes:
