@@ -1,5 +1,5 @@
 ---
-version: 0.24_1
+version: 0.23_1
 date: Monday August 18 15:22:03 PDT 2008
 changes:
 - Fixed issue with runtime_source_code that broke Catalyst::View::Jemplate
