@@ -1,18 +1,8 @@
-proto = new Subclass('Test.Jemplate', 'Test.Base');
+(function() {
 
-proto.init = function() {
-    Test.Base.prototype.init.call(this);
-    this.block_class = 'Test.Jemplate.Block';
-}
+var proto = Test.Base.newSubclass('Test.Jemplate');
 
-proto = Subclass('Test.Jemplate.Block', 'Test.Base.Block');
-
-proto.init = function() {
-    Test.Base.Block.prototype.init.call(this);
-    this.filter_object = new Test.Jemplate.Filter();
-}
-
-proto = new Subclass('Test.Jemplate.Filter', 'Test.Base.Filter');
+proto = Test.Jemplate.Filter.prototype;
 
 proto.jemplate_process = function(content, block) {
     var template;
@@ -35,3 +25,5 @@ proto.raw_context = function( content, block ) {
         alert(e);
     }
 }
+
+})();

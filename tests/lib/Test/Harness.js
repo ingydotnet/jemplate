@@ -1,4 +1,6 @@
-// # $Id: Kinetic.pm 1493 2005-04-07 19:20:18Z theory $
+// $Id: /mirror/openjsan/users/theory/Test.Simple/trunk/lib/Test/Harness.js 2141 2008-08-28T06:41:15.308449Z ingy  $
+
+/*global JSAN, Test, _global, _player */
 
 // Set up namespace.
 if (typeof self != 'undefined') {
@@ -14,7 +16,7 @@ if (typeof self != 'undefined') {
 }
 
 Test.Harness = function () {};
-Test.Harness.VERSION = '0.21';
+Test.Harness.VERSION = '0.28';
 Test.Harness.Done = 0;
 
 // Stoopid IE.
@@ -75,9 +77,9 @@ Test.Harness.prototype.outFileNames = function (files) {
     }
     len += 3;
     var ret = [];
-    for (var i = 0; i < files.length; i++) {
-        var outName = files[i];
-        var add = len - files[i].length;
+    for (var k = 0; k < files.length; k++) {
+        var outName = files[k];
+        var add = len - files[k].length;
         // Where is Perl's x operator when I need it??
         for (var j = 0; j < add; j++) {
             outName += '.';
@@ -102,25 +104,28 @@ Test.Harness.prototype.outputResults = function (test, file, out, attrs) {
         this.files++;
         var pass = true;
         for (var i = 0; i < test.TestResults.length; i++) {
+            var result = test.TestResults[i];
+            var resultType = result ? result.getType() : '';
+
             // Start out assuming passage.
-            if (test.TestResults[i].ok) {
-                if (attrs.verbose) out.pass(test.TestResults[i].output);
+            if (result && result.getOK()) {
+                if (attrs.verbose) out.pass(result.getOutput());
                 this.ok++;
                 track.ok++
-                if (test.TestResults[i].type == 'todo') {
+                if (resultType == 'todo') {
                     // Handle unexpected pass.
-                    if (test.TestResults[i].actualOK) this.bonus++;
+                    if (result.getActualOK()) this.bonus++;
                     this.todo ++;
-                } else if (test.TestResults[i].type == 'skip') this.subSkipped++;
+                } else if (resultType == 'skip') this.subSkipped++;
             } else {
-                if (test.TestResults[i].type == 'todo') {
+                if (resultType == 'todo') {
                     // Expected failure.
                     this.todo++;
-                    if (attrs.verbose) out.pass(test.TestResults[i].output);
+                    if (attrs.verbose) out.pass(result.getOutput());
                 } else {
                     pass = false;
                     track.failList.push(i + 1);
-                    out.fail(test.TestResults[i].output);
+                    out.fail(result.getOutput());
                 }
             }
             
@@ -163,11 +168,11 @@ Test.Harness.prototype.outputSummary = function (fn, time) {
     if (this._allOK()) {
         fn("All tests successful" + bonusmsg + '.' + Test.Harness.LF);
     } else if (!this.tests) {
-        fn("FAILED—no tests were run for some reason." + Test.Harness.LF);
+        fn("FAILED -- no tests were run for some reason." + Test.Harness.LF);
     } else if (!this.ran) {
         var blurb = this.tests == 1 ? "file" : "files";
-        fn("FAILED—" + this.tests + " test " + blurb + " could be run, "
-           + "alas—no output ever seen." + Test.Harness.LF);
+        fn("FAILED -- " + this.tests + " test " + blurb + " could be run: "
+           + "alas, no output ever seen." + Test.Harness.LF);
     } else {
         pct = this.good / this.tests * 100;
         var pctOK = 100 * this.ok / this.ran;
@@ -213,7 +218,7 @@ Test.Harness.prototype.formatFailures = function () {
 
     var out = failedStr;
     if (out.length < maxNamelen) {
-        for (var j = out.length; j < maxNameLength; j++) {
+        for (var j = out.length; j < maxNamelen; j++) {
             out += ' ';
         }
     }

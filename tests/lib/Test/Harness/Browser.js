@@ -1,4 +1,6 @@
-// # $Id: Kinetic.pm 1493 2005-04-07 19:20:18Z theory $
+// $Id: /mirror/openjsan/users/theory/Test.Simple/trunk/lib/Test/Harness/Browser.js 2141 2008-08-28T06:41:15.308449Z ingy  $
+
+/*global JSAN, Test, ActiveXObject */
 
 if (typeof JSAN != 'undefined') JSAN.use('Test.Harness');
 else {
@@ -13,8 +15,8 @@ if (window.parent != window &&
     // Build fake T.H.B so original script from this file doesn't throw
     // exception. This is a bit of a hack...
     Test.Harness.Browser = function() {
-        this.runTests = function() {},
-        this.encoding = function () { return this }
+        this.runTests = function() {};
+        this.encoding = function () { return this };
     };
 
     // We're in a test iframe. Set up the necessary parts and load the
@@ -33,7 +35,7 @@ if (window.parent != window &&
 
     // XXX replace with a script element at some point? Safari is due to
     // have this working soon (not sure about IE or Opera):
-    // http://bugzilla.opendarwin.org/show_bug.cgi?id=3748
+    // http://bugs.webkit.org/show_bug.cgi?id=3748
     __MY.inc = window.parent.Test.Harness.Browser.includes;
     __MY.req = typeof XMLHttpRequest != 'undefined'
       ? new XMLHttpRequest()
@@ -72,7 +74,7 @@ if (window.parent != window &&
         this.includes.push('');
     };
 
-    Test.Harness.Browser.VERSION = '0.21';
+    Test.Harness.Browser.VERSION = '0.28';
 
     Test.Harness.Browser.runTests = function () {
         var harness = new Test.Harness.Browser();
@@ -92,7 +94,6 @@ if (window.parent != window &&
         // Safari makes it impossible to do anything with the iframe if it's
         // set to display:none. See:
         // http://www.quirksmode.org/bugreports/archives/2005/02/hidden_iframes.html
-        //alert(navigator.userAgent);
         if (/Safari|Konqueror/.test(navigator.userAgent)) {
             node.style.visibility = "hidden";
             node.style.height = "0"; 
@@ -105,15 +106,16 @@ if (window.parent != window &&
 
     Test.Harness.Browser.prototype._setupOutput = function () {
         // Setup the pre element for test output.
-        var node = document.createElement("pre");
-        node.setAttribute("id", "output");
+        var node = document.createElement('pre');
+        node.setAttribute('id', 'output');
         document.body.appendChild(node);
-        // Brutal hack to make output linkable
         fixoutput = function(node) {
             // Trailing space added and replaced to work around yet another
             // Safari bug.
             node.innerHTML = node.innerHTML.replace(
-                / ?(\w[\w\.]+?\w)(?=\.\.\.)/m, '<a href="$1">$1</a>'
+                / ?(\w[\w\.\-]+?\w)(?=\.\.\.)/m,
+                (/MSIE/.test(navigator.userAgent) ? '<br>' : '') +
+                '<a href="$1">$1</a>'
             ) + ' ';
         };
         return {
@@ -124,8 +126,8 @@ if (window.parent != window &&
                 fixoutput(node);
             },
             fail: function (msg) {
-                var red = document.createElement("span");
-                red.setAttribute("style", "color: red; font-weight: bold");
+                var red = document.createElement('span');
+                red.setAttribute('style', 'color: red; font-weight: bold');
                 node.appendChild(red);
                 red.appendChild(document.createTextNode(msg));
                 window.scrollTo(0, document.body.offsetHeight
@@ -188,6 +190,8 @@ if (window.parent != window &&
             }
         };
 
+        // XXX Support IE's propertychange event?
+        // http://msdn.microsoft.com/workshop/author/dhtml/reference/events/onpropertychange.asp
         if (Object.watch) {
             // We can use the cool watch method, and avoid setting timeouts!
             // We just need to unwatch() when all tests are finished.
@@ -239,10 +243,7 @@ if (window.parent != window &&
         if (/\.html$/.test(file)) {
             buffer.location.replace(file);
         } else { // if (/\.js$/.test(file)) {
-            if (/MSIE/.test(navigator.userAgent)
-                || /Opera/.test(navigator.userAgent)
-                || /Safari|Konqueror/.test(navigator.userAgent))
-            {
+            if (/MSIE|Opera|Safari|Konqueror/.test(navigator.userAgent)) {
                 // These browsers have problems with the DOM solution. It
                 // simply doesn't work in Safari, and Opera considers its
                 // handling of buffer.document to be a security violation. So
@@ -286,7 +287,7 @@ if (window.parent != window &&
             if (this.encoding()) el.charset = this.encoding();
 
             // XXX This doesn't work in Safari right now. See
-            // http://bugzilla.opendarwin.org/show_bug.cgi?id=3748
+            // http://bugs.webkit.org/show_bug.cgi?id=3748
             el.src = file;
             pre.appendChild(el);
 
@@ -330,7 +331,6 @@ if (window.parent != window &&
             }
         }
     }
-    delete pairs;
 
     Test.Harness.Browser.prototype.formatFailures = function (fn) {
         // XXX Switch to DOM?

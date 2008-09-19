@@ -1,39 +1,19 @@
 <html>
 <head>
-    <script type="text/javascript" src="js/jquery.js"></script>
-
-    <script type="text/javascript" src="http://yui.yahooapis.com/2.5.1/build/yahoo/yahoo-min.js"></script>
-    <script type="text/javascript" src="http://yui.yahooapis.com/2.5.1/build/event/event-min.js"></script>
-    <script type="text/javascript" src="http://yui.yahooapis.com/2.5.1/build/connection/connection-min.js"></script>
-    <script type="text/javascript" src="http://yui.yahooapis.com/2.5.1/build/json/json-min.js"></script>
-
-    <script type="text/javascript" src="js/Subclass.js"></script>
-    <script type="text/javascript" src="js/Test/Builder.js"></script>
-    <script type="text/javascript" src="js/Test/Base.js"></script>
+    <title>Jemplate Testing - t/greetings.t.js</title>
+    <script type="text/javascript">
+        var testBaseCurrentScript = 't/greetings.t.js';
+    </script>
+    <script type="text/javascript" src="lib/Test/Builder.js"></script>
+    <script type="text/javascript" src="lib/Test/Base.js"></script>
     <script type="text/javascript" src="js/Test/Jemplate.js"></script>
     <script type="text/javascript" src="js/JemplateRuntime.js"></script>
     <script type="text/javascript" src="js/jemplate.js"></script>
     <script type="text/javascript" src="js/jemplate2.js"></script>
     <script type="text/javascript" src="js/jemplate_dummy_plugin.js"></script>
-    <script type="text/javascript">
-        var testBaseCurrentScript = 't/greetings.t.js';
-    </script>
-    
-    <script type="text/javascript">
-    	global_foo = 'global_foo';
-    	global_object = {
-    		str : 'global_object_foo',
-    		func_sum : function (a,b) {
-    			return a+b;
-    		}
-    	};
-    	global_multiply = function (a,b) {
-    		return a*b;
-    	}
-    </script>
-    
-    <script type="text/javascript" src="t/greetings.t.js"></script>
+    <script type="text/javascript" src="js/global.js"></script>
 </head>
 <body>
+    <script type="text/javascript" src="t/greetings.t.js"></script>
 </body>
 </html>

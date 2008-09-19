@@ -1,40 +1,72 @@
-.PHONY: all clean purge jemplate
+.PHONY: all clean purge
 
-T_JS := $(wildcard t/*t.js)
-T_HTML := $(T_JS:t/%.t.js=%.t.html)
+RENDERER:=$(shell echo `js-cpan Test/Base/bin/render-template`)
+TEST_TEMPLATE:=$(shell echo `js-cpan Test/Base/template/test.html`)
+INDEX_TEMPLATE:=$(shell echo `js-cpan Test/Base/template/index.html`)
+TEST_LOCAL=template/test.html
+INDEX_LOCAL=template/index.html
 
-ALL_TARGETS=$(T_HTML) \
-	    index.html \
-	    js/JemplateRuntime.js \
-	    js/jemplate.js \
-	    js/jemplate2.js \
+MD5SUM=perl -MDigest::MD5 -e \
+    'open X,shift;$$d=Digest::MD5->new;$$d->addfile(*X);print $$d->hexdigest'
 
-JEMPLATES=t/*.t.js
-JEMPLATE := perl -I../lib ../jemplate
+TEST_TEMPLATE_MD5=$(word 1,$(shell $(MD5SUM) $(TEST_TEMPLATE)))
+TEST_LOCAL_MD5=$(word 1,$(shell $(MD5SUM) $(TEST_LOCAL)))
+INDEX_TEMPLATE_MD5=$(word 1,$(shell $(MD5SUM) $(INDEX_TEMPLATE)))
+INDEX_LOCAL_MD5=$(word 1,$(shell $(MD5SUM) $(INDEX_LOCAL)))
 
-all: $(ALL_TARGETS)
+ALL_T_HTML:=$(shell ls -1 t/*.t.js | perl -pe 's/js$$/html/;s/^t\///')
 
-%.t.html: template/test.html
-	perl bin/render-template test.html $@
+ALL_DIRS:=lib template
 
-index.html: template/index.html $(JEMPLATES)
-	perl bin/render-template index.html $@
+ALL_TARGETS:=$(ALL_T_HTML) index.html
 
-js/JemplateRuntime.js:
-	$(JEMPLATE) --runtime=standard > $@
+ALL_LIBS= \
+	lib/Test/Base.js \
+	lib/Test/Builder.js \
+	lib/Test/Harness.js \
+	lib/Test/Harness/Browser.js \
 
-js/jemplate.js: jemplate $(JEMPLATES)
-	$(JEMPLATE) --compile jemplate/* > $@
+all: $(ALL_DIRS) $(ALL_TARGETS) $(ALL_LIBS)
 
-js/jemplate2.js: jemplate2
-	$(JEMPLATE) --compile jemplate2 \
-		--start-tag='<!' --end-tag='!>' --any-case --post-chomp > $@
+clean:
+	rm -fr $(ALL_TARGETS) $(ALL_LIBS)
+	if [ "$(TEST_TEMPLATE_MD5)" = \
+     "$(TEST_LOCAL_MD5)" ]; then rm -f $(TEST_LOCAL); fi
+	if [ "$(INDEX_TEMPLATE_MD5)" = \
+     "$(INDEX_LOCAL_MD5)" ]; then rm -f $(INDEX_LOCAL); fi
+	-find $(ALL_DIRS) -depth -type d | xargs rmdir 2> /dev/null
 
-jemplate: $(JEMPLATES)
-	perl bin/pull-jemplates
 
-clean purge:
-	rm -fr $(ALL_TARGETS) jemplate/* *.t.js
+purge: clean
+	rm Makefile config.yaml
 
-html:
-	mkdir html
+%.t.html: $(TEST_LOCAL)
+	perl $(RENDERER) $(notdir $<) $(@:%.t.html=t/%.t.js) > $@
+
+index.html: $(INDEX_LOCAL) t/*.t.js
+	perl $(RENDERER) $(notdir $<) $(@:%.t.html=t/%.t.js) > $@
+
+lib/Test/Base.js: lib/Test
+	cp -f `js-cpan Test.Base` $@
+# 	ln -s ../../../lib/Test/Base.js $@
+
+lib/Test/Builder.js: lib/Test
+	cp -f `js-cpan Test.Builder` $@
+
+lib/Test/Harness.js: lib/Test
+	cp -f `js-cpan Test.Harness` $@
+
+lib/Test/Harness/Browser.js: lib/Test/Harness
+	cp -f `js-cpan Test.Harness.Browser` $@
+
+lib lib/Test lib/Test/Harness:
+	mkdir -p $@
+
+$(TEST_LOCAL):
+	cp -f $(TEST_TEMPLATE) $@
+
+$(INDEX_LOCAL):
+	cp -f $(INDEX_TEMPLATE) $@
+
+template:
+	mkdir -p $@

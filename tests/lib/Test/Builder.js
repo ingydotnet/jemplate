@@ -1,4 +1,6 @@
-// # $Id: Kinetic.pm 1493 2005-04-07 19:20:18Z theory $
+// $Id: /mirror/openjsan/users/theory/Test.Simple/trunk/lib/Test/Builder.js 2167 2008-09-07T21:00:15.546887Z theory  $
+
+/*global JSAN, Test, WScript, _global */
 
 // Set up namespace.
 if (typeof self != 'undefined') {
@@ -9,8 +11,14 @@ if (typeof self != 'undefined') {
     //Director
     if (typeof _global.Test == "undefined") _global.Test = {PLATFORM: 'director'};
     else _global.Test.PLATFORM = 'director';
+} else if (typeof WScript != 'undefined') {
+    // WSH
+    if (typeof Test == 'undefined') Test = {PLATFORM: 'wsh'};
+    else Test.PLATFORM = 'wsh';
 } else {
-    throw new Error("Test.More does not support your platform");
+    // Assume command-line interpreter.
+    if (typeof Test == 'undefined') Test = {PLATFORM: 'interp'};
+    else Test.PLATFORM = 'interp';
 }
 
 // Constructor.
@@ -26,9 +34,9 @@ Test.Builder.globalScope = typeof JSAN != 'undefined'
     ? window
     : typeof _global != 'undefined'
       ? _global
-      : null;
+      : this;
 
-Test.Builder.VERSION = '0.21';
+Test.Builder.VERSION = '0.28';
 Test.Builder.Instances = [];
 Test.Builder.lineEndingRx = /\r?\n|\r/g;
 Test.Builder.StringOps = {
@@ -48,15 +56,22 @@ Test.Builder.LF = typeof navigator != "undefined"
   : "\n";
 
 // Static methods.
+Test.Builder.Error = function (msg) {
+    this.message = msg;
+    this.name    = "Test.Builder.Error";
+}
+Test.Builder.Error.prototype = new Error();
+
 Test.Builder.die = function (msg) {
-    throw new Error(msg);
+    throw new Test.Builder.Error(msg);
 };
 
 Test.Builder._whoa = function (check, desc) {
     if (!check) return;
-    Test.Builder.die("WHOA! " + desc + Test.Builder.LF +
-                     + "This should never happen! Please contact the author "
-                     + "immediately!");
+    Test.Builder.die(
+        "WHOA! " + desc + Test.Builder.LF +
+        "This should never happen! Please contact the author immediately!"
+    );
 };
 
 Test.Builder.typeOf = function (object) {
@@ -122,7 +137,7 @@ Test.Builder.prototype.plan = function (arg) {
     for (var cmd in arg) {
         if (cmd == 'tests') {
             if (arg[cmd] == null) {
-                TestBulder.die(
+                Test.Bulder.die(
                     "Got an undefined number of tests. Looks like you tried to "
                     + "say how many tests you plan to run but made a mistake."
                     + Test.Builder.LF
@@ -139,11 +154,15 @@ Test.Builder.prototype.plan = function (arg) {
             this.skipAll(arg[cmd]);
         } else if (cmd == 'noPlan' && arg[cmd]) {
             this.noPlan();
+        } else if ({}.hasOwnProperty) { 
+            // see if the param belongs to Object.prototype.
+            if (arg.hasOwnProperty(cmd)) {
+                Test.Builder.die("plan() doesn't understand "
+                    + cmd + (arg[cmd] ? (" " + arg[cmd]) : ''));
+            }
         } else {
-            // Do nothing, since Object.prototype might have been changed.
-            // Too bad JS doesn't have real hashes!
-            // Test.Builder.die("plan() doesn't understand "
-            // + cmd + (arg[cmd] ? (" " + arg[cmd]) : ''));
+            // Ignore errors if hasOwnProperty() isn't available, as in 
+            // Safari < 2.0.2 and Explorer 5.
         }
     }
 };
@@ -198,9 +217,9 @@ Test.Builder.prototype.ok = function (test, desc) {
 
     // Append any output to the previous test's results.
     if (this.Buffer.length && this.TestResults.length) {
-        this.TestResults[this.TestResults.length - 1].output +=
-            this.Buffer.splice(0, this.Buffer.length).join('');
-    
+        this.TestResults[this.TestResults.length - 1].appendOutput(
+            this.Buffer.splice(0, this.Buffer.length).join('')
+        );
     }
 
     // I don't think we need to worry about threading in JavaScript.
@@ -220,38 +239,38 @@ Test.Builder.prototype.ok = function (test, desc) {
     // I don't think we need to worry about result beeing shared between
     // threads.
     var out = '';
-    var result = {};
+    var result = new Test.Builder.TestResult();
 
     if (test) {
-        result.ok        = true;
-        result.actual_ok = test;
+        result.setOK(true);
+        result.setActualOK(test);
     } else {
         out += 'not ';
-        result.ok        = todo ? true : false;
-        result.actual_ok = false;
+        result.setOK(todo ? true : false);
+        result.setActualOK(false);
     }
 
     out += 'ok';
     if (this.useNumbers) out += ' ' + this.CurrTest;
 
     if (desc == null) {
-        result.desc = '';
+        result.setDesc('');
     } else {
         desc = desc.replace(Test.Builder.lineEndingRx, Test.Builder.LF + "# ");
         // XXX Does this matter since we don't have a TestHarness?
         desc.split('#').join('\\#'); // # # in a desc can confuse TestHarness.
         out += ' - ' + desc;
-        result.desc = desc;
+        result.setDesc(desc);
     }
 
     if (todo) {
         todo = todo.replace(Test.Builder.lineEndingRx, Test.Builder.LF + "# ");
         out += " # TODO " + todo;
-        result.reason = todo;
-        result.type   = 'todo';
+        result.setReason(todo);
+        result.setType('todo');
     } else {
-        result.reason = '';
-        result.type   = '';
+        result.setReason('');
+        result.setType('');
     }
 
     this.TestResults[this.CurrTest - 1] = result;
@@ -260,10 +279,11 @@ Test.Builder.prototype.ok = function (test, desc) {
     this._print(out);
 
     if (!test) {
+        // Add URL and line numer using code from http://pastie.org/253058?
         var msg = todo ? "Failed (TODO)" : "Failed";
         this.diag("    " + msg + " test");
     }
-    result.output = this.Buffer.splice(0, this.Buffer.length).join('');
+    result.setOutput(this.Buffer.splice(0, this.Buffer.length).join(''));
     return test;
 };
 
@@ -383,18 +403,12 @@ Test.Builder.prototype._isDiag = function (got, op, expect) {
     for (var i = 0; i < args.length; i++) {
         if (args[i] != null) {
             args[i] = op == 'eq' ? "'" + args[i].toString() + "'" : args[i].valueOf();
-
-            args[i] = args[i].replace(/&/g, '&amp;'); 
-            args[i] = args[i].replace(/</g, '&lt;');
-            args[i] = args[i].replace(/>/g, '&gt;');
-            args[i] = args[i].replace(/"/g, '&quot;'); // " end quote for emacs
         }
     }
 
-
     return this.diag(
-        "         got: \"" + args[0] + "\"" + Test.Builder.LF +
-        "    expected: \"" + args[1] + "\"" + Test.Builder.LF
+        "        have: " + args[0] + Test.Builder.LF +
+        "        want: " + args[1] + Test.Builder.LF
     );
 };
 
@@ -417,20 +431,21 @@ Test.Builder.prototype.skip = function (why) {
                                           Test.Builder.LF+ "# ");
 
     this.CurrTest++;
-    this.TestResults[this.CurrTest - 1] = {
+    this.TestResults[this.CurrTest - 1] = new Test.Builder.TestResult({
         ok:        true,
-        actual_ok: true,
+        actualOK:  true,
         desc:      '',
         type:      'skip',
         reason:    why
-    };
+    });
 
     var out = "ok";
     if (this.useNumbers) out += ' ' + this.CurrTest;
     out    += " # skip " + why + Test.Builder.LF;
     this._print(out);
-    this.TestResults[this.CurrTest - 1].output =
-    this.Buffer.splice(0, this.Buffer.length).join('');
+    this.TestResults[this.CurrTest - 1].setOutput(
+        this.Buffer.splice(0, this.Buffer.length).join('')
+    );
     return true;
 };
 
@@ -444,20 +459,21 @@ Test.Builder.prototype.todoSkip = function (why) {
     
 
     this.CurrTest++;
-    this.TestResults[this.CurrTest - 1] = {
+    this.TestResults[this.CurrTest - 1] = new Test.Builder.TestResult({
         ok:        true,
-        actual_ok: false,
+        actualOK:  false,
         desc:      '',
         type:      'todo_skip',
         reason:    why
-    };
+    });
 
     var out = "not ok";
     if (this.useNumbers) out += ' ' + this.CurrTest;
     out    += " # TODO & SKIP " + why + Test.Builder.LF;
     this._print(out);
-    this.TestResults[this.CurrTest - 1].output =
-    this.Buffer.splice(0, this.Buffer.length).join('');
+    this.TestResults[this.CurrTest - 1].setOutput(
+        this.Buffer.splice(0, this.Buffer.length).join('')
+    );
     return true;
 };
 
@@ -565,36 +581,32 @@ Test.Builder.prototype._setupOutput = function () {
             // and refer to it via the closure, then things don't work right
             // --the order of output can become all screwed up (see
             // buffer.html).  I have no idea why this is.
-            var node = doc.getElementById("test");
             var body = doc.body || doc.getElementsByTagName("body")[0];
-            if (node) {
-                // This approach is neater, but causes buffering problems when
-                // mixed with document.write. See tests/buffer.html.
-                //node.appendChild(document.createTextNode(msg));
-                //return;
-                for (var i = 0; i < node.childNodes.length; i++) {
-                    if (node.childNodes[i].nodeType == 3 /* Text Node */) {
-                        // Append to the node and scroll down.
-                        node.childNodes[i].appendData(msg);
-                        top.scrollTo(
-                            0, body.offsetHeight || body.scrollHeight
-                        );
-                        return;
-                    }
-                }
-
-                // If there was no text node, add one.
-                node.appendChild(doc.createTextNode(msg));
-                top.scrollTo(0, body.offsetHeight || body.scrollHeight);
-                return;
+            var node = doc.getElementById('test_output')
+                || doc.getElementById('test');
+            if (!node) {
+                node = document.createElement('pre');
+                node.id = 'test_output';
+                body.appendChild(node);
             }
 
-            // Default to the normal write and scroll down...
-            doc.write("<pre style='margin: 0px'>"+msg+"</pre>");
-            // IE 6 Service Pack 2 requires that we re-cache the object. Bill
-            // Gates only knows why!
-            body = doc.body || doc.getElementsByTagName("body")[0];
-            if (body) top.scrollTo(0, body.offsetHeight || body.scrollHeight);
+            // This approach is neater, but causes buffering problems when
+            // mixed with document.write. See tests/buffer.html.
+            //node.appendChild(document.createTextNode(msg));
+            //return;
+            for (var i = 0; i < node.childNodes.length; i++) {
+                if (node.childNodes[i].nodeType == 3 /* Text Node */) {
+                    // Append to the node and scroll down.
+                    node.childNodes[i].appendData(msg);
+                    top.scrollTo( 0, body.offsetHeight || body.scrollHeight );
+                    return;
+                }
+            }
+
+            // If there was no text node, add one.
+            node.appendChild(doc.createTextNode(msg));
+            top.scrollTo(0, body.offsetHeight || body.scrollHeight);
+            return;
         };
 
         this.output(writer);
@@ -615,12 +627,30 @@ Test.Builder.prototype._setupOutput = function () {
         // Macromedia-Adobe:Director MX 2004 Support
         // XXX Is _player a definitive enough object?
         // There may be an even more explicitly Director object.
+        /*global trace */
         this.output(trace);       
         this.failureOutput(trace);
         this.todoOutput(trace);
         this.warnOutput(trace);
-    }
 
+    } else if (Test.PLATFORM == 'wsh') {
+        // Windows Scripting Host Support
+        var printer = function (msg) {
+			WScript.StdOut.writeline(msg);
+		}
+		this.output(printer);
+		this.failureOutput(printer);
+		this.todoOutput(printer);
+		this.warnOutput(printer);
+
+    } else if (Test.PLATFORM == 'interp') {
+        // Command-line interpeter.
+        var out = function (toOut) { print( toOut.replace(/\n$/, '') ); };
+        this.output(out);
+        this.failureOutput(out);
+        this.todoOutput(out);
+        this.warnOutput(out);
+	}
     return this;
 };
 
@@ -630,17 +660,16 @@ Test.Builder.prototype.currentTest = function (num) {
     if (!this.HavePlan)
         Test.Builder.die("Can't change the current test number without a plan!");
     this.CurrTest = num;
-    if (num > this.TestResults.length ) {
+    if (num >= this.TestResults.length ) {
         var reason = 'incrementing test number';
         for (var i = this.TestResults.length; i < num; i++) {
-            this.TestResults[i] = {
+            this.TestResults[i] = new Test.Builder.TestResult({
                 ok:        true, 
-                actual_ok: null,
+                actualOK:  null,
                 reason:    reason,
                 type:      'unknown', 
-                name:      null,
                 output:    'ok - ' + reason + Test.Builder.LF
-            };
+            });
         }
     } else if (num < this.TestResults.length) {
         // IE requires the second argument to truncate the array.
@@ -652,13 +681,19 @@ Test.Builder.prototype.currentTest = function (num) {
 Test.Builder.prototype.summary = function () {
     var results = new Array(this.TestResults.length);
     for (var i = 0; i < this.TestResults.length; i++) {
-        results[i] = this.TestResults[i]['ok'];
+        var result = this.TestResults[i];
+        results[i] = result ? null : result.getOK();
     }
     return results
 };
 
 Test.Builder.prototype.details = function () {
-    return this.TestResults;
+    var details = new Array();
+    for (var i = 0; i < this.TestResults.length; i++) {
+        var result = this.TestResults[i];
+        details.push(result ? result.exportDetails() : null);
+    }
+    return details;
 };
 
 Test.Builder.prototype.todo = function (why, howMany) {
@@ -726,23 +761,16 @@ Test.Builder.prototype._ending = function () {
             this.ExpectedTests - this.TestResults.length
         );
 
-        if (this.CurrTest < this.ExpectedTests) {
-            var s = this.ExpectedTests == 1 ? '' : 's';
+        if (this.CurrTest != this.ExpectedTests) {
             out(
                 "# Looks like you planned " + this.ExpectedTests + " test"
-                + s + " but only ran " + this.CurrTest + "." + Test.Builder.LF
-            );
-        } else if (this.CurrTest > this.ExpectedTests) {
-           var numExtra = this.CurrTest - this.ExpectedTests;
-            var s = this.ExpectedTests == 1 ? '' : 's';
-            out(
-                "# Looks like you planned " + this.ExpectedTests + " test"
-                + s + " but ran " + numExtra + " extra." + Test.Builder.LF
+                + (this.ExpectedTests == 1 ? '' : 's')
+                + " but ran " + this.CurrTest + "." + Test.Builder.LF
             );
         } else if (numFailed) {
-            var s = numFailed == 1 ? '' : 's';
             out(
-                "# Looks like you failed " + numFailed + "test" + s + " of "
+                "# Looks like you failed " + numFailed + "test"
+                + (numFailed == 1 ? '' : 's') + " of "
                 + this.ExpectedTests + "." + Test.Builder.LF
             );
         }
@@ -839,3 +867,125 @@ Test.Builder.exporter = function (pkg, root) {
             root[pkg.EXPORT[i]] = pkg[pkg.EXPORT[i]];
     }
 };
+
+// Package-private utility class for describing the results of a single test.
+Test.Builder.TestResult = function (args) {
+    var defaults = Test.Builder.TestResult.defaults;
+    for (var name in defaults) {
+        this[name] = defaults[name];
+    }
+    if (args) {
+        for (var name in args) {
+            // Validate params.
+            if ({}.hasOwnProperty) {
+                if (   args.hasOwnProperty(name) 
+                    && !defaults.hasOwnProperty(name)
+                ) {
+                    throw new Test.Builder.Error("Invalid parameter: " + name);
+                }
+            }
+            this[name] = args[name];
+        }
+    }
+}
+
+Test.Builder.TestResult.defaults = {
+    ok:       null,
+    actualOK: null,
+    desc:     '',
+    reason:   '',
+    type:     null,
+    output:   '' 
+};
+
+// Set up get/set accessors
+Test.Builder.TestResult.makeGetSet = function (varName, reCasedName) {
+    Test.Builder.TestResult.prototype[ 'get' + reCasedName ] 
+        = function () { return this[varName] };
+    Test.Builder.TestResult.prototype[ 'set' + reCasedName ] 
+        = function (newVal) { this[varName] = newVal };
+}
+Test.Builder.TestResult.makeGetSet('ok',       'OK');
+Test.Builder.TestResult.makeGetSet('actualOK', 'ActualOK'); 
+Test.Builder.TestResult.makeGetSet('desc',     'Desc');
+Test.Builder.TestResult.makeGetSet('reason',   'Reason');
+Test.Builder.TestResult.makeGetSet('type',     'Type');
+Test.Builder.TestResult.makeGetSet('output',   'Output');
+
+// Append string to 'output' member var.
+Test.Builder.TestResult.prototype.appendOutput = function (more) {
+    this.output += more;
+};
+
+Test.Builder.TestResult.prototype.exportDetails = function () {
+    return {
+        ok:        this.ok,
+        actual_ok: this.actualOK, // backwards compatible
+        desc:      this.desc,
+        reason:    this.reason,
+        type:      this.type,
+        output:    this.output
+    };
+};
+
+//////////////////////////////////////////////////////////////////////////////
+// Package-private utility class for describing the results of a single test.
+//////////////////////////////////////////////////////////////////////////////
+Test.Builder.TestResult = function (args) {
+    var defaults = Test.Builder.TestResult.defaults;
+    for (var name in defaults) {
+        this[name] = defaults[name];
+    }
+    if (args) {
+        for (var prop in args) {
+            // Validate params.
+            if ({}.hasOwnProperty
+                && args.hasOwnProperty(prop) 
+                && !defaults.hasOwnProperty(prop)
+            ) {
+                throw new Test.Builder.Error("Invalid parameter: " + prop);
+            }
+            this[prop] = args[prop];
+        }
+    }
+}
+
+Test.Builder.TestResult.defaults = {
+    ok:       null,
+    actualOK: null,
+    desc:     '',
+    reason:   '',
+    type:     null,
+    output:   '' 
+};
+
+// Set up get/set accessors
+Test.Builder.TestResult.makeGetSet = function (varName, reCasedName) {
+    Test.Builder.TestResult.prototype[ 'get' + reCasedName ] 
+        = function () { return this[varName] };
+    Test.Builder.TestResult.prototype[ 'set' + reCasedName ] 
+        = function (newVal) { this[varName] = newVal };
+}
+Test.Builder.TestResult.makeGetSet('ok',       'OK');
+Test.Builder.TestResult.makeGetSet('actualOK', 'ActualOK'); 
+Test.Builder.TestResult.makeGetSet('desc',     'Desc');
+Test.Builder.TestResult.makeGetSet('reason',   'Reason');
+Test.Builder.TestResult.makeGetSet('type',     'Type');
+Test.Builder.TestResult.makeGetSet('output',   'Output');
+
+// Append string to 'output' member var.
+Test.Builder.TestResult.prototype.appendOutput = function (more) {
+    this.output += more;
+};
+
+Test.Builder.TestResult.prototype.exportDetails = function () {
+    return {
+        ok:        this.ok,
+        actual_ok: this.actualOK, // backwards compatible
+        desc:      this.desc,
+        reason:    this.reason,
+        type:      this.type,
+        output:    this.output
+    };
+};
+

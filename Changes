@@ -1,4 +1,10 @@
 ---
+version: 0.24
+date:    Fri Sep 19 15:09:35 PDT 2008
+changes:
+- Convert tests to standard Test.Base setup!
+
+---
 version: 0.23_1
 date: Monday August 18 15:22:03 PDT 2008
 changes:
