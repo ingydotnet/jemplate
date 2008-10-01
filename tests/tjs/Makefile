@@ -21,6 +21,7 @@ help:
 all: \
 	var \
 	var/test.html \
+	var/lib \
 	var/js \
 	var/t \
 	$(T_HTML) \
@@ -28,6 +29,9 @@ all: \
 	var/runtime.js \
 	var/jt.js \
 	var/jt-greeting.js
+
+var/lib:
+	(cd var && ln -s ../../lib lib)
 
 var/js:
 	(cd var && ln -s ../../js js)
