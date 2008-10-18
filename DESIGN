@@ -112,7 +112,7 @@ completion, the second is for the testing of the feature.
     ++ [% WRAPPER template [var = value ...] %] text... [% END %] 
     ++ [% BLOCK [name] %] content... [% END %] 
     ++ [% FILTER filter %] text... [% END %] 
-    -- [% MACRO name[(varlist)] directive %] 
+    +- [% MACRO name[(varlist)] directive %] 
     -- [% USE plugin[(param, ...)] %] 
     xx [% PERL %] code... [% END %] 
     xx [% RAWPERL %] code... [% END %] 
@@ -158,8 +158,9 @@ completion, the second is for the testing of the feature.
 
     ++ each            list of alternating keys/values 
     ++ exists(key)     does key exist? 
-    -- import(hash2)   import contents of hash2 
-    -- import          import into current namespace hash 
+    +- import(hash2)   import contents of hash2 
+    +- import          import into current namespace hash 
+    +- item            retrieve value using string
     ++ keys            list of keys 
     ++ list            returns alternating key, value 
     ++ nsort           keys sorted numerically 
@@ -275,8 +276,8 @@ Refer to documentation for details of individual plugins.
 === Runtime processing options 
 
     -- EVAL_PERL       process PERL/RAWPERL blocks (0) 
-    -- PRE_PROCESS     template(s) to process before main template 
-    -- POST_PROCESS    template(s) to process after main template 
+    ++ PRE_PROCESS     template(s) to process before main template 
+    +- POST_PROCESS    template(s) to process after main template 
     -- PROCESS         template(s) to process instead of main template 
     -- ERROR           name of error template or reference to hash 
                        array mapping error types to templates 

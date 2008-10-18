@@ -6,7 +6,7 @@ var filters = {
     raw_context: 'raw_context'
 };
 
-t.plan(6);
+t.plan(7);
 t.filters(filters);
 t.run_is('jemplate', 'output');
 
@@ -54,87 +54,155 @@ arg: abc
 {}
 --- jemplate
 global-scope-access.html
+#1
 [% GLOBAL.global_foo %]
+#2
 [% GLOBAL.global_object.str %]
+#3
 [% GLOBAL.global_object.func_sum(1,1) %]
+#4
 [% GLOBAL.global_multiply(1,10) %]
+#5
 [% global_foo %]
-[% 1 %]
+#6
 [% global_object.str %]
+#7
 [% global_object.func_sum(1,1) %]
+#8
 [% global_multiply(1,10) %]
-[% 1 %]
+eof
 --- output
+#1
 global_foo
-global_object_foo
+#2
+global_object_str
+#3
 2
+#4
 10
+#5
 
-1
+#6
 
+#7
 
+#8
 
-1
+eof
 
 === Advanced Global Scope Access
 --- raw_context
 {}
 --- jemplate
 global-scope-access2.html
+#1
 [% 
-	global_foo = '|local_foo'; #creates new local variable
+	global_foo = 'local_foo'; #creates local variable
 	GLOBAL.global_foo;
-	global_foo;
 %]
+#2
+[% global_foo %]
+#3
 [% 
 	local_var = "foo"; #new variables are always local
 	GLOBAL.local_var; #empty	
 %]
+#4
 [% 
-	GLOBAL.new_global_var = "|foo"; #new global vars could be created only this way
+	GLOBAL.new_global_var = "new_global_var"; #new global vars could be created only this way
 	new_global_var; #empty
-	GLOBAL.new_global_var;
-	new_global_var = "|foo2";
-	new_global_var; #not empty
-	GLOBAL.new_global_var; 
 %]
+#5
+[% GLOBAL.new_global_var; %]
+#6
+[%
+	new_global_var = "local_value";
+	new_global_var; #not empty
+%]
+#7
+[% GLOBAL.new_global_var; %]
+#8
 [% 
-	GLOBAL.global_foo = "global_foo";
-	LOCAL.global_foo = "|masked"; #masking global variable	
-	GLOBAL.global_foo;
+	global_foo = "global_foo2";
+	global_foo;
+%]
+#9
+[%
+	LOCAL.global_foo = "masked"; #LOCAL access	
 	global_foo; 
 %]
 --- output
-global_foo|local_foo
+#1
+global_foo
+#2
+local_foo
+#3
 
-|foo|foo2|foo
-global_foo|masked
+#4
+
+#5
+new_global_var
+#6
+local_value
+#7
+new_global_var
+#8
+global_foo2
+#9
+masked
 
 === RAW directive
 --- raw_context
 {}
 --- jemplate
 global-scope-access3.html
-[% 
+#1
+[%
 	RAW global_foo;
 	global_foo;
-	RAW global_object;
-	'\n';global_object.str;
-	'\n';global_object.func_sum(1,1);
-	RAW global_multiply;	
-	'\n';global_multiply(1,10);
 %]
-[% 
+#2
+[%
 	RAW global_object;
+	global_object.str;
+%]
+#3
+[% global_object.func_sum(1,1); %]
+#4
+[%
+	RAW global_multiply;	
+	global_multiply(1,10);
+%]
+#5
+[%
 	global_object.str = 'new_str';
-	'\n';global_object.str;	
+	GLOBAL.global_object.str;	
 %]
 --- output
+#1
 global_foo
-global_object_foo
+#2
+global_object_str
+#3
 2
+#4
 10
-
+#5
 new_str
+
+=== Function property access
+--- raw_context
+{}
+--- jemplate
+global-scope-access4.html
+#1
+[%
+	#RAW global_multiply;	
+	#global_multiply.function_property;
+	'function_property';
+%]
+--- output
+#1
+function_property
 
 */

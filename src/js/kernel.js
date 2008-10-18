@@ -513,7 +513,8 @@ proto._dotop = function(root, item, args, lvalue) {
     }
 
 
-    if (atroot || root.constructor == Object || root == this.data.GLOBAL) {
+    //root is complex object, not scalar
+    if (atroot || (root instanceof Object && !(root instanceof Array)) || root == this.data.GLOBAL) {
         
 		if (typeof root[item] != 'undefined' && root[item] != null && (!is_function_call || !this.hash_functions[item])) { //consider undefined == null
             if (typeof root[item] == 'function') {
@@ -521,7 +522,9 @@ proto._dotop = function(root, item, args, lvalue) {
             } else {
                 return root[item];
             }
-        } /*else if (atroot && typeof this.data.GLOBAL[item] != 'undefined' && this.__config__.GLOBAL && item != 'LOCAL' ) {
+        } /*
+        	//this section was for automatic global scope access
+        	else if (atroot && typeof this.data.GLOBAL[item] != 'undefined' && this.__config__.GLOBAL && item != 'LOCAL' ) {
             
             if (typeof this.data.GLOBAL[item] == 'function' ) {
                 result = this.data.GLOBAL[item].apply(root,args);
@@ -550,7 +553,7 @@ proto._dotop = function(root, item, args, lvalue) {
             for (var i = 0; i < item.length; i++) result.push(root[item[i]]);
             return result;
         }
-    } else if ( (root.constructor != Object) && (root instanceof Object) ) {
+    } /*else if ( (root.constructor != Object) && (root instanceof Object) ) {
         //this section was proposed for calling method on blessed reference in Perl
 		//not sure how well it is playing with javascript
 		try {
@@ -591,7 +594,7 @@ proto._dotop = function(root, item, args, lvalue) {
             } 
             
         }
-    } else if (this.string_functions[item] && !lvalue) {
+    }*/ else if (this.string_functions[item] && !lvalue) {
         args.unshift(root);
         result = this.string_functions[item].apply(this, args);
     } else if (this.list_functions[item] && !lvalue) {
@@ -624,6 +627,7 @@ proto._assign = function(root, item, args, value, set_default) {
     }
     
     if (atroot || root.constructor == Object || root == this.data.GLOBAL) {
+//this section was for automatic global scope access    	
 //		if (atroot && this.__config__.GLOBAL && typeof root[item] == 'undefined' && typeof this.data.GLOBAL[item] != 'undefined' && !set_default) { 
 //            return this.data.GLOBAL[item] = value;
 //        }
@@ -946,6 +950,11 @@ proto.hash_functions.nsort = function(hash) {
     for (var key in hash)
         list.push(key);
     return list.sort(function(a, b) { return (a-b) });
+}
+
+// item           return a value by key
+proto.hash_functions.item = function(hash, key) {
+    return hash[key];
 }
 
 // size            number of pairs

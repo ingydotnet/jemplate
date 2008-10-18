@@ -4,4 +4,6 @@ import_libs:
   - runtime.js
   - jt.js
   - jt-greeting.js
+  - js/jemplate_dummy_plugin.js
+  - js/global.js
 templates: ../template
