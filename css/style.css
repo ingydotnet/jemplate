@@ -1,0 +1,29 @@
+#logo_pane {
+    text-align: center;
+    vertical-align: middle;
+    clear: both;
+}
+
+.news_time {
+    font-style: italic;
+    color: red;
+}
+
+#news_pane {
+    width: 250px;
+    float: left;
+}
+
+#main_pane {
+    width: 500px;
+    float: left;
+    font-size: 120%;
+    border-style: solid;
+    margin: 1em;
+    padding: 1em;
+}
+
+#links_pane {
+    width: 250px;
+    float: left;
+}

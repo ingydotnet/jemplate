@@ -1,0 +1,58 @@
+---
+about_jemplate: |
+  <p>JavaScript Templating is the best way to turn AJAX/JSON data into
+  HTML. <b>Jemplate</b> is the best way to do JavaScript Templating.</p>
+
+  <p><b>Jemplate</b> beats other JavaScript Templating frameworks hands
+  down for the following reasons:</p>
+
+  <ul>
+  <li>Jemplate is a complete port of the popular <a
+  href="http://www.template-toolkit.org/">Template Toolkit</a> framework. This
+  means it is very full featured indeed.</li>
+  <li>Templates are precompiled (one time, on the server) as JavaScript functions. There is no JavaScript runtime penalty of compiling templates.</li>
+  <li>Templates are <b>not</b> stored in your HTML. No silly tricks, like putting template code in hidden textareas.</li>
+  <li>A browser downloads your templates once and caches them. Just like any other JavaScript code.</li>
+  </ul>
+  <p>This site is generated entirely by Jemplate. View Source to see for yourself.</p>
+  <blockquote style="color: orange">
+  -- Ingy döt Net
+  </blockquote>
+
+news_list:
+  - time: "June 12th, 2008"
+    title: Jemplate-0.23 Released
+    story: |
+      (Robert Krimen)++
+  - time: "April 29th, 2008"
+    title: Jemplate-0.22 Released
+    story: |
+      Found and fixed a couple bugs in the 0.21 release.
+  - time: "April 28th, 2008"
+    title: Jemplate-0.21 Released
+    story: |
+      Robert Krimen stepped up and largely overhauled Jemplate. It now
+      has builtin jQuery and YUI support. Ingy added a standalone
+      Jemplate compiler which means you don't need to install any Perl
+      modules to use Jemplate, now.
+  - time: "November 22nd, 2006"
+    title: Jemplate-0.20 Released
+    story: |
+      Fixed a couple platform specific test failures found in 0.19.
+  - time: "November 21st, 2006"
+    title: Jemplate-0.19 Released
+    story: |
+      The first jemplate release in over 6 months is now on <a
+      href="http://search.cpan.org">CPAN</a> and
+      <a href="http://www.openjsan.org">JSAN</a>. This release has many bug
+      fixes, allows template names to have paths, and has many more command
+      line options, including --runtime, which writes out the Jemplate runtime
+      module. Thanks to all who helped out!
+  - time: "November 14th, 2006"
+    title: A Touch of Jemplate
+    story: |
+      <i>David Coffey</i> has created a site called
+      <a href="http://atouchofglasss.com/">A Touch of Glass</a> that is
+      done completely with Jemplate. This site used data exported from a
+      Yahoo! Store site as XML. He converted the XML to JSON and rendered
+      the whole schmear with Jemplate. Simply Brilliant.

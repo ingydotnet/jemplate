@@ -1,0 +1,429 @@
+<?xml version="1.0"?>
+<rss version="2.0">
+ <channel>
+   <title>Jemplate: Timeline</title>
+  <link>http://trac.jemplate.net/trac/timeline</link>
+  <description>Trac Timeline</description>
+  <language>en-us</language>
+  <generator>Trac v0.9.6</generator>
+   <image>
+    <title>Jemplate</title>
+    <url>http://trac.jemplate.net/trac/chrome/common/jemplate.gif</url>
+    <link>http://trac.jemplate.net/trac/timeline</link>
+   </image>
+   <item>
+    <title>Changeset [185]: --</title>
+    <pubDate>Wed, 15 Nov 2006 08:00:25 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/changeset/185</link>
+    <description>&lt;p&gt;
+--
+&lt;/p&gt;
+</description>
+   </item>
+   <item>
+    <title>Changeset [184]:  r1982@skinny:  ingy | 2006-11-14 17:48:08 -0800 ...</title>
+    <pubDate>Wed, 15 Nov 2006 01:54:41 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/changeset/184</link>
+    <description>&lt;blockquote&gt;
+&lt;p&gt;
+&lt;a class=&#34;missing changeset&#34; href=&#34;http://trac.jemplate.net/trac/changeset/1982&#34; rel=&#34;nofollow&#34;&gt;r1982&lt;/a&gt;@skinny:  ingy | 2006-11-14 17:48:08 -0800
+Some recent changes in the Jemplate code.
+ 
+I'm checking this in so that I can switch to:
+ 
+&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;&lt;li&gt;&lt;a class=&#34;ext-link&#34; href=&#34;http://svn.jemplate.net/repo/trunk/&#34;&gt;&lt;span class=&#34;icon&#34;&gt;&lt;/span&gt;http://svn.jemplate.net/repo/trunk/&lt;/a&gt;
+&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;
+ 
+&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;
+This is the new area for Jemplate dev. It is really a downstream version of
+the more stable:
+ 
+&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;&lt;li&gt;&lt;a class=&#34;ext-link&#34; href=&#34;http://svn.kwiki.org/ingy/Jemplate/&#34;&gt;&lt;span class=&#34;icon&#34;&gt;&lt;/span&gt;http://svn.kwiki.org/ingy/Jemplate/&lt;/a&gt;
+&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;
+ 
+&lt;/p&gt;
+</description>
+   </item>
+   <item>
+    <title>JavaScript edited by ingy</title>
+    <pubDate>Wed, 15 Nov 2006 01:53:30 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/wiki/JavaScript</link>
+    <description>&lt;p&gt;
+--
+&lt;/p&gt;
+</description>
+   </item>
+   <item>
+    <title>WikiStart edited by ingy</title>
+    <pubDate>Wed, 15 Nov 2006 01:52:50 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/wiki/WikiStart</link>
+    <description>&lt;p&gt;
+s/Javascript/JavaScript/g
+&lt;/p&gt;
+</description>
+   </item>
+   <item>
+    <title>WikiStart edited by dacoffey</title>
+    <pubDate>Wed, 15 Nov 2006 01:45:11 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/wiki/WikiStart</link>
+    <description>&lt;p&gt;
+--
+&lt;/p&gt;
+</description>
+   </item>
+   <item>
+    <title>Changeset [182]: Speeling mistake</title>
+    <pubDate>Wed, 15 Nov 2006 00:28:18 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/changeset/182</link>
+    <description>&lt;p&gt;
+Speeling mistake
+&lt;/p&gt;
+</description>
+   </item>
+   <item>
+    <title>Changeset [181]: Getting some basic content into the site.  </title>
+    <pubDate>Wed, 15 Nov 2006 00:22:04 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/changeset/181</link>
+    <description>&lt;p&gt;
+Getting some basic content into the site.
+&lt;/p&gt;
+</description>
+   </item>
+   <item>
+    <title>WikiStart edited by dacoffey</title>
+    <pubDate>Tue, 14 Nov 2006 18:20:10 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/wiki/WikiStart</link>
+    <description>&lt;p&gt;
+--
+&lt;/p&gt;
+</description>
+   </item>
+   <item>
+    <title>Ticket #19 (enhancement) created by dacoffey</title>
+    <pubDate>Tue, 14 Nov 2006 18:12:26 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/ticket/19</link>
+    <description>Fix test harness output on IE. It currently shows up on one line.</description>
+   </item>
+   <item>
+    <title>Ticket #18 (enhancement) created by dacoffey</title>
+    <pubDate>Tue, 14 Nov 2006 18:12:11 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/ticket/18</link>
+    <description>Write tests to make sure all the `process` API variations work (on allbrowsers. This has bit me already.)</description>
+   </item>
+   <item>
+    <title>Ticket #17 (enhancement) created by dacoffey</title>
+    <pubDate>Tue, 14 Nov 2006 18:11:28 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/ticket/17</link>
+    <description>Finish implementing the standard filters</description>
+   </item>
+   <item>
+    <title>Ticket #16 (enhancement) created by dacoffey</title>
+    <pubDate>Tue, 14 Nov 2006 18:11:19 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/ticket/16</link>
+    <description>Implement the hash virtual methods</description>
+   </item>
+   <item>
+    <title>Ticket #15 (enhancement) created by dacoffey</title>
+    <pubDate>Tue, 14 Nov 2006 18:10:45 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/ticket/15</link>
+    <description>Make foo.bar() compile to stash.get('foo', 0, 'bar', [])</description>
+   </item>
+   <item>
+    <title>Ticket #14 (enhancement) created by dacoffey</title>
+    <pubDate>Tue, 14 Nov 2006 18:09:43 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/ticket/14</link>
+    <description>Finish the following directives:</description>
+   </item>
+   <item>
+    <title>Ticket #13 (enhancement) created by dacoffey</title>
+    <pubDate>Tue, 14 Nov 2006 18:09:17 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/ticket/13</link>
+    <description>Implement plugin support for javascript libraries</description>
+   </item>
+   <item>
+    <title>Ticket #12 (enhancement) created by dacoffey</title>
+    <pubDate>Tue, 14 Nov 2006 18:08:52 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/ticket/12</link>
+    <description>Port popular TT plugin modules</description>
+   </item>
+   <item>
+    <title>Ticket #11 (enhancement) created by dacoffey</title>
+    <pubDate>Tue, 14 Nov 2006 18:08:35 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/ticket/11</link>
+    <description>Write a tutorial pod</description>
+   </item>
+   <item>
+    <title>Ticket #10 (enhancement) created by dacoffey</title>
+    <pubDate>Tue, 14 Nov 2006 18:08:23 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/ticket/10</link>
+    <description>TT supports stash localization within a template. Jemplate should do this.</description>
+   </item>
+   <item>
+    <title>Ticket #9 (enhancement) created by dacoffey</title>
+    <pubDate>Tue, 14 Nov 2006 18:08:05 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/ticket/9</link>
+    <description>Add Experimental Ajax/Json/Stash support</description>
+   </item>
+   <item>
+    <title>Ticket #8 (enhancement) created by dacoffey</title>
+    <pubDate>Tue, 14 Nov 2006 18:07:22 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/ticket/8</link>
+    <description>Option to include template source as comments</description>
+   </item>
+   <item>
+    <title>Ticket #7 (enhancement) created by dacoffey</title>
+    <pubDate>Tue, 14 Nov 2006 18:07:11 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/ticket/7</link>
+    <description>Option to bundle Jemplate.js runtime</description>
+   </item>
+   <item>
+    <title>Ticket #6 (enhancement) created by dacoffey</title>
+    <pubDate>Tue, 14 Nov 2006 18:06:52 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/ticket/6</link>
+    <description>Better Getopt::Long processing</description>
+   </item>
+   <item>
+    <title>WikiStart edited by dacoffey</title>
+    <pubDate>Tue, 14 Nov 2006 18:03:37 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/wiki/WikiStart</link>
+    <description>&lt;p&gt;
+--
+&lt;/p&gt;
+</description>
+   </item>
+   <item>
+    <title>Changeset [180]: jemplate.net site</title>
+    <pubDate>Tue, 14 Nov 2006 17:43:46 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/changeset/180</link>
+    <description>&lt;p&gt;
+jemplate.net site
+&lt;/p&gt;
+</description>
+   </item>
+   <item>
+    <title>AjaxTest edited by dacoffey</title>
+    <pubDate>Tue, 14 Nov 2006 17:13:13 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/wiki/AjaxTest</link>
+    <description>&lt;p&gt;
+--
+&lt;/p&gt;
+</description>
+   </item>
+   <item>
+    <title>AjaxTest edited by dacoffey</title>
+    <pubDate>Tue, 14 Nov 2006 17:13:04 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/wiki/AjaxTest</link>
+    <description>&lt;p&gt;
+--
+&lt;/p&gt;
+</description>
+   </item>
+   <item>
+    <title>WikiStart edited by dacoffey</title>
+    <pubDate>Tue, 14 Nov 2006 17:12:52 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/wiki/WikiStart</link>
+    <description>&lt;p&gt;
+--
+&lt;/p&gt;
+</description>
+   </item>
+   <item>
+    <title>WikiStart edited by dacoffey</title>
+    <pubDate>Tue, 14 Nov 2006 17:10:47 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/wiki/WikiStart</link>
+    <description>&lt;p&gt;
+--
+&lt;/p&gt;
+</description>
+   </item>
+   <item>
+    <title>AjaxTest edited by dacoffey</title>
+    <pubDate>Tue, 14 Nov 2006 17:10:08 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/wiki/AjaxTest</link>
+    <description>&lt;p&gt;
+--
+&lt;/p&gt;
+</description>
+   </item>
+   <item>
+    <title>AjaxTest edited by dacoffey</title>
+    <pubDate>Tue, 14 Nov 2006 17:06:54 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/wiki/AjaxTest</link>
+    <description>&lt;p&gt;
+--
+&lt;/p&gt;
+</description>
+   </item>
+   <item>
+    <title>Examples edited by dacoffey</title>
+    <pubDate>Tue, 14 Nov 2006 17:03:27 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/wiki/Examples</link>
+    <description>&lt;p&gt;
+--
+&lt;/p&gt;
+</description>
+   </item>
+   <item>
+    <title>WikiStart edited by dacoffey</title>
+    <pubDate>Tue, 14 Nov 2006 17:01:59 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/wiki/WikiStart</link>
+    <description>&lt;p&gt;
+--
+&lt;/p&gt;
+</description>
+   </item>
+   <item>
+    <title>WikiStart edited by dacoffey</title>
+    <pubDate>Tue, 14 Nov 2006 17:00:43 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/wiki/WikiStart</link>
+    <description>&lt;p&gt;
+--
+&lt;/p&gt;
+</description>
+   </item>
+   <item>
+    <title>WikiStart edited by dacoffey</title>
+    <pubDate>Tue, 14 Nov 2006 16:59:24 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/wiki/WikiStart</link>
+    <description>&lt;p&gt;
+--
+&lt;/p&gt;
+</description>
+   </item>
+   <item>
+    <title>Ticket #5 (enhancement) created by dacoffey</title>
+    <pubDate>Tue, 14 Nov 2006 16:56:05 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/ticket/5</link>
+    <description>turn the jemplate CLI script into a standalone script</description>
+   </item>
+   <item>
+    <title>Ticket #4 (enhancement) created by dacoffey</title>
+    <pubDate>Tue, 14 Nov 2006 16:54:26 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/ticket/4</link>
+    <description>allow callback to be passed for async process</description>
+   </item>
+   <item>
+    <title>WikiStart edited by dacoffey</title>
+    <pubDate>Tue, 14 Nov 2006 16:53:33 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/wiki/WikiStart</link>
+    <description>&lt;p&gt;
+--
+&lt;/p&gt;
+</description>
+   </item>
+   <item>
+    <title>Ticket #3 (enhancement) created by dacoffey</title>
+    <pubDate>Tue, 14 Nov 2006 16:52:19 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/ticket/3</link>
+    <description>options</description>
+   </item>
+   <item>
+    <title>Ticket #2 (enhancement) created by dacoffey</title>
+    <pubDate>Tue, 14 Nov 2006 16:50:54 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/ticket/2</link>
+    <description>push output onto an array rather than a string</description>
+   </item>
+   <item>
+    <title>Ticket #1 (enhancement) created by dacoffey</title>
+    <pubDate>Tue, 14 Nov 2006 16:50:01 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/ticket/1</link>
+    <description>refactor Jemplate.process</description>
+   </item>
+   <item>
+    <title>WikiStart edited by dacoffey</title>
+    <pubDate>Tue, 14 Nov 2006 16:46:57 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/wiki/WikiStart</link>
+    <description>&lt;p&gt;
+--
+&lt;/p&gt;
+</description>
+   </item>
+   <item>
+    <title>WikiStart edited by dacoffey</title>
+    <pubDate>Tue, 14 Nov 2006 16:44:20 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/wiki/WikiStart</link>
+    <description>&lt;p&gt;
+--
+&lt;/p&gt;
+</description>
+   </item>
+   <item>
+    <title>WikiStart edited by dacoffey</title>
+    <pubDate>Tue, 14 Nov 2006 16:41:28 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/wiki/WikiStart</link>
+    <description>&lt;p&gt;
+--
+&lt;/p&gt;
+</description>
+   </item>
+   <item>
+    <title>WikiStart edited by dacoffey</title>
+    <pubDate>Tue, 14 Nov 2006 16:37:35 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/wiki/WikiStart</link>
+    <description>&lt;p&gt;
+--
+&lt;/p&gt;
+</description>
+   </item>
+   <item>
+    <title>WikiStart edited by dacoffey</title>
+    <pubDate>Tue, 14 Nov 2006 16:35:29 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/wiki/WikiStart</link>
+    <description>&lt;p&gt;
+--
+&lt;/p&gt;
+</description>
+   </item>
+   <item>
+    <title>Changeset [183]: added line describing recursive path preservation</title>
+    <pubDate>Tue, 14 Nov 2006 07:23:35 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/changeset/183</link>
+    <description>&lt;p&gt;
+added line describing recursive path preservation
+&lt;/p&gt;
+</description>
+   </item>
+   <item>
+    <title>WikiStart edited by ingy</title>
+    <pubDate>Tue, 14 Nov 2006 05:45:54 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/wiki/WikiStart</link>
+    <description>&lt;p&gt;
+--
+&lt;/p&gt;
+</description>
+   </item>
+   <item>
+    <title>TracTicketsCustomFields edited by trac</title>
+    <pubDate>Tue, 14 Nov 2006 05:23:02 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/wiki/TracTicketsCustomFields</link>
+    <description>&lt;p&gt;
+--
+&lt;/p&gt;
+</description>
+   </item>
+   <item>
+    <title>WikiDeletePage edited by trac</title>
+    <pubDate>Tue, 14 Nov 2006 05:23:02 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/wiki/WikiDeletePage</link>
+    <description>&lt;p&gt;
+--
+&lt;/p&gt;
+</description>
+   </item>
+   <item>
+    <title>TracBackup edited by trac</title>
+    <pubDate>Tue, 14 Nov 2006 05:23:02 GMT</pubDate>
+    <link>http://trac.jemplate.net/trac/wiki/TracBackup</link>
+    <description>&lt;p&gt;
+--
+&lt;/p&gt;
+</description>
+   </item>
+ </channel>
+</rss>

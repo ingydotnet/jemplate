@@ -1,0 +1,33 @@
+<div id="logo">
+    <img src="images/jemplate.gif" />
+</div>
+<div id="news_pane">
+    <h3>Recent Jemplate News</h3>
+[% FOR news = news_list %]
+[% PROCESS news_item %]
+[% END %]
+</div>
+
+<div id="main_pane">
+[% about_jemplate %]
+</div>
+
+<div id="links_pane">
+    <h3>Jemplate Links</h3>
+    <ul>
+        <li><a href="http://svn.jemplate.net/repo/trunk/bin/jemplate">Download the Jemplate Compiler</a></li>
+        <li><a href="http://search.cpan.org/dist/Jemplate/">Download the Jemplate Distribution</a></li>
+        <li><a href="http://trac.jemplate.net/trac/">The Jemplate Trac</a></li>
+        <li><a href="http://svn.jemplate.net/repo/trunk/">Subversion Repository</a></li>
+    </ul>
+</div>
+
+[% BLOCK news_item %]
+<div class="news_item">
+    <span class="news_title">[% news.title %]</span><br />
+    <span class="news_time">[% news.time %]</span><br />
+    <br />
+    <div class="news_story">[% news.story %]</div>
+</div>
+<hr />
+[% END %]
