@@ -1972,7 +1972,7 @@ output += '\n';;
 output += '\n</div>\n\n<div id="main_pane">\n';
 //line 12 "body.html"
 output += stash.get('about_jemplate');
-output += '\n</div>\n\n<div id="links_pane">\n    <h3>Jemplate Links</h3>\n    <ul>\n        <li><a href="http://svn.jemplate.net/repo/trunk/bin/jemplate">Download the Jemplate Compiler</a></li>\n        <li><a href="http://search.cpan.org/dist/Jemplate/">Download the Jemplate Distribution</a></li>\n        <li><a href="http://trac.jemplate.net/trac/">The Jemplate Trac</a></li>\n        <li><a href="http://svn.jemplate.net/repo/trunk/">Subversion Repository</a></li>\n    </ul>\n</div>\n\n';
+output += '\n</div>\n\n<div id="links_pane">\n    <h3>Jemplate Links</h3>\n    <ul>\n        <li><a href="http://svn.jemplate.net/repo/trunk/bin/jemplate">Download the Jemplate Compiler</a></li>\n        <li><a href="http://search.cpan.org/dist/Jemplate/">Download the Jemplate Distribution</a></li>\n        <li><a href="http://trac.jemplate.net/trac/">The Jemplate Trac</a></li>\n        <li><a href="http://github.com/ingydotnet/jemplate/tree/master">Git Repository</a></li>\n    </ul>\n</div>\n\n';
 
 output += '\n';
     }
