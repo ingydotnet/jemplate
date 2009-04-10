@@ -522,16 +522,7 @@ proto._dotop = function(root, item, args, lvalue) {
             } else {
                 return root[item];
             }
-        } /*
-        	//this section was for automatic global scope access
-        	else if (atroot && typeof this.data.GLOBAL[item] != 'undefined' && this.__config__.GLOBAL && item != 'LOCAL' ) {
-            
-            if (typeof this.data.GLOBAL[item] == 'function' ) {
-                result = this.data.GLOBAL[item].apply(root,args);
-            } else {
-                return this.data.GLOBAL[item];
-            }
-        }*/ else if (lvalue) {
+        } else if (lvalue) {
             return root[item] = {};
         } else if (this.hash_functions[item] && !atroot || item == 'import') {
             args.unshift(root);
@@ -553,48 +544,7 @@ proto._dotop = function(root, item, args, lvalue) {
             for (var i = 0; i < item.length; i++) result.push(root[item[i]]);
             return result;
         }
-    } /*else if ( (root.constructor != Object) && (root instanceof Object) ) {
-        //this section was proposed for calling method on blessed reference in Perl
-		//not sure how well it is playing with javascript
-		try {
-            result = root[item].apply(root,args);
-        } catch (e) {
-            var my_class = root.constructor.name;
-            
-            if (false) throw "Cant locate method"; 
-            
-            if (root instanceof Array) {
-                if (this.list_functions[item]) {
-                    args.unshift(root);
-                    result = this.list_functions[item].apply(this,args);
-                } else if (typeof item == 'string' && /^-?\d+$/.test(item) || typeof item == 'number' ) {
-                    if (typeof root[item] != 'function') return root[item];
-                    result = root[item].apply(this, args);
-                } else if (item instanceof Array) {
-                    for (var i = 0; i < item.length; i++) result.push(root[item[i]]);
-                    return result;
-                }
-            } else if (typeof root == 'object') {
-                if (typeof root[item] != 'undefined' && root[item] != null) {//consider undefined == null
-                    if (typeof root[item] == 'function') {
-                        result = root[item].apply(this,args);
-                    } else {
-                        return root[item];
-                    }
-                } else if (this.hash_functions[item]) {
-                    args.unshift(root);
-                    result = this.hash_functions[item].apply(this,args);
-                } 
-            } else if (this.string_functions[item]) {
-                args.unshift(root);
-                result = this.string_functions[item].apply(this, args);
-            } else if (this.list_functions[item]) {
-                args.unshift([root]);
-                result = this.list_functions[item].apply(this,args);
-            } 
-            
-        }
-    }*/ else if (this.string_functions[item] && !lvalue) {
+    } else if (this.string_functions[item] && !lvalue) {
         args.unshift(root);
         result = this.string_functions[item].apply(this, args);
     } else if (this.list_functions[item] && !lvalue) {
@@ -627,10 +577,6 @@ proto._assign = function(root, item, args, value, set_default) {
     }
     
     if (atroot || root.constructor == Object || root == this.data.GLOBAL) {
-//this section was for automatic global scope access    	
-//		if (atroot && this.__config__.GLOBAL && typeof root[item] == 'undefined' && typeof this.data.GLOBAL[item] != 'undefined' && !set_default) { 
-//            return this.data.GLOBAL[item] = value;
-//        }
 		
 		if (root == this.LOCAL_ANCHOR) root = this.data;
 			 
