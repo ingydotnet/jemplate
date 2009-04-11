@@ -1,0 +1,22 @@
+#1
+[%
+	RAW global_foo;
+	global_foo;
+%]
+#2
+[%
+	RAW global_object;
+	global_object.str;
+%]
+#3
+[% global_object.func_sum(1,1); %]
+#4
+[%
+	RAW global_multiply;	
+	global_multiply(1,10);
+%]
+#5
+[%
+	global_object.str = 'new_str';
+	GLOBAL.global_object.str;	
+%]
