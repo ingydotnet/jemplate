@@ -232,7 +232,7 @@ sub make_file_list {
 
     foreach my $arg (@args) {
         unless (-e $arg) { next; } # file exists
-        unless (-s $arg) { next; } # file size > 0
+        unless (-s $arg or -d $arg) { next; } # file size > 0 or directory (for Win platform)
 
         if (-d $arg) {
             foreach my $full ( recurse_dir($arg) ) {
