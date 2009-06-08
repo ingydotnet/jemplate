@@ -1,4 +1,10 @@
 ---
+version: 0.24_1
+date: Monday June 08 10:37:54 PDT 2009
+changes:
+- Fix to get tests working on MSWin32 (rt23883)
+
+---
 version: 0.24
 date:    Fri Sep 19 15:09:35 PDT 2008
 changes:
