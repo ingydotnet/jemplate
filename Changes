@@ -1,5 +1,5 @@
 ---
-version: 0.24_1
+version: 0.24_2
 date: Monday June 08 10:37:54 PDT 2009
 changes:
 - Fix to get tests working on MSWin32 (rt23883)
