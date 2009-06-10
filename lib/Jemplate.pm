@@ -587,12 +587,13 @@ Jemplate now supports almost all the TT directives, including:
   * [% LAST %]
   * [% CLEAR %]
   * [%# this is a comment %]
+  * [% MACRO name(param1, param2) BLOCK %] ... [% END %]  
 
 ALL of the string virtual functions are supported.
 
 ALL of the array virtual functions are supported:
 
-ALL of the hash virtual functions are supported (except for import):
+ALL of the hash virtual functions are supported:
 
 MANY of the standard filters are implemented.
 
