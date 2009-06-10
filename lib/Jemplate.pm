@@ -614,8 +614,8 @@ All tests run 100% successful in the above browsers.
 
 =head1 DEVELOPMENT
 
-The bleeding edge code is available via Subversion at
-http://svn.jemplate.net/repo/trunk/
+The bleeding edge code is available via Git at
+git://github.com/ingydotnet/jemplate.git
 
 You can run the runtime tests directly from
 http://svn.jemplate.net/repo/trunk/tests/run/index.html or from the
@@ -657,6 +657,8 @@ Christian Hansen
 David A. Coffey <dacoffey@cogsmith.com>
 
 Robert Krimen <robertkrimen@gmail.com>
+
+Nickolay Platonov <nickolay8@gmail.com>
 
 =head1 COPYRIGHT
 
