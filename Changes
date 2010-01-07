@@ -1,4 +1,29 @@
 ---
+version: 0.24_3
+date:    Mon Jun 8 2009
+changes:
+- fixed bug, related to empty template body (http://rt.cpan.org/Public/Bug/Display.html?id=37061)
+- fixed bug in Parser.yp, which produced compilation error for macroses
+- fixed "intermediate instantiation" issue (http://rt.cpan.org/Public/Bug/Display.html?id=37539)
+- fixed "iteration over empty object" issue (http://rt.cpan.org/Public/Bug/Display.html?id=37540)
+- added and tested MACRO directive
+- added PRE_PROCESS and POST_PROCESS configuration options
+- added and tested global scope access via GLOBAL modifier (GLOBAL.jQeuery etc)
+- added dummy LOCAL modifier, for symmetry
+- added "init" method for Jemplate singleton
+- added experimental RAW directive (RAW jQuery, equivalent of jQuery = GLOBAL.jQuery)
+
+VMethods:
+- added "list" for lists (http://rt.cpan.org/Public/Bug/Display.html?id=37570)
+- added "item" for hashes
+- fixed "import" for hashes
+
+Test suite:
+- combined back to a single copy
+
+Patches:
+- Integrated patch from RT#37895
+
 version: 0.24_2
 date: Monday June 08 10:37:54 PDT 2009
 changes:

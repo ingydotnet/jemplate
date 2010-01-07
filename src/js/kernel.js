@@ -651,7 +651,7 @@ proto.string_functions.list = function(string) {
 
 // match(re)       get list of matches
 proto.string_functions.match = function(string, re, modifiers) {
-    var regexp = new RegExp(re, modifiers);
+    var regexp = new RegExp(re, modifiers == undefined ? 'g' : modifiers);
     var list = string.match(regexp);
     return list;
 }
@@ -668,7 +668,7 @@ proto.string_functions.repeat = function(string, args) {
 
 // replace(re, sub, global)    replace instances of re with sub
 proto.string_functions.replace = function(string, re, sub, modifiers) {
-    var regexp = new RegExp(re,modifiers);    
+    var regexp = new RegExp(re, modifiers == undefined ? 'g' : modifiers);    
     if (! sub) sub  = '';
 
     return string.replace(regexp, sub);
