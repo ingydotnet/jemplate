@@ -1,4 +1,11 @@
 ---
+version: 0.24_4
+date:    Saturday January 09 17:06:40 PST 2010
+changes:
+- added .pairs (VMethod) functionality with tests
+- fixed quoted.t failing test
+
+---
 version: 0.24_3
 date:    Mon Jun 8 2009
 changes:

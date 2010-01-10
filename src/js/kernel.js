@@ -928,6 +928,20 @@ proto.hash_functions.values = function(hash) {
     return list;
 }
 
+proto.hash_functions.pairs = function(hash) {
+    var list = new Array();
+    var keys = new Array();
+    for ( var key in hash ) {
+        keys.push( key );
+    }
+    keys.sort();
+    for ( var key in keys ) {
+        key = keys[key]
+        list.push( { 'key': key, 'value': hash[key] } );
+    }
+    return list;
+}
+
 //  delete
 proto.hash_functions.remove = function(hash, key) {
     return delete hash[key];

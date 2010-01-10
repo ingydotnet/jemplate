@@ -18,6 +18,10 @@ all_from        'lib/Jemplate.pm';
 
 #build_requires        'Directory::Scratch';
 
+if (-e 'inc/.author') {
+    my $all_from = join '/', 'lib', split m/-/, name . '.pm';
+    `perldoc -tF $all_from > README` if ! -e 'README' || (stat $all_from)[9] > (stat 'README')[9];
+}
 
 requires        'Template' => '2.19';
 requires        'File::Find::Rule' => '0.30';
