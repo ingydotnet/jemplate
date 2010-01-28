@@ -36,6 +36,11 @@ Jemplate.process = function() {
     return jemplate.process.apply(jemplate, arguments);
 }
 
+// commonjs export style
+if (typeof(exports) == "object") {
+    exports.Jemplate = Jemplate;
+}
+
 ;(function(){
 
 if (! Jemplate.templateMap)
