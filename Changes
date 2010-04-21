@@ -1,14 +1,12 @@
 ---
+changes:
+- Added test case for rt37539
+
+---
 version: 0.25
 date:    Wednesday April 21 13:44:19 PDT 2010
 changes:
 - release
-
----
-version: 0.24_4
-date:    Saturday January 09 17:06:40 PST 2010
-changes:
-- added .pairs (VMethod) functionality with tests
 
 ---
 version: 0.24_4
