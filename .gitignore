@@ -1,0 +1,8 @@
+tests/tjs/var
+Makefile
+Makefile.old
+Makefile.js
+t/a.js
+t/b.js
+t/check.js
+t?
