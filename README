@@ -1,5 +1,5 @@
 VERSION
-    Version 0.24_4
+    Version 0.25
 
 NAME
     Jemplate - JavaScript Templating with Template Toolkit
@@ -24,6 +24,10 @@ SYNOPSIS
         jQuery.getJSON("url/data.json", function(data) {
             Jemplate.process('my-template.html', data, '#some-div');
         });
+
+    From the commandline:
+
+        jemplate --runtime --compile path/to/jemplate/directory/ > jemplate.js
 
 DESCRIPTION
     Jemplate is a templating framework for JavaScript that is built over
