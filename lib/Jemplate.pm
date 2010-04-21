@@ -428,6 +428,10 @@ or, with jQuery.js:
         Jemplate.process('my-template.html', data, '#some-div');
     });
 
+From the commandline:
+
+    jemplate --runtime --compile path/to/jemplate/directory/ > jemplate.js
+
 =head1 DESCRIPTION
 
 Jemplate is a templating framework for JavaScript that is built over
