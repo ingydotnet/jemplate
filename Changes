@@ -1,6 +1,7 @@
 ---
 changes:
 - Added test case for rt37539
+- Added test case for rt37540
 
 ---
 version: 0.25
