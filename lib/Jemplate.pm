@@ -225,8 +225,10 @@ sub recurse_dir {
     my $dir = shift;
     my @files;
     foreach ( File::Find::Rule->file->in( $dir ) ) {
-        # don't include .hidden files
-        unless ($_ =~ '\/\.') { push(@files, $_); }
+        if ( m{/\.[^\.]+} ) {} # Skip ".hidden" files or directories
+        else {
+            push @files, $_;
+        }
     }
     return @files;
 }

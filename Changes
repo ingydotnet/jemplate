@@ -1,5 +1,6 @@
 ---
 changes:
+- Fixed rt53697 with test case
 - Added test case for rt37539
 - Added test case for rt37540
 

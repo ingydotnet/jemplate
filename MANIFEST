@@ -54,6 +54,9 @@ META.yml
 README
 t/a.js
 t/assets/jt/hello
+t/assets/jt/a/.hidden/apple
+t/assets/jt/a/b/c/.hidden
+t/assets/jt/a/b/cherry
 t/b.js
 t/block.t
 t/call.t

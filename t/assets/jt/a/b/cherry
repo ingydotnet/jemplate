@@ -1,0 +1,3 @@
+[% BLOCK cherry %]
+apple
+[% END %]
