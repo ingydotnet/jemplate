@@ -1,8 +1,9 @@
 ---
 changes:
-- Fixed rt53697 with test case
-- Added test case for rt37539
-- Added test case for rt37540
+- Fixed rt53967 with test case - Compiler double-dot path fail
+- Added test case for rt37539 - Intermediate instantiation
+- Added test case for rt37540 - Iterate over empty object
+- Added test case for rt37895 - Inconsistent jemplate version
 
 ---
 version: 0.25
