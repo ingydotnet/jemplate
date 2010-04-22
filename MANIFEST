@@ -88,6 +88,11 @@ t/TestJemplate.pm
 t/throw.t
 t/while.t
 t/wrapper.t
+t/pairs.t
+t/9bug/37539-intermediate-instantiation.t
+t/9bug/37540-iterate-over-empty-object.t
+t/9bug/37895-inconsistent-jemplate-version.t
+t/9bug/53967-compiler-double-dot-path-fail.t
 tests/Makefile
 tests/README
 tests/bin/daemon
