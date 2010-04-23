@@ -1,5 +1,6 @@
 ---
 changes:
+- Fixed rt53454 with test case - Support rudimentary array range operator
 - Fixed rt53453 with test case - Make Jemplate slice like TT slice
 - Fixed rt53967 with test case - Compiler double-dot path fail
 - Added test case for rt37539 - Intermediate instantiation
