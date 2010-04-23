@@ -792,7 +792,12 @@ proto.list_functions.merge = function(list /*, ... args */) {
 }
 
 proto.list_functions.slice = function(list, start, end) {
-    return list.slice(start, end);
+    // To make it like slice in TT
+    // See rt53453
+    if ( end == -1 ) {
+        return list.slice( start );
+    }
+    return list.slice( start, end + 1 );
 }
 
 proto.list_functions.splice = function(list /*, ... args */ ) {

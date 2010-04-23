@@ -28,6 +28,8 @@ requires        'File::Find::Rule' => '0.30';
 
 use_test_base;
 
+tests_recursive;
+
 no_index        directory => 'examples';
 
 clean_files     't/Jemplate.js';
