@@ -1,4 +1,6 @@
 ---
+version: 0.25_1
+date: Thursday April 22 17:58:53 PDT 2010
 changes:
 - Fixed rt53454 with test case - Support rudimentary array range operator
 - Fixed rt53453 with test case - Make Jemplate slice like TT slice
