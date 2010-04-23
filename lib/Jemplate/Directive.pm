@@ -666,7 +666,27 @@ EOF
 }
 
 sub capture {
-    return "throw('CAPTURE not yet supported in Jemplate');";
+    my ($class, $name, $block) = @_;
+
+    if (ref $name) {
+        if (scalar @$name == 2 && ! $name->[1]) {
+            $name = $name->[0];
+        }
+        else {
+            $name = '[' . join(', ', @$name) . ']';
+        }
+    }
+
+    return <<EOF;
+
+// CAPTURE
+(function() {
+	var output = '';
+	$block
+	stash.set($name, output);
+})();
+EOF
+
 }   
 
 BEGIN {

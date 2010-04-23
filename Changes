@@ -1,4 +1,8 @@
 ---
+changes:
+- Implemented rt4308 - Capture implementation (Tom Molesworth)
+
+---
 version: 0.25_1
 date: Thursday April 22 17:58:53 PDT 2010
 changes:
