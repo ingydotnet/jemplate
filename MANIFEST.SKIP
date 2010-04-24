@@ -11,3 +11,4 @@
 ^tests/
 Makefile.old
 t[0-9]
+Template-TT3

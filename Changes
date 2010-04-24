@@ -1,6 +1,7 @@
 ---
 changes:
 - Implemented rt4308 - Capture implementation (Tom Molesworth)
+- Added test for rt37570 - List method for lists (fixed in 5eaf340da...)
 
 ---
 version: 0.25_1
