@@ -7,11 +7,11 @@ use Getopt::Long;
 
 =head1 VERSION
 
-Version 0.25_2
+Version 0.260
 
 =cut
  
-our $VERSION = '0.25_2';
+our $VERSION = '0.260';
 
 use Jemplate::Parser;
 
