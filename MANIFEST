@@ -97,6 +97,7 @@ t/9bug/53453-make-Jemplate-slice-like-TT-slice.t
 t/9bug/53454-array-range-operator.t
 t/9bug/37570-list-for-lists.t
 t/9bug/43809-capture-implementation.t
+t/9bug/56965-DIV-operator-broken.t
 tests/Makefile
 tests/README
 tests/bin/daemon

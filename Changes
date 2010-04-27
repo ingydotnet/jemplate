@@ -1,4 +1,10 @@
 ---
+version: 0.261
+date: Tuesday April 27 09:35:06 PDT 2010
+changes:
+- Fixed rt56956 with test case - DIV operator broken (Agent Zhang)
+
+---
 version: 0.260
 date: Monday April 26 12:03:40 PDT 2010
 
