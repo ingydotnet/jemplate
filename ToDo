@@ -1,3 +1,14 @@
+=== 0.25
+
+- Find out what changed from 0.23 to 0.23_01 to HEAD
+- Release 0.24
+
+- Port to Python
+- Make tests/javascript and tests/python
+- Make separate JS and PY subclasses of Template classes
+
+=== 0.23
+
 FUTURE:
 
 09:55 < nkuttler_> apparently firefox sets the accept header to request xml rather than json, which obviously is incompatible with later JSON.parse calls. I have added a 
