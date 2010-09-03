@@ -25,7 +25,7 @@ use_test_base;
 
 no_index        directory => 'examples';
 
-clean_files     't/Jemplate.js';
+clean_files     't/Jemplate.js t/a.js t/b.js t/check.js';
 
 install_script  'jemplate';
 
