@@ -17,7 +17,7 @@ stash.set('foo', 'foo');
 //line 1 "test_template"
 stash.set('bar', 'bar');
 output += '\n';
-//line 0 "test_template"
+//line 1 "test_template"
 output += stash.get('foo') + '/' + stash.get('bar');
 output += '\n';
 
