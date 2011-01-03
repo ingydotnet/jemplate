@@ -145,8 +145,8 @@ condition:  IF expr ';'
 	      block else END	    { $factory->if(@_[2, 4, 5])           }
 	|   atomexpr IF expr	    { $factory->if(@_[3, 1])              }
 	|   UNLESS expr ';'
-	      block else END	    { $factory->if("!($_[2])", @_[4, 5])  }
-	|   atomexpr UNLESS expr    { $factory->if("!($_[3])", $_[1])     }
+	      block else END	    { $factory->if("($_[2]) == false", @_[4, 5])  }
+	|   atomexpr UNLESS expr    { $factory->if("($_[3]) == false", $_[1])     }
 ;
 
 else:	    ELSIF expr ';' 
