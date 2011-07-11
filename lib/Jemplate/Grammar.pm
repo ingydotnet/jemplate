@@ -5498,13 +5498,13 @@ sub
 		 'condition', 6,
 sub
 #line 148 "Parser.yp"
-{ $factory->if("!($_[2])", @_[4, 5])  }
+{ $factory->if("($_[2]) == false", @_[4, 5])  }
 	],
 	[#Rule 49
 		 'condition', 3,
 sub
 #line 149 "Parser.yp"
-{ $factory->if("!($_[3])", $_[1])     }
+{ $factory->if("($_[3]) == false", $_[1])     }
 	],
 	[#Rule 50
 		 'else', 5,

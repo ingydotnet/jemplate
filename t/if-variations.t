@@ -19,7 +19,7 @@ output += 'Foo';
 [% UNLESS foo %]Foo[% END -%]
 --- js
 //line 1 "(unknown template)"
-if (!(stash.get('foo'))) {
+if ((stash.get('foo')) == false) {
 output += 'Foo';
 }
 
@@ -46,7 +46,7 @@ output += 'Foo';
 [% SET foo = bar UNLESS baz -%]
 --- js
 //line 1 "(unknown template)"
-if (!(stash.get('baz'))) {
+if ((stash.get('baz')) == false) {
 stash.set('foo', stash.get('bar'));
 }
 
