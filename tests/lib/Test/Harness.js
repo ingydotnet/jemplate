@@ -1,4 +1,4 @@
-// $Id: /mirror/openjsan/users/theory/Test.Simple/trunk/lib/Test/Harness.js 2141 2008-08-28T06:41:15.308449Z ingy  $
+// $Id$
 
 /*global JSAN, Test, _global, _player */
 
@@ -16,7 +16,7 @@ if (typeof self != 'undefined') {
 }
 
 Test.Harness = function () {};
-Test.Harness.VERSION = '0.28';
+Test.Harness.VERSION = '0.29';
 Test.Harness.Done = 0;
 
 // Stoopid IE.

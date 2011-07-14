@@ -1,4 +1,5 @@
-(function() {
+// XXX Wrap this class.
+// (function() {
 
 Test.Base = function() {
     this.init.apply(this, arguments);
@@ -683,4 +684,3 @@ var JSON = function () {
     };
 }();
 
-})();

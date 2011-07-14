@@ -1,4 +1,4 @@
-// $Id: /mirror/openjsan/users/theory/Test.Simple/trunk/lib/Test/Builder.js 2167 2008-09-07T21:00:15.546887Z theory  $
+// $Id$
 
 /*global JSAN, Test, WScript, _global */
 
@@ -36,7 +36,7 @@ Test.Builder.globalScope = typeof JSAN != 'undefined'
       ? _global
       : this;
 
-Test.Builder.VERSION = '0.28';
+Test.Builder.VERSION = '0.29';
 Test.Builder.Instances = [];
 Test.Builder.lineEndingRx = /\r?\n|\r/g;
 Test.Builder.StringOps = {
@@ -611,8 +611,7 @@ Test.Builder.prototype._setupOutput = function () {
 
         this.output(writer);
         this.failureOutput(function (msg) {
-            writer('<span style="color: red; font-weight: bold">'
-                   + msg + '</span>')
+            writer(msg);
         });
         this.todoOutput(writer);
         this.endOutput(writer);
@@ -755,7 +754,7 @@ Test.Builder.prototype._ending = function () {
 
         var numFailed = 0;
         for (var i = 0; i < this.TestResults.length; i++) {
-            if (!this.TestResults[i]) numFailed++;
+            if (!this.TestResults[i].ok) numFailed++;
         }
         numFailed += Math.abs(
             this.ExpectedTests - this.TestResults.length
@@ -769,7 +768,7 @@ Test.Builder.prototype._ending = function () {
             );
         } else if (numFailed) {
             out(
-                "# Looks like you failed " + numFailed + "test"
+                "# Looks like you failed " + numFailed + " test"
                 + (numFailed == 1 ? '' : 's') + " of "
                 + this.ExpectedTests + "." + Test.Builder.LF
             );

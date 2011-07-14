@@ -1,4 +1,4 @@
-// $Id: /mirror/openjsan/users/theory/Test.Simple/trunk/lib/Test/Harness/Browser.js 2141 2008-08-28T06:41:15.308449Z ingy  $
+// $Id$
 
 /*global JSAN, Test, ActiveXObject */
 
@@ -11,6 +11,9 @@ else {
 if (window.parent != window &&
     location.href.replace(/[?#].+/, "") == parent.location.href.replace(/[?#].+/, ""))
 {
+    // We're in a test iframe. Set up the necessary parts and load the                      
+    // test script with XMLHttpRequest (the Safari and Opera xml-hack).                     
+    var __MY = {};
 
     // Build fake T.H.B so original script from this file doesn't throw
     // exception. This is a bit of a hack...
@@ -19,9 +22,7 @@ if (window.parent != window &&
         this.encoding = function () { return this };
     };
 
-    // We're in a test iframe. Set up the necessary parts and load the
-    // test script with XMLHttpRequest (to support Safari and Opera).
-    var __MY = {};
+    // Create the test script element.
     __MY.pre = document.createElement("pre");
     __MY.pre.id = "test";
     if (window.parent.Test.Harness.Browser._encoding) {
@@ -68,13 +69,14 @@ if (window.parent != window &&
     else if (document.appendChild) document.appendChild(__MY.pre);
 
 } else {
+    // Create the harness and run the tests.
     Test.Harness.Browser = function () {
         this.includes = Test.Harness.Browser.includes = [];
         Array.prototype.push.apply(Test.Harness.Browser.includes, arguments);
         this.includes.push('');
     };
 
-    Test.Harness.Browser.VERSION = '0.28';
+    Test.Harness.Browser.VERSION = '0.29';
 
     Test.Harness.Browser.runTests = function () {
         var harness = new Test.Harness.Browser();
@@ -89,17 +91,12 @@ if (window.parent != window &&
         var node = document.getElementById('buffer');
         if (node) return node.contentWindow || frames.buffer;
         node = document.createElement("iframe");
-        node.setAttribute("id", "buffer");
-        node.setAttribute("name", "buffer");
-        // Safari makes it impossible to do anything with the iframe if it's
-        // set to display:none. See:
+        node.setAttribute( 'id',   'buffer' );
+        node.setAttribute( 'name', 'buffer' );
+        node.style.visibility = 'hidden';
         // http://www.quirksmode.org/bugreports/archives/2005/02/hidden_iframes.html
-        if (/Safari|Konqueror/.test(navigator.userAgent)) {
-            node.style.visibility = "hidden";
-            node.style.height = "0"; 
-            node.style.width = "0";
-        } else
-            node.style.display = "none";
+        node.style.height     = '1';
+        node.style.width      = '1';
         document.body.appendChild(node);
         return node.contentWindow || frames.buffer;
     };
@@ -138,24 +135,21 @@ if (window.parent != window &&
 
     Test.Harness.Browser.prototype._setupSummary = function () {
         // Setup the div for the summary.
-        var node = document.createElement("div");
+        var node = document.createElement("pre");
         node.setAttribute("id", "summary");
-        node.setAttribute(
-            "style", "white-space:pre; font-family: Verdana,Arial,serif;"
-        );
         document.body.appendChild(node);
         return function (msg) {
             node.appendChild(document.createTextNode(msg));
             window.scrollTo(0, document.body.offsetHeight
                             || document.body.scrollHeight);
         };
-};
+    };
 
     Test.Harness.Browser.prototype.runTests = function () {
         Test.Harness.Browser._encoding = this.encoding();
         var files = this.args.file
-        ? typeof this.args.file == 'string' ? [this.args.file] : this.args.file
-        : arguments;
+            ? typeof this.args.file == 'string' ? [this.args.file] : this.args.file
+            : arguments;
         if (!files.length) return;
         var outfiles = this.outFileNames(files);
         var buffer = this._setupFrame();
@@ -240,72 +234,90 @@ if (window.parent != window &&
     };
 
     Test.Harness.Browser.prototype.runTest = function (file, buffer) {
-        if (/\.html$/.test(file)) {
+        var fileType = /\.html$/.test(file) ? 'html'
+            : /\.js$/.test(file) ? 'js'
+            : this.defaultTestType
+        if ( fileType == 'html' ) {
             buffer.location.replace(file);
-        } else { // if (/\.js$/.test(file)) {
-            if (/MSIE|Opera|Safari|Konqueror/.test(navigator.userAgent)) {
-                // These browsers have problems with the DOM solution. It
-                // simply doesn't work in Safari, and Opera considers its
-                // handling of buffer.document to be a security violation. So
-                // have them use the XML hack, instead.
+        }
+        else if ( fileType == 'js' ) {
+            if (/MSIE|Safari|Opera|Konqueror/.test(navigator.userAgent)) {
+                // These browsers have problems with the DOM solution, though
+                // I'm not sure why. It simply doesn't work in Safari, and
+                // Opera considers its handling of buffer.document to be a
+                // security violation. Theoretically, we should be able to get
+                // it working with all browsers and get rid of the XML hack,
+                // but it will require more expertise than I possess. In the
+                // meantime, we have to live with it.
                 this.includes[this.includes.length-1] = file;
                 buffer.location.replace(location.pathname + "?xml-hack=1");
                 return;
             }
-            // document.write() simply doesn't work here. Thanks to
-            // Pawel Chmielowski for figuring that out!
+
+            // Use the DOM (document.write() won't work) to create a new
+            // document with script elements for all of the JavaScript scrips
+            // we want to run.
             var doc = buffer.document;
             doc.open("text/html");
             doc.close();
-            var el;
 
-            // XXX Opera chokes on this line. It thinks that using the doc
-            // element like this is a security violation, never mind that we
-            // were the ones who actually created it. Whatever!
-            var body = doc.body || doc.getElementsByTagName("body")[0];
-            var head = doc.getElementsByTagName("head")[0];
+            // Set up a function to do the DOM insertion and run the test.
+            var harn = this;
+            var doit = function () {
+                var el;
 
-            // Safari seems to be headless at this point.
-            if (!head) {
-                head = doc.createElement('head');
-                doc.appendChild(head);
-            }
+                // XXX Opera chokes on this line. It thinks that using the doc
+                // element like this is a security violation, never mind that
+                // we were the ones who actually created it. Whatever!
+                var body = doc.body || doc.getElementsByTagName("body")[0];
+                var head = doc.getElementsByTagName("head")[0];
 
-            // Add script elements for all includes.
-            for (var i = 0; i < this.includes.length - 1; i++) {
+                // Safari seems to be headless at this point.
+                if (!head) {
+                    head = doc.createElement('head');
+                    doc.appendChild(head);
+                }
+
+                // Add script elements for all includes.
+                for (var i = 0; i < harn.includes.length - 1; i++) {
+                    el = doc.createElement("script");
+                    el.setAttribute("src", harn.includes[i]);
+                    head.appendChild(el);
+                }
+
+                // Create the pre and script element for the test file.
+                var pre = doc.createElement("pre");
+                pre.id = "test";
                 el = doc.createElement("script");
-                el.setAttribute("src", this.includes[i]);
-                head.appendChild(el);
-            }
+                el.type = "text/javascript";
+                if (harn.encoding()) el.charset = harn.encoding();
 
+                // XXX This doesn't work in Safari right now. See
+                // http://bugs.webkit.org/show_bug.cgi?id=3748
+                el.src = file;
+                pre.appendChild(el);
 
-            // Create the pre and script element for the test file.
-            var pre = doc.createElement("pre");
-            pre.id = "test";
-            el = doc.createElement("script");
-            el.type = "text/javascript";
-            if (this.encoding()) el.charset = this.encoding();
+                // Create a script element to finish the tests.
+                el = doc.createElement("script");
+                el.type = "text/javascript";
+                var text = "window.onload(null, Test)";
 
-            // XXX This doesn't work in Safari right now. See
-            // http://bugs.webkit.org/show_bug.cgi?id=3748
-            el.src = file;
-            pre.appendChild(el);
+                // IE doesn't let script elements have children.
+                if (null != el.canHaveChildren) el.text = text;
+                // But most other browsers do.
+                else el.appendChild(document.createTextNode(text));
 
-            // Create a script element to finish the tests.
-            el = doc.createElement("script");
-            el.type = "text/javascript";
-            var text = "window.onload(null, Test)";
+                pre.appendChild(el);
 
-            // IE doesn't let script elements have children.
-            if (null != el.canHaveChildren) el.text = text;
-            // But most other browsers do.
-            else el.appendChild(document.createTextNode(text));
+                // IE 6 SP 2 Requires getting the body element again.
+                body = doc.body || doc.getElementsByTagName("body")[0];
+                body.appendChild(pre);
+            };
 
-            pre.appendChild(el);
+            // If we have a body, just do it. Otherwise, do it when
+            // the document loads.
+            if (doc.body) doit(); else buffer.onload = doit;
 
-            // IE 6 SP 2 Requires getting the body element again.
-            body = doc.body || doc.getElementsByTagName("body")[0];
-            body.appendChild(pre);
         /* Let's just assume that if it's not .html, it's JavaScript.
         } else {
             // Who are you, man??
