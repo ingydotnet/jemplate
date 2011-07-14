@@ -87,7 +87,7 @@ use strict;
 use Exporter;
 use vars qw/$VERSION @ISA @EXPORT_OK
             $strict_leading_dot $strict_wildcard_slash/;
-$VERSION = '0.08';
+$VERSION = '0.09';
 @ISA = 'Exporter';
 @EXPORT_OK = qw( glob_to_regex glob_to_regex_string match_glob );
 
@@ -182,15 +182,13 @@ BEGIN {
 
 package File::Find::Rule;
 use strict;
-use vars qw/$VERSION $AUTOLOAD/;
 use File::Spec;
 use Text::Glob 'glob_to_regex';
 use Number::Compare;
 use Carp qw/croak/;
 use File::Find (); # we're only wrapping for now
-use Cwd;           # 5.00503s File::Find goes screwy with max_depth == 0
 
-$VERSION = '0.30';
+our $VERSION = '0.32';
 
 sub import {
     my $pkg = shift;
@@ -245,8 +243,8 @@ sub new {
     my $referent = shift;
     my $class = ref $referent || $referent;
     bless {
-        rules    => [],  # [0]
-        subs     => [],  # [1]
+        rules    => [],
+        subs     => {},
         iterator => [],
         extras   => {},
         maxdepth => undef,
@@ -349,15 +347,15 @@ use vars qw( @stat_tests );
 
 sub any {
     my $self = _force_object shift;
-    my @rulesets = @_;
-
+    # compile all the subrules to code fragments
     push @{ $self->{rules} }, {
-        rule => 'any',
-        code => '(' . join( ' || ', map {
-            "( " . $_->_compile( $self->{subs} ) . " )"
-        } @_ ) . ")",
+        rule => "any",
+        code => '(' . join( ' || ', map '( ' . $_->_compile . ' )', @_ ). ')',
         args => \@_,
     };
+    
+    # merge all the subs hashes of the kids into ourself
+    %{ $self->{subs} } = map { %{ $_->{subs} } } $self, @_;
     $self;
 }
 
@@ -366,15 +364,15 @@ sub any {
 
 sub not {
     my $self = _force_object shift;
-    my @rulesets = @_;
 
     push @{ $self->{rules} }, {
         rule => 'not',
-        args => \@rulesets,
-        code => '(' . join ( ' && ', map {
-            "!(". $_->_compile( $self->{subs} ) . ")"
-        } @_ ) . ")",
+        args => \@_,
+        code => '(' . join ( ' && ', map { "!(". $_->_compile . ")" } @_ ) . ")",
     };
+    
+    # merge all the subs hashes into us
+    %{ $self->{subs} } = map { %{ $_->{subs} } } $self, @_;
     $self;
 }
 
@@ -465,6 +463,7 @@ sub relative () {
 
 sub DESTROY {}
 sub AUTOLOAD {
+    our $AUTOLOAD;
     $AUTOLOAD =~ /::not_([^:]*)$/
       or croak "Can't locate method $AUTOLOAD";
     my $method = $1;
@@ -485,8 +484,8 @@ sub in {
     my $self = _force_object shift;
 
     my @found;
-    my $fragment = $self->_compile( $self->{subs} );
-    my @subs = @{ $self->{subs} };
+    my $fragment = $self->_compile;
+    my %subs = %{ $self->{subs} };
 
     warn "relative mode handed multiple paths - that's a bit silly\n"
       if $self->{relative} && @_ > 1;
@@ -526,11 +525,10 @@ sub in {
     }';
 
     #use Data::Dumper;
-    #print Dumper \@subs;
+    #print Dumper \%subs;
     #warn "Compiled sub: '$code'\n";
 
     my $sub = eval "$code" or die "compile error '$code' $@";
-    my $cwd = getcwd;
     for my $path (@_) {
         # $topdir is used for relative and maxdepth
         $topdir = $path;
@@ -540,7 +538,6 @@ sub in {
           unless $topdir eq '/';
         $self->_call_find( { %{ $self->{extras} }, wanted => $sub }, $path );
     }
-    chdir $cwd;
 
     return @found;
 }
@@ -552,19 +549,20 @@ sub _call_find {
 
 sub _compile {
     my $self = shift;
-    my $subs = shift; # [1]
 
     return '1' unless @{ $self->{rules} };
     my $code = join " && ", map {
         if (ref $_->{code}) {
-            push @$subs, $_->{code};
-            "\$subs[$#{$subs}]->(\@args) # $_->{rule}\n";
+            my $key = "$_->{code}";
+            $self->{subs}{$key} = $_->{code};
+            "\$subs{'$key'}->(\@args) # $_->{rule}\n";
         }
         else {
             "( $_->{code} ) # $_->{rule}\n";
         }
     } @{ $self->{rules} };
 
+    #warn $code;
     return $code;
 }
 
@@ -16255,12 +16253,12 @@ sub
 	[#Rule 48
 		 'condition', 6,
 sub
-{ $factory->if("!($_[2])", @_[4, 5])  }
+{ $factory->if("($_[2]) == false", @_[4, 5])  }
 	],
 	[#Rule 49
 		 'condition', 3,
 sub
-{ $factory->if("!($_[3])", $_[1])     }
+{ $factory->if("($_[3]) == false", $_[1])     }
 	],
 	[#Rule 50
 		 'else', 5,
