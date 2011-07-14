@@ -1,4 +1,4 @@
-PERL5LIB=../lib
+PERL5LIB = ../lib
 
 all: js/ajax.js js/hello.js js/features.js
 

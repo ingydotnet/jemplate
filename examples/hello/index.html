@@ -1,19 +1,19 @@
 <html>
     <head>
-        <title>Hello Test</title>
-<script src="../../share/Jemplate.js" type="text/javascript"></script>
-<script src="../js/hello.js" type="text/javascript"></script>
+        <title>Hello Jemplate Example</title>
+        <script src="../js/JemplateRuntime.js" type="text/javascript"></script>
+        <script src="../js/hello.js" type="text/javascript"></script>
 
-<script type="text/javascript">
+        <script type="text/javascript">
 onload = function() {
     var body = document.getElementsByTagName('body')[0];
     var data = { name: 'Ingy' };
     body.innerHTML = Jemplate.process('hello.html', data);
 }
-</script>
+        </script>
 
     </head>
     <body>
-It didn't work...
+Loading...
     </body>
 </html>

@@ -1,0 +1,9 @@
+This is a directory of simple Jemplate examples.
+
+It should be viewable from CPAN.
+
+It should also run locally by running:
+
+    plackup
+
+to start a server.
