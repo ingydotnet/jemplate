@@ -1,7 +1,7 @@
-.PHONY: check fetch compact clean
+.PHONY: got_rhino check fetch compact clean
 
 CURL := curl
-JS := js
+JS := $(shell which rhino)
 JAVA := java
 RM := rm
 
@@ -9,8 +9,13 @@ DOT_JS := ajax-jquery.js ajax-xhr.js ajax-yui.js json-json2-internal.js json-jso
 
 DOT_COMPACT_JS := $(DOT_JS:%.js=%.compact.js)
 
+all: got_rhino check
+
 check: $(DOT_COMPACT_JS) $(DOT_JS)
-	for file in $^; do js -e "window = { Function: { prototype: {} }, document: {} }; Jemplate = {};" -swC $$file && echo $$file pass; done
+	for file in $^; do $(JS) -e "window={Function:{prototype:{}},document:{}};Jemplate={};" $$file && echo $$file pass; done
+
+got_rhino:
+	@if [ -z "$(JS)" ]; then echo "ERROR: The 'rhino' executable is required"; exit 1; fi
 
 compact: $(DOT_COMPACT_JS)
 
