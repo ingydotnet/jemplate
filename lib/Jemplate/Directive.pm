@@ -33,6 +33,17 @@ $block
 ...
 }
  
+# Try to do 1 .. 10 expansions
+sub _attempt_range_expand_val ($) {
+    my $val = shift;
+    return $val unless
+        my ( $from, $to ) = $val =~ m/\s*\[\s*(\S+)\s*\.\.\s*(\S+)\s*\]/;
+
+    die "Range expansion is current supported for positive/negative integer values only (e.g. [ 1 .. 10 ])\nCannot expand: $val" unless $from =~ m/^-?\d+$/ && $to =~ m/^-?\d+$/;
+
+    return join '', '[', join( ',', $from .. $to ), ']';
+}
+
 #------------------------------------------------------------------------
 # textblock($text)
 #------------------------------------------------------------------------
@@ -101,6 +112,7 @@ sub assign {
             $var = '[' . join(', ', @$var) . ']';
         }
     }
+    $val =  _attempt_range_expand_val $val;
     $val .= ', 1' if $default;
     return "stash.set($var, $val)";
 }
@@ -276,6 +288,8 @@ sub foreach {
             "stash.get(['import', [value]]) if typeof(value) == 'object'";
         $loop_restore = 'stash = context.delocalise()';
     }
+
+    $list = _attempt_range_expand_val $list;
 
     return <<EOF;
 
@@ -652,7 +666,27 @@ EOF
 }
 
 sub capture {
-    return "throw('CAPTURE not yet supported in Jemplate');";
+    my ($class, $name, $block) = @_;
+
+    if (ref $name) {
+        if (scalar @$name == 2 && ! $name->[1]) {
+            $name = $name->[0];
+        }
+        else {
+            $name = '[' . join(', ', @$name) . ']';
+        }
+    }
+
+    return <<EOF;
+
+// CAPTURE
+(function() {
+	var output = '';
+	$block
+	stash.set($name, output);
+})();
+EOF
+
 }   
 
 BEGIN {

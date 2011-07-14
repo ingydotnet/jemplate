@@ -19,7 +19,7 @@ list.html
 [% a1.max() %]+[% a1.size() %]
 [% SET a2 = a1.reverse -%]
 [% a2.join('^') %]
-[% a2.slice(1, 3).join('*') %]
+[% a2.slice(1, 2).join('*') %]
 [% SET a3 = [ 5, 9, 'x', 17, 9, 33, 12, 'x', 5] -%]
 [% a3.unique().join(',') %]
 [% a1.unshift('zero').sort().join('!') %]

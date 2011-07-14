@@ -5,7 +5,13 @@ use warnings;
 use Template 2.14;
 use Getopt::Long;
 
-our $VERSION = '0.23_1';
+=head1 VERSION
+
+Version 0.261
+
+=cut
+ 
+our $VERSION = '0.261';
 
 use Jemplate::Parser;
 
@@ -219,8 +225,10 @@ sub recurse_dir {
     my $dir = shift;
     my @files;
     foreach ( File::Find::Rule->file->in( $dir ) ) {
-        # don't include .hidden files
-        unless ($_ =~ '\/\.') { push(@files, $_); }
+        if ( m{/\.[^\.]+} ) {} # Skip ".hidden" files or directories
+        else {
+            push @files, $_;
+        }
     }
     return @files;
 }
@@ -232,7 +240,7 @@ sub make_file_list {
 
     foreach my $arg (@args) {
         unless (-e $arg) { next; } # file exists
-        unless (-s $arg) { next; } # file size > 0
+        unless (-s $arg or -d $arg) { next; } # file size > 0 or directory (for Win platform)
 
         if (-d $arg) {
             foreach my $full ( recurse_dir($arg) ) {
@@ -422,6 +430,10 @@ or, with jQuery.js:
         Jemplate.process('my-template.html', data, '#some-div');
     });
 
+From the commandline:
+
+    jemplate --runtime --compile path/to/jemplate/directory/ > jemplate.js
+
 =head1 DESCRIPTION
 
 Jemplate is a templating framework for JavaScript that is built over
@@ -587,12 +599,13 @@ Jemplate now supports almost all the TT directives, including:
   * [% LAST %]
   * [% CLEAR %]
   * [%# this is a comment %]
+  * [% MACRO name(param1, param2) BLOCK %] ... [% END %]  
 
 ALL of the string virtual functions are supported.
 
 ALL of the array virtual functions are supported:
 
-ALL of the hash virtual functions are supported (except for import):
+ALL of the hash virtual functions are supported:
 
 MANY of the standard filters are implemented.
 
@@ -613,8 +626,8 @@ All tests run 100% successful in the above browsers.
 
 =head1 DEVELOPMENT
 
-The bleeding edge code is available via Subversion at
-http://svn.jemplate.net/repo/trunk/
+The bleeding edge code is available via Git at
+git://github.com/ingydotnet/jemplate.git
 
 You can run the runtime tests directly from
 http://svn.jemplate.net/repo/trunk/tests/run/index.html or from the
@@ -656,6 +669,8 @@ Christian Hansen
 David A. Coffey <dacoffey@cogsmith.com>
 
 Robert Krimen <robertkrimen@gmail.com>
+
+Nickolay Platonov <nickolay8@gmail.com>
 
 =head1 COPYRIGHT
 

@@ -355,7 +355,7 @@ item:	    IDENT		    { "'$_[1]'"                           }
 expr:	    expr BINOP expr	    { "$_[1] $_[2] $_[3]"                 }
 	|   expr '/' expr	    { "$_[1] $_[2] $_[3]"                 }
 	|   expr '+' expr	    { "$_[1] $_[2] $_[3]"                 }
-	|   expr DIV expr	    { "int($_[1] / $_[3])"                }
+	|   expr DIV expr	    { "Math.floor($_[1] / $_[3])"                }
 	|   expr MOD expr	    { "$_[1] % $_[3]"                     }
 	|   expr CMPOP expr	    { "$_[1] $CMPOP{ $_[2] } $_[3]"       }
 	|   expr CAT expr	    { "$_[1]  + $_[3]"                    }

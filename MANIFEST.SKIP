@@ -7,3 +7,8 @@
 ^t/Jemplate.js$
 ^src/
 ^tests/tjs/var/
+^tmp.*
+^tests/
+Makefile.old
+t[0-9]
+Template-TT3

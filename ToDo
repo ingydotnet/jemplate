@@ -9,6 +9,10 @@
 
 === 0.23
 
+Add note about commit 3c4d9 referring to wrong rt, should refer to 23883
+
+TODO: Does use_test_base not work? make test compains that Test::Base is not installed -rokr
+    
 FUTURE:
 
 09:55 < nkuttler_> apparently firefox sets the accept header to request xml rather than json, which obviously is incompatible with later JSON.parse calls. I have added a 

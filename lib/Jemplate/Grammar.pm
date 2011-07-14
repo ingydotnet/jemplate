@@ -6010,7 +6010,7 @@ sub
 		 'expr', 3,
 sub
 #line 358 "Parser.yp"
-{ "int($_[1] / $_[3])"                }
+{ "Math.floor($_[1] / $_[3])"                }
 	],
 	[#Rule 138
 		 'expr', 3,
