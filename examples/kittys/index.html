@@ -8,7 +8,7 @@
         <script type="text/javascript">
 $(function() {
  $.getJSON("http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?",
-  { tags: "kitty cat", tagmode: "any", format: "json" }, function(data) { console.log(data); Jemplate.process('kittys.html',data,'#flickr') });
+  { tags: "kitty cat", tagmode: "any", format: "json" }, function(data) { Jemplate.process('kittys.html',data,'#flickr') });
 });
         </script>
 
