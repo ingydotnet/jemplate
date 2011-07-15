@@ -1,20 +1,25 @@
-This is the JavaScript testing area for Jemplate. If you are new to
-testing Jemplate, please read this.
+This is the JavaScript testing area for Jemplate. If you are new to testing
+Jemplate, please read this.
 
 == RUNNING THE TESTS ==
 
-There are currently two ways to run these tests. 
+There are currently three ways to run these JavaScript tests. 
 
-1) If you have a webserver pointing at this directory you can just go to
-   that URL and all the tests will run in your browser.
+1) If you have Plack.pm installed, run this command and follow the printed
+   instructions:
 
-2) You can do the following commands:
+    make test
+
+2) If you have some other webserver pointing at this directory you can just go
+   to the appropriate URL (+ index.html) and all the tests will run in your
+   browser.
+
+3) You can do the following commands:
 
         cd tjs
         make clean test
 
-   The output will tell you a URL to load in your browser to run
-   the tests.
+The output will tell you a URL to load in your browser to run the tests.
 
 == ADDING OR CHANGING TESTS ==
 

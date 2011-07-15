@@ -1,3 +1,13 @@
+== Things to do:
+
+- Switch to App::Cmd
+- Add Python support
+- Add Perl (module) support
+
+#------------------------------------------------------------------------------#
+# Older notes, before July 14, 2011
+#------------------------------------------------------------------------------#
+
 === 0.25
 
 - Find out what changed from 0.23 to 0.23_01 to HEAD

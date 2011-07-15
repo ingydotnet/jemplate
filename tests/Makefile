@@ -28,6 +28,11 @@ ALL_LIBS= \
 
 all: $(ALL_DIRS) $(ALL_TARGETS) $(ALL_LIBS)
 
+test: all
+	@echo
+	@echo 'Load index.html at the following URL to run browser tests:'
+	@plackup
+
 clean:
 	rm -fr $(ALL_TARGETS) $(ALL_LIBS)
 	if [ "$(TEST_TEMPLATE_MD5)" = \

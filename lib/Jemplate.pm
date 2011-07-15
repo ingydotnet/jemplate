@@ -1,3 +1,15 @@
+##
+# name:      Jemplate
+# abstract:  JavaScript Templating with Template Toolkit
+# author:    Ingy döt Net <ingy@cpan.org>
+# license:   perl
+# copyright: 2006-2008, 2011
+
+# ToDo:
+# - Module::Package
+# - Stardoc
+# - Use TT:Simple in Makefiles
+
 package Jemplate;
 use 5.006001;
 use strict;
@@ -5,12 +17,6 @@ use warnings;
 use Template 2.14;
 use Getopt::Long;
 
-=head1 VERSION
-
-Version 0.261
-
-=cut
- 
 our $VERSION = '0.261';
 
 use Jemplate::Parser;
@@ -404,10 +410,6 @@ if (typeof(Jemplate) == 'undefined')
 
 1;
 
-=head1 NAME
-
-Jemplate - JavaScript Templating with Template Toolkit
-
 =head1 SYNOPSIS
 
     var data = Ajax.get('url/data.json');
@@ -671,14 +673,3 @@ David A. Coffey <dacoffey@cogsmith.com>
 Robert Krimen <robertkrimen@gmail.com>
 
 Nickolay Platonov <nickolay8@gmail.com>
-
-=head1 COPYRIGHT
-
-Copyright (c) 2006-2008. Ingy döt Net.
-
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
-
-See L<http://www.perl.com/perl/misc/Artistic.html>
-
-=cut

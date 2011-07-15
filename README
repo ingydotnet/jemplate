@@ -1,6 +1,3 @@
-VERSION
-    Version 0.261
-
 NAME
     Jemplate - JavaScript Templating with Template Toolkit
 
@@ -239,11 +236,14 @@ AUTHORS
 
     Nickolay Platonov <nickolay8@gmail.com>
 
-COPYRIGHT
-    Copyright (c) 2006-2008. Ingy döt Net.
+AUTHOR
+    Ingy döt Net <ingy@cpan.org>
+
+COPYRIGHT AND LICENSE
+    Copyright (c) 2006-2008, 2011. Ingy döt Net.
 
     This program is free software; you can redistribute it and/or modify it
     under the same terms as Perl itself.
 
-    See <http://www.perl.com/perl/misc/Artistic.html>
+    See http://www.perl.com/perl/misc/Artistic.html
 
