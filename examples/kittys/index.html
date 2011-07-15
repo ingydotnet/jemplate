@@ -1,0 +1,20 @@
+<html>
+    <head>
+        <title>Kittys Jemplate Example</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js" type="text/javascript"></script>
+        <script src="../js/JemplateRuntime.js" type="text/javascript"></script>
+        <script src="../js/kittys.js" type="text/javascript"></script>
+
+        <script type="text/javascript">
+$(function() {
+ $.getJSON("http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?",
+  { tags: "kitty cat", tagmode: "any", format: "json" }, function(data) { console.log(data); Jemplate.process('kittys.html',data,'#flickr') });
+});
+        </script>
+
+    </head>
+    <body>
+Loading...
+      <div id="flickr"></div>
+    </body>
+</html>
