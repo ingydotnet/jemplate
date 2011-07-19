@@ -16,7 +16,7 @@ t.is(
 
 var test2 = t.state.blocks.shift();
 t.is(
-    jVAR.process('hello',{}),
+    jVAR.process('hello'),
     test2.data.output,
     test2.name
 );
