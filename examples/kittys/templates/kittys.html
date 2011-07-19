@@ -1,0 +1,6 @@
+<h1>Flickr Kittys</h1>
+[% FOREACH kitty = items %]
+  <h2>[% kitty.title %]</h2>
+  [% kitty.author %] took this picture [% kitty.date_taken %]<br />
+  <a href="[% kitty.link %]"><img src="[% kitty.media.m %]" /></a>
+[% END %]
