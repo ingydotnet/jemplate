@@ -8,7 +8,7 @@ There are currently three ways to run these JavaScript tests.
 1) If you have Plack.pm installed, run this command and follow the printed
    instructions:
 
-    make test
+    make clean test
 
 2) If you have some other webserver pointing at this directory you can just go
    to the appropriate URL (+ index.html) and all the tests will run in your
@@ -16,8 +16,8 @@ There are currently three ways to run these JavaScript tests.
 
 3) You can do the following commands:
 
-        cd tjs
-        make clean test
+    cd tjs
+    make clean test
 
 The output will tell you a URL to load in your browser to run the tests.
 
