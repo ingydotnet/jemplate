@@ -1,5 +1,6 @@
 .PHONY: all clean purge
 
+JEMPLATE=../bin/jemplate
 RENDERER:=$(shell echo `js-cpan Test/Base/bin/render-template`)
 TEST_TEMPLATE:=$(shell echo `js-cpan Test/Base/template/test.html`)
 INDEX_TEMPLATE:=$(shell echo `js-cpan Test/Base/template/index.html`)
@@ -26,7 +27,10 @@ ALL_LIBS= \
 	lib/Test/Harness.js \
 	lib/Test/Harness/Browser.js \
 
-all: $(ALL_DIRS) $(ALL_TARGETS) $(ALL_LIBS)
+ALL_JS= \
+	js/JemplateRuntime.js \
+
+all: $(ALL_DIRS) $(ALL_TARGETS) $(ALL_LIBS) $(ALL_JS)
 
 test: all
 	@echo
@@ -34,7 +38,7 @@ test: all
 	@plackup
 
 clean:
-	rm -fr $(ALL_TARGETS) $(ALL_LIBS)
+	rm -fr $(ALL_TARGETS) $(ALL_LIBS) $(ALL_JS)
 	if [ "$(TEST_TEMPLATE_MD5)" = \
      "$(TEST_LOCAL_MD5)" ]; then rm -f $(TEST_LOCAL); fi
 	if [ "$(INDEX_TEMPLATE_MD5)" = \
@@ -75,3 +79,6 @@ $(INDEX_LOCAL):
 
 template:
 	mkdir -p $@
+
+js/JemplateRuntime.js:
+	$(JEMPLATE) --runtime=standard > $@
