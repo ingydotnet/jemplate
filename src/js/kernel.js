@@ -374,9 +374,9 @@ if (typeof Jemplate.Stash == 'undefined') {
     Jemplate.Stash = function(stash, config) {
         this.__config__ = config;
 		
-    this.data = config["VARIABLES"];
-    this.data["GLOBAL"] = this.__config__.SCOPE;
-
+		this.data = {
+			GLOBAL : this.__config__.SCOPE			
+		};
 		this.LOCAL_ANCHOR = {};
 		this.data.LOCAL = this.LOCAL_ANCHOR;
 		
