@@ -9,6 +9,12 @@ our $WHILE_MAX = 1000;
 # only true when inside JAVASCRIPT blocks
 our $INJAVASCRIPT = 0;
 
+sub new {
+    my $class = shift;
+    
+    return bless {}, $class
+}
+
 sub template {
     my ($class, $block) = @_;
 
