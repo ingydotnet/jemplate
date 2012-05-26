@@ -17,7 +17,7 @@ use warnings;
 use Template 2.14;
 use Getopt::Long;
 
-our $VERSION = '0.261';
+our $VERSION = '0.27';
 
 use Jemplate::Parser;
 
