@@ -402,9 +402,16 @@ sub _preamble {
    Copyright 2006-2008 - Ingy döt Net - All rights reserved.
 */
 
-var Jemplate;
+;(function(){
+
+var root = this,
+    Jemplate;
+
 if (typeof(exports) == 'object') {
     Jemplate = require("jemplate").Jemplate;
+}
+else {
+    Jemplate = root.Jemplate;
 }
 
 if (typeof(Jemplate) == 'undefined')
@@ -413,6 +420,7 @@ if (typeof(Jemplate) == 'undefined')
 ...
 }
 
+}());
 1;
 
 =head1 SYNOPSIS
