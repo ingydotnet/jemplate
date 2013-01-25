@@ -5,7 +5,7 @@ var filters = {
     jemplate: 'jemplate_process'
 };
 
-t.plan(5);
+t.plan(6);
 t.filters(filters);
 t.run_is('jemplate', 'output');
 
