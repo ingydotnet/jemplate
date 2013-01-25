@@ -80,4 +80,16 @@ b:a:c
 c:b:d
 d:c:
 
+=== Test range operator
+--- jemplate
+loop3.html
+[%- FOR i IN [0 .. 3] -%]
+    [%- i -%]:[%-loop.count%]
+[% END -%]
+--- output
+0:1
+1:2
+2:3
+3:4
+
 */
