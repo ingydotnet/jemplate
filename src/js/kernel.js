@@ -16,37 +16,23 @@ modify it under the same terms as Perl itself.
 // Main Jemplate class
 //------------------------------------------------------------------------------
 
-;(function(){
-
-var root = this,
-    prevJemplate = root.Jemplate,
-    Jemplate = function() {
+if (typeof Jemplate == 'undefined') {
+    var Jemplate = function() {
         this.init.apply(this, arguments);
     };
+}
 
 Jemplate.VERSION = '0.22';
-
-// unclobber root object
-Jemplate.noConflict = function () {
-    root.Jemplate = prevJemplate;
-    return Jemplate;
-};
 
 Jemplate.process = function() {
     var jemplate = new Jemplate(Jemplate.prototype.config);
     return jemplate.process.apply(jemplate, arguments);
-};
-
-Jemplate.templateMap = {};
-
-// common js export
-if (typeof(exports) == 'object') {
-    exports.Jemplate = Jemplate;
 }
-// browser export
-else {
-    root.Jemplate = Jemplate;
-}
+
+;(function(){
+
+if (! Jemplate.templateMap)
+    Jemplate.templateMap = {};
 
 var proto = Jemplate.prototype = {};
 
@@ -59,7 +45,7 @@ proto.config = {
     ERROR: null,
     EVAL_JAVASCRIPT: false,
     GLOBAL : true,
-    SCOPE : this,
+	SCOPE : this,
     FILTERS: {},
     INCLUDE_PATH: [''],
     INTERPOLATE: false,
@@ -84,7 +70,7 @@ proto.defaults = {
     ERROR: null,
     EVAL_JAVASCRIPT: false,
     GLOBAL : true,
-    SCOPE : this,
+	SCOPE : this,
     INCLUDE_PATH: [''],
     INTERPOLATE: false,
     OUTPUT: null,
@@ -101,9 +87,9 @@ proto.defaults = {
 
 
 Jemplate.init = function(config) {
-
+ 
     Jemplate.prototype.config = config || {};
-
+    
     for (var i in Jemplate.prototype.defaults) {
         if(typeof Jemplate.prototype.config[i] == "undefined") {
             Jemplate.prototype.config[i] = Jemplate.prototype.defaults[i];
@@ -112,9 +98,9 @@ Jemplate.init = function(config) {
 }
 
 proto.init = function(config) {
-
+    
     this.config = config || {};
-
+    
     for (var i in Jemplate.prototype.defaults) {
         if(typeof this.config[i] == "undefined") {
             this.config[i] = Jemplate.prototype.defaults[i];
@@ -138,13 +124,13 @@ proto.process = function(template, data, output) {
 
     var proc = function(input) {
         try {
-            if (typeof context.config.PRE_PROCESS == 'string') context.config.PRE_PROCESS = [context.config.PRE_PROCESS];
+            if (typeof context.config.PRE_PROCESS == 'string') context.config.PRE_PROCESS = [context.config.PRE_PROCESS];                
             for (var i = 0; i < context.config.PRE_PROCESS.length; i++) {
                 context.process(context.config.PRE_PROCESS[i]);
             }
-
+            
             result = context.process(template, input);
-
+            
             if (typeof context.config.POST_PROCESS == 'string') context.config.PRE_PROCESS = [context.config.POST_PROCESS];
             for (i = 0; i < context.config.POST_PROCESS.length; i++) {
                 context.process(context.config.POST_PROCESS[i]);
@@ -230,7 +216,7 @@ proto.plugin = function(name, args) {
         throw "Unknown plugin name ':" + name + "'";
 
     // The Context object (this) is passed as the first argument to the plugin.
-    var func = eval(name);
+	var func = eval(name);
     return new func(this, args);
 }
 
@@ -321,7 +307,7 @@ proto.filters.html_line_break = function(text) {
 proto.filters.uri = function(text) {
      return encodeURIComponent(text);
 }
-
+ 
 proto.filters.url = function(text) {
     return encodeURI(text);
 }
@@ -387,14 +373,14 @@ proto.filters.replace = function(text, args) {
 if (typeof Jemplate.Stash == 'undefined') {
     Jemplate.Stash = function(stash, config) {
         this.__config__ = config;
-
-        this.data = {
-            GLOBAL : this.__config__.SCOPE
-        };
-        this.LOCAL_ANCHOR = {};
-        this.data.LOCAL = this.LOCAL_ANCHOR;
-
-        this.update(stash);
+		
+		this.data = {
+			GLOBAL : this.__config__.SCOPE			
+		};
+		this.LOCAL_ANCHOR = {};
+		this.data.LOCAL = this.LOCAL_ANCHOR;
+		
+		this.update(stash);
     };
 }
 
@@ -403,9 +389,9 @@ proto = Jemplate.Stash.prototype;
 proto.clone = function(args) {
     var data = this.data;
     this.data = {
-        GLOBAL : this.__config__.SCOPE
-    };
-    this.data.LOCAL = this.LOCAL_ANCHOR;
+		GLOBAL : this.__config__.SCOPE
+	};
+	this.data.LOCAL = this.LOCAL_ANCHOR;
     this.update(data);
     this.update(args);
     this.data._PARENT = data;
@@ -419,18 +405,18 @@ proto.update = function(args) {
     if (typeof args == 'undefined') return;
     for (var key in args) {
         if (key != 'GLOBAL' && key != 'LOCAL') {
-            this.set(key, args[key]);
-        }
+	        this.set(key, args[key]);
+		}
     }
 }
 
 proto.get = function(ident, args) {
     var root = this.data;
-
+    
     var value;
-
+    
     if ( (ident instanceof Array) || (typeof ident == 'string' && /\./.test(ident) ) ) {
-
+        
         if (typeof ident == 'string') {
             ident = ident.split('.');
             var newIdent = [];
@@ -440,7 +426,7 @@ proto.get = function(ident, args) {
             }
             ident = newIdent;
         }
-
+        
         for (var i = 0; i < ident.length; i += 2) {
             var dotopArgs = ident.slice(i, i+2);
             dotopArgs.unshift(root);
@@ -466,14 +452,14 @@ proto.get = function(ident, args) {
 
 
 proto.set = function(ident, value, set_default) {
-
+    
     var root, result, error;
-
+    
     root = this.data;
-
+    
     while (true) {
         if ( (ident instanceof Array) || (typeof ident == 'string' && /\./.test(ident) ) ) {
-
+            
             if (typeof ident == 'string') {
                 ident = ident.split('.');
                 var newIdent = [];
@@ -483,7 +469,7 @@ proto.set = function(ident, value, set_default) {
                 }
                 ident = newIdent;
             }
-
+            
             for (var i = 0; i < ident.length - 2; i += 2) {
                 var dotopArgs = ident.slice(i, i+2);
                 dotopArgs.unshift(root);
@@ -493,35 +479,35 @@ proto.set = function(ident, value, set_default) {
                     break;
                 root = result;
             }
-
+            
             var assignArgs = ident.slice(ident.length-2, ident.length);
             assignArgs.unshift(root);
             assignArgs.push(value);
             assignArgs.push(set_default);
-
-
+            
+            
             result = this._assign.apply(this, assignArgs);
         } else {
             result = this._assign(root, ident, 0, value, set_default);
         }
         break;
     }
-
+    
     return (typeof result != 'undefined') ? result : '';
 }
 
 
 
-proto._dotop = function(root, item, args, lvalue) {
+proto._dotop = function(root, item, args, lvalue) {    
     if (root == this.LOCAL_ANCHOR) root = this.data;
-    var atroot = root == this.data;
-
+	var atroot = root == this.data;
+    
     var value,result = undefined;
-
-    var is_function_call = args instanceof Array;
-
-    args = args || [];
-
+    
+   	var is_function_call = args instanceof Array;
+   	
+   	args = args || [];
+    
     if (typeof root == 'undefined' || typeof item == 'undefined' || typeof item == 'string' && item.match(/^[\._]/)) {
         return undefined;
     }
@@ -529,8 +515,8 @@ proto._dotop = function(root, item, args, lvalue) {
 
     //root is complex object, not scalar
     if (atroot || (root instanceof Object && !(root instanceof Array)) || root == this.data.GLOBAL) {
-
-        if (typeof root[item] != 'undefined' && root[item] != null && (!is_function_call || !this.hash_functions[item])) { //consider undefined == null
+        
+		if (typeof root[item] != 'undefined' && root[item] != null && (!is_function_call || !this.hash_functions[item])) { //consider undefined == null
             if (typeof root[item] == 'function') {
                 result = root[item].apply(root,args);
             } else {
@@ -543,7 +529,7 @@ proto._dotop = function(root, item, args, lvalue) {
             result = this.hash_functions[item].apply(this,args);
         } else if (item instanceof Array) {
             result = {};
-
+            
             for (var i = 0; i < item.length; i++) result[item[i]] = root[item[i]];
             return result;
         }
@@ -567,14 +553,14 @@ proto._dotop = function(root, item, args, lvalue) {
     } else {
         result = undefined;
     }
-
-
+    
+    
     if (result instanceof Array) {
-        if (typeof result[0] == 'undefined' && typeof result[1] != 'undefined') {
-            throw result[1];
-        }
-    }
-
+		if (typeof result[0] == 'undefined' && typeof result[1] != 'undefined') {
+	        throw result[1];
+	    }
+	}
+    
     return result;
 
 }
@@ -583,23 +569,23 @@ proto._dotop = function(root, item, args, lvalue) {
 proto._assign = function(root, item, args, value, set_default) {
     var atroot = root == this.data;
     var result;
-
+    
     args = args || [];
-
+    
     if (typeof root == 'undefined' || typeof item == 'undefined' || typeof item == 'string' && item.match(/^[\._]/)) {
         return undefined;
     }
-
+    
     if (atroot || root.constructor == Object || root == this.data.GLOBAL) {
-
-        if (root == this.LOCAL_ANCHOR) root = this.data;
-
-        if (!(set_default && typeof root[item] != 'undefined')) {
+		
+		if (root == this.LOCAL_ANCHOR) root = this.data;
+			 
+		if (!(set_default && typeof root[item] != 'undefined')) {
             if (atroot && item == 'GLOBAL') throw "Attempt to modify GLOBAL access modifier"
-            if (atroot && item == 'LOCAL') throw "Attempt to modify LOCAL access modifier"
-
-            return root[item] = value;
-        }
+			if (atroot && item == 'LOCAL') throw "Attempt to modify LOCAL access modifier"
+			
+			return root[item] = value;
+        } 
     } else if ((root instanceof Array) && (typeof item == 'string' && /^-?\d+$/.test(item) || typeof item == 'number' )) {
         if (!(set_default && typeof root[item] != 'undefined')) {
             return root[item] = value;
@@ -612,7 +598,7 @@ proto._assign = function(root, item, args, value, set_default) {
     } else {
         throw 'dont know how to assign to [' + root + '.' + item +']';
     }
-
+    
     return undefined;
 }
 
@@ -682,7 +668,7 @@ proto.string_functions.repeat = function(string, args) {
 
 // replace(re, sub, global)    replace instances of re with sub
 proto.string_functions.replace = function(string, re, sub, modifiers) {
-    var regexp = new RegExp(re, modifiers == undefined ? 'g' : modifiers);
+    var regexp = new RegExp(re, modifiers == undefined ? 'g' : modifiers);    
     if (! sub) sub  = '';
 
     return string.replace(regexp, sub);
@@ -810,7 +796,7 @@ proto.list_functions.slice = function(list, start, end) {
 proto.list_functions.splice = function(list /*, ... args */ ) {
     var args = Array.prototype.slice.call(arguments);
     args.shift();
-
+    
     return list.splice.apply(list,args);
 }
 
@@ -871,7 +857,7 @@ proto.hash_functions.exists = function(hash, key) {
 
 // import(hash2)   import contents of hash2
 // import          import into current namespace hash
-proto.hash_functions['import'] = function(hash, hash2) {
+proto.hash_functions['import'] = function(hash, hash2) {    
     for ( var key in hash2 )
         hash[key] = hash2[key];
     return '';
