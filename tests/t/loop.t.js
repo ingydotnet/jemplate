@@ -5,7 +5,7 @@ var filters = {
     jemplate: 'jemplate_process'
 };
 
-t.plan(5);
+t.plan(6);
 t.filters(filters);
 t.run_is('jemplate', 'output');
 
@@ -79,5 +79,17 @@ a::b
 b:a:c
 c:b:d
 d:c:
+
+=== Test range operator
+--- jemplate
+loop3.html
+[%- FOR i IN [0 .. 3] -%]
+    [%- i -%]:[%-loop.count%]
+[% END -%]
+--- output
+0:1
+1:2
+2:3
+3:4
 
 */
