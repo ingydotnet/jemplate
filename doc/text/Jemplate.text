@@ -204,14 +204,14 @@ CREDIT
     them ;)
 
 AUTHORS
-    Ingy döt Net <ingy@cpan.org>
+    Ingy dÃ¶t Net <ingy@cpan.org>
 
     (Note: I had to list myself first so that this line would go into
     META.yml)
 
     Jemplate is truly a community authored project:
 
-    Ingy döt Net <ingy@cpan.org>
+    Ingy dÃ¶t Net <ingy@cpan.org>
 
     Tatsuhiko Miyagawa <miyagawa@bulknews.net>
 
@@ -230,7 +230,7 @@ AUTHORS
     Robert Krimen <robertkrimen@gmail.com>
 
 COPYRIGHT
-    Copyright (c) 2006-2008. Ingy döt Net.
+    Copyright (c) 2006-2008. Ingy dÃ¶t Net.
 
     This program is free software; you can redistribute it and/or modify it
     under the same terms as Perl itself.
