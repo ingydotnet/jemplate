@@ -20334,6 +20334,10 @@ if (typeof(Jemplate) == 'undefined')
 
 Jemplate->main(@ARGV);
 
+__END__
+
+=encoding UTF-8
+
 =head1 Usage:
 
     jemplate --runtime [runtime-opt]

@@ -71,7 +71,7 @@ PUBLIC API
         The "template-name" is a string like 'body.html' that is the name of
         the top level template that you wish to process.
 
-        The optional "data" specififies the data object to be used by the
+        The optional "data" specifies the data object to be used by the
         templates. It can be an object, a function or a url. If it is an
         object, it is used directly. If it is a function, the function is
         called and the returned object is used. If it is a url, an
@@ -106,7 +106,7 @@ PUBLIC API
 
     Jemplate->compile_module_cached($module_path, \@template_file_paths);
         Similar to `compile_module`, but only compiles if one of the
-        templates is newer than the module. Returns 1 if sucessful compile,
+        templates is newer than the module. Returns 1 if successful compile,
         0 if no compile due to cache, undef if error.
 
 AJAX AND JSON METHODS
@@ -204,14 +204,14 @@ CREDIT
     them ;)
 
 AUTHORS
-    Ingy döt Net <ingy@cpan.org>
+    Ingy dÃ¶t Net <ingy@cpan.org>
 
     (Note: I had to list myself first so that this line would go into
     META.yml)
 
     Jemplate is truly a community authored project:
 
-    Ingy döt Net <ingy@cpan.org>
+    Ingy dÃ¶t Net <ingy@cpan.org>
 
     Tatsuhiko Miyagawa <miyagawa@bulknews.net>
 
@@ -230,7 +230,7 @@ AUTHORS
     Robert Krimen <robertkrimen@gmail.com>
 
 COPYRIGHT
-    Copyright (c) 2006-2008. Ingy döt Net.
+    Copyright (c) 2006-2008. Ingy dÃ¶t Net.
 
     This program is free software; you can redistribute it and/or modify it
     under the same terms as Perl itself.

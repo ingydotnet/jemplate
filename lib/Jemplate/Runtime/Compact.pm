@@ -79,6 +79,10 @@ function XXX(A){if(!confirm(A)){throw ("terminated...")}return A}function JJJ(A)
 
 1;
 
+__END__
+
+=encoding UTF-8
+
 =head1 NAME
 
 Jemplate::Runtime - Perl Module containing the Jemplate JavaScript Runtime

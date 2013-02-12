@@ -415,6 +415,10 @@ if (typeof(Jemplate) == 'undefined')
 
 1;
 
+__END__
+
+=encoding UTF-8
+
 =head1 SYNOPSIS
 
     var data = Ajax.get('url/data.json');
@@ -496,7 +500,7 @@ The Jemplate.js JavaScript runtime module has the following API method:
 The C<template-name> is a string like C<'body.html'> that is the name of
 the top level template that you wish to process.
 
-The optional C<data> specififies the data object to be used by the
+The optional C<data> specifies the data object to be used by the
 templates. It can be an object, a function or a url. If it is an object,
 it is used directly. If it is a function, the function is called and the
 returned object is used. If it is a url, an asynchronous <Ajax.get> is
@@ -539,7 +543,7 @@ $module_path. Returns 1 if successful, undef if error.
 =item Jemplate->compile_module_cached($module_path, \@template_file_paths);
 
 Similar to `compile_module`, but only compiles if one of the templates
-is newer than the module. Returns 1 if sucessful compile, 0 if no
+is newer than the module. Returns 1 if successful compile, 0 if no
 compile due to cache, undef if error.
 
 =back

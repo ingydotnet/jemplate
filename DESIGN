@@ -42,7 +42,7 @@ $module_path. Returns 1 if successful, undef if error.
 - Jemplate->compile_module_cached($module_path, \@template_file_paths);
 
 Similar to `compile_module`, but only compiles if one of the templates
-is newer than the module. Returns 1 if sucessful compile, 0 if no
+is newer than the module. Returns 1 if successful compile, 0 if no
 compile due to cache, undef if error.
 
 
