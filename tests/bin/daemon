@@ -98,6 +98,8 @@ while ( my $connection = $daemon->accept ) {
 
 __END__
 
+=encoding UTF-8
+
 =head1 NAME
 
 daemon - Jemplate test daemon

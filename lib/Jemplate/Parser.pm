@@ -29,6 +29,10 @@ sub new {
 
 1;
 
+__END__
+
+=encoding UTF-8
+
 =head1 NAME
 
 Jemplate::Parser - Jemplate Parser Subclass
