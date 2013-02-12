@@ -79,6 +79,10 @@ sub xxx {
 
 1;
 
+__END__
+
+=encoding UTF-8
+
 =head1 NAME
 
 Jemplate::Runtime - Perl Module containing the Jemplate JavaScript Runtime

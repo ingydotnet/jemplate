@@ -415,6 +415,10 @@ if (typeof(Jemplate) == 'undefined')
 
 1;
 
+__END__
+
+=encoding UTF-8
+
 =head1 SYNOPSIS
 
     var data = Ajax.get('url/data.json');
