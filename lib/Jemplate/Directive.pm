@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 our $OUTPUT = 'output +=';
-our $WHILE_MAX = 1000;
+our $WHILE_MAX = 1000 unless defined $WHILE_MAX;
 
 # parser state variable
 # only true when inside JAVASCRIPT blocks
