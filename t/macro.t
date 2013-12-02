@@ -13,11 +13,9 @@ __END__
 
 ===
 --- macro_definition
-[% 
-	MACRO simple(param1,param2) BLOCK;
+[% MACRO simple(param1,param2) BLOCK;
 		param1 _ param2;
-	END;
-%]
+	END; %]
 --- js -trim
 //line 1 "test_template"
 
