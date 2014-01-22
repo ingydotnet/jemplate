@@ -74,6 +74,7 @@ Where "compile-opt" can include:
     --eval
     --noeval
     -s, --source
+    --exclude
 
 For more information use:
     perldoc jemplate
@@ -93,7 +94,7 @@ sub main {
         return unless $compile;
     }
 
-    my $templates = make_file_list(@argv);
+    my $templates = make_file_list($jemplate_options->{exclude}, @argv);
     print_usage_and_exit() unless @$templates;
 
     if ($list) {
@@ -150,7 +151,8 @@ sub get_options {
         ? $ENV{JEMPLATE_EVAL_JAVASCRIPT}
         : 1;
 
-    my $source = 0;
+    my $source  = 0;
+    my $exclude = 0;
     my ($ajax, $json, $xxx, $xhr, $compact, $minify);
 
     my $help = 0;
@@ -169,6 +171,7 @@ sub get_options {
         "eval!"         => \$eval_javascript,
 
         "source|s"      => \$source,
+        "exclude=s"     => \$exclude,
 
         "ajax:s"        => \$ajax,
         "json:s"        => \$json,
@@ -211,6 +214,7 @@ sub get_options {
         $options,
         { compile => $compile, runtime => $runtime, list => $list,
             source => $source,
+            exclude => $exclude,
             ajax => $ajax, json => $json, xxx => $xxx, xhr => $xhr,
             compact => $compact, minify => $minify },
     );
@@ -240,13 +244,14 @@ sub recurse_dir {
 }
 
 sub make_file_list {
-    my @args = @_;
+    my ($exclude, @args) = @_;
 
     my @list;
 
     foreach my $arg (@args) {
         unless (-e $arg) { next; } # file exists
         unless (-s $arg or -d $arg) { next; } # file size > 0 or directory (for Win platform)
+        if ($exclude and $arg =~ m/$exclude/) { next; } # file matches exclude regex
 
         if (-d $arg) {
             foreach my $full ( recurse_dir($arg) ) {

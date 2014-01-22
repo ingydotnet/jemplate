@@ -63,6 +63,7 @@ Where C<compile-opt> can include:
     --eval
     --noeval
     -s, --source
+    --exclude
 
     See below for more information
     
@@ -148,5 +149,8 @@ These compile time options are specific to Jemplate.
     -s, --source
         Include the original template source code as a JavaScript
         comment next to each compiled template.
+
+    --exclude
+        Exclude any file matching the given regular expression.
 
 =cut
