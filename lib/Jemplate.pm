@@ -10,14 +10,14 @@
 # - Stardoc
 # - Use TT:Simple in Makefiles
 
+# ABSTRACT: JavaScript Templating with Template Toolkit
 package Jemplate;
-use 5.006001;
 use strict;
 use warnings;
 use Template 2.14;
 use Getopt::Long;
 
-our $VERSION = '0.27';
+# VERSION
 
 use Jemplate::Parser;
 
