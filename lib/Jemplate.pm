@@ -1,17 +1,6 @@
-=encoding utf8
-
-=head1 NAME
-
-Jemplate - JavaScript Templating with Template Toolkit
-
-=cut
-
 # ToDo:
-# - Module::Package
-# - Stardoc
 # - Use TT:Simple in Makefiles
 
-# ABSTRACT: JavaScript Templating with Template Toolkit
 package Jemplate;
 use strict;
 use warnings;
@@ -49,7 +38,7 @@ Where "--runtime" and "runtime-opt" can include:
     --json=json2        Include http://www.json.org/json2.js for parsing/stringifying
     --json=yui          Use YUI: YAHOO.lang.JSON (requires external YUI)
     --json=none         Doesn't provide any JSON functionality except a warning
-    
+
     --ajax              By itself, equivalent to --ajax=xhr
     --ajax=jquery       Use jQuery for Ajax get and post (requires external jQuery)
     --ajax=yui          Use YUI: yui/connection/connection.js (requires external YUI)
@@ -319,7 +308,7 @@ sub runtime_source_code {
     push @runtime, $Jemplate_Runtime->kernel if $runtime;
 
     push @runtime, $Jemplate_Runtime->json2 if $json =~ m/^json2?$/i;
-    
+
     push @runtime, $Jemplate_Runtime->ajax_xhr if $ajax eq "xhr";
     push @runtime, $Jemplate_Runtime->ajax_jquery if $ajax eq "jquery";
     push @runtime, $Jemplate_Runtime->ajax_yui if $ajax eq "yui";
@@ -423,7 +412,11 @@ if (typeof(Jemplate) == 'undefined')
 
 __END__
 
-=encoding UTF-8
+=encoding utf8
+
+=head1 NAME
+
+Jemplate - JavaScript Templating with Template Toolkit
 
 =head1 SYNOPSIS
 
@@ -616,7 +609,7 @@ Jemplate now supports almost all the TT directives, including:
   * [% LAST %]
   * [% CLEAR %]
   * [%# this is a comment %]
-  * [% MACRO name(param1, param2) BLOCK %] ... [% END %]  
+  * [% MACRO name(param1, param2) BLOCK %] ... [% END %]
 
 ALL of the string virtual functions are supported.
 
@@ -689,13 +682,9 @@ Robert Krimen <robertkrimen@gmail.com>
 
 Nickolay Platonov <nickolay8@gmail.com>
 
-=head1 AUTHOR
-
-Ingy döt Net <ingy@cpan.org>
-
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (c) 2006-2014, 2011. Ingy döt Net.
+Copyright (c) 2006-2014. Ingy döt Net.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
