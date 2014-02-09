@@ -608,7 +608,7 @@ our $VERSION = 2.75;
 
 use constant STATUS_OK       =>   0;      # ok
 use constant STATUS_RETURN   =>   1;      # ok, block ended by RETURN
-use constant STATUS_STOP     =>   2;      # ok, stoppped by STOP 
+use constant STATUS_STOP     =>   2;      # ok, stopped by STOP 
 use constant STATUS_DONE     =>   3;      # ok, iterator done
 use constant STATUS_DECLINED =>   4;      # ok, declined to service request
 use constant STATUS_ERROR    => 255;      # error condition
@@ -642,7 +642,7 @@ use constant DEBUG_SERVICE   => 1024; # context debugging
 use constant DEBUG_ALL       => 2047; # everything
 
 use constant DEBUG_CALLER    => 4096; # add caller file/line
-use constant DEBUG_FLAGS     => 4096; # bitmask to extraxt flags
+use constant DEBUG_FLAGS     => 4096; # bitmask to extract flags
 
 $DEBUG_OPTIONS  = {
     &DEBUG_OFF      => off      => off      => &DEBUG_OFF,
@@ -2076,7 +2076,7 @@ sub _load {
             };
         }
 
-        return ( "$alias: $!", Template::Constants::STATUS_ERROR )
+        return ( $error, Template::Constants::STATUS_ERROR )
             unless $tolerant;
     }
 
@@ -2170,7 +2170,7 @@ sub _store {
     my $size = $self->{ SIZE };
     my ($slot, $head);
 
-    # Return if memory cache disabled.  (overridding code should also check)
+    # Return if memory cache disabled.  (overriding code should also check)
     # $$$ What's the expected behaviour of store()?  Can't tell from the
     # docs if you can call store() when SIZE = 0.
     return $data->{data} if defined $size and !$size;
@@ -2339,7 +2339,10 @@ sub _template_content {
     my $error;
 
     local *FH;
-    if (open(FH, "< $path")) {
+    if(-d $path) {
+        $error = "$path: not a file";
+    }
+    elsif (open(FH, "< $path")) {
         local $/;
         binmode(FH);
         $data = <FH>;
@@ -2491,7 +2494,7 @@ use File::Basename;
 use File::Path;
 use Scalar::Util qw(blessed);
 
-our $VERSION = '2.24';
+our $VERSION = '2.25';
 our $ERROR   = '';
 our $DEBUG   = 0;
 our $BINMODE = 0 unless defined $BINMODE;
@@ -9768,7 +9771,7 @@ sub split_text {
         $pre = '' unless defined $pre;
         $dir = '' unless defined $dir;
         
-        $prelines  = ($pre =~ tr/\n//);  # newlines in preceeding text
+        $prelines  = ($pre =~ tr/\n//);  # newlines in preceding text
         $dirlines  = ($dir =~ tr/\n//);  # newlines in directive tag
         $postlines = 0;                  # newlines chomped after tag
         
@@ -9778,7 +9781,14 @@ sub split_text {
                 $dir = ($dir =~ /($CHOMP_FLAGS)$/o) ? $1 : '';
             }
             else {
-                s/^($CHOMP_FLAGS)?\s*//so;
+
+                if(s/^($CHOMP_FLAGS)?(\s*)//so && $2) {
+                  my $chomped = $2;
+                  my $linecount = ($chomped =~ tr/\n//); # newlines in chomped whitespace
+                  $linecount ||= 0;
+                  $prelines += $linecount;
+                  $dirlines -= $linecount;
+                }
                 # PRE_CHOMP: process whitespace before tag
                 $chomp = $1 ? $1 : $prechomp;
                 $chomp =~ tr/-=~+/1230/;
@@ -10002,7 +10012,7 @@ sub tokenise_directive {
         }
         elsif (defined($token = $6)) {
             # Fold potential keywords to UPPER CASE if the ANYCASE option is
-            # set, unless (we've got some preceeding tokens and) the previous
+            # set, unless (we've got some preceding tokens and) the previous
             # token is a DOT op.  This prevents the 'last' in 'data.last'
             # from being interpreted as the LAST keyword.
             $uctoken = 
@@ -11190,8 +11200,8 @@ $STATES = [
 			'node' => 23,
 			'ident' => 79,
 			'term' => 97,
-			'lterm' => 58,
-			'list' => 94
+			'list' => 94,
+			'lterm' => 58
 		}
 	},
 	{#State 11
@@ -11702,13 +11712,13 @@ $STATES = [
 			"\${" => 38
 		},
 		GOTOS => {
-			'expr' => 152,
 			'sterm' => 70,
 			'item' => 41,
-			'assign' => 151,
 			'node' => 23,
 			'ident' => 150,
 			'term' => 60,
+			'expr' => 152,
+			'assign' => 151,
 			'lterm' => 58
 		}
 	},
@@ -12208,8 +12218,8 @@ $STATES = [
 			'LITERAL' => 59,
 			"\"" => 62,
 			'PROCESS' => 63,
-			'FILTER' => 25,
 			'RETURN' => 66,
+			'FILTER' => 25,
 			'INSERT' => 67,
 			'NUMBER' => 26,
 			'REF' => 27,
@@ -12231,8 +12241,8 @@ $STATES = [
 			'atomexpr' => 49,
 			'atomdir' => 13,
 			'mdir' => 195,
-			'filter' => 30,
 			'sterm' => 70,
+			'filter' => 30,
 			'ident' => 150,
 			'setlist' => 72,
 			'try' => 36,
@@ -12273,8 +12283,8 @@ $STATES = [
 			'LITERAL' => 59,
 			"\"" => 62,
 			'PROCESS' => 63,
-			'FILTER' => 25,
 			'RETURN' => 66,
+			'FILTER' => 25,
 			'INSERT' => 67,
 			'NUMBER' => 26,
 			'REF' => 27,
@@ -12296,8 +12306,8 @@ $STATES = [
 			'atomexpr' => 49,
 			'atomdir' => 13,
 			'mdir' => 198,
-			'filter' => 30,
 			'sterm' => 70,
+			'filter' => 30,
 			'ident' => 150,
 			'setlist' => 72,
 			'try' => 36,
@@ -13210,13 +13220,13 @@ $STATES = [
 		},
 		DEFAULT => -164,
 		GOTOS => {
-			'expr' => 258,
 			'sterm' => 70,
 			'item' => 255,
-			'param' => 256,
 			'node' => 23,
 			'ident' => 254,
 			'term' => 60,
+			'expr' => 258,
+			'param' => 256,
 			'lterm' => 58
 		}
 	},
@@ -13411,14 +13421,14 @@ $STATES = [
 			"\${" => 38
 		},
 		GOTOS => {
-			'expr' => 152,
 			'sterm' => 70,
 			'item' => 41,
-			'assign' => 151,
 			'margs' => 270,
 			'node' => 23,
 			'ident' => 150,
 			'term' => 60,
+			'expr' => 152,
+			'assign' => 151,
 			'lterm' => 58
 		}
 	},
@@ -13496,13 +13506,13 @@ $STATES = [
 		},
 		DEFAULT => -66,
 		GOTOS => {
-			'expr' => 258,
 			'sterm' => 70,
 			'item' => 255,
-			'param' => 256,
 			'node' => 23,
 			'ident' => 254,
 			'term' => 60,
+			'expr' => 258,
+			'param' => 256,
 			'lterm' => 58
 		}
 	},
@@ -13798,13 +13808,13 @@ $STATES = [
 			"\${" => 38
 		},
 		GOTOS => {
-			'expr' => 258,
 			'sterm' => 70,
 			'item' => 255,
-			'param' => 256,
 			'node' => 23,
 			'ident' => 254,
 			'term' => 60,
+			'expr' => 258,
+			'param' => 256,
 			'lterm' => 58
 		}
 	},
@@ -14373,13 +14383,13 @@ $STATES = [
 		},
 		DEFAULT => -163,
 		GOTOS => {
-			'expr' => 258,
 			'sterm' => 70,
 			'item' => 255,
-			'param' => 256,
 			'node' => 23,
 			'ident' => 254,
 			'term' => 60,
+			'expr' => 258,
+			'param' => 256,
 			'lterm' => 58
 		}
 	},
@@ -14406,13 +14416,13 @@ $STATES = [
 			"\${" => 38
 		},
 		GOTOS => {
-			'expr' => 258,
 			'sterm' => 70,
 			'item' => 255,
-			'param' => 256,
 			'node' => 23,
 			'ident' => 254,
 			'term' => 60,
+			'expr' => 258,
+			'param' => 256,
 			'lterm' => 58
 		}
 	},
@@ -15241,8 +15251,8 @@ $STATES = [
 			'LITERAL' => 59,
 			"\"" => 62,
 			'PROCESS' => 63,
-			'FILTER' => 25,
 			'RETURN' => 66,
+			'FILTER' => 25,
 			'INSERT' => 67,
 			'NUMBER' => 26,
 			'REF' => 27,
@@ -15264,8 +15274,8 @@ $STATES = [
 			'atomexpr' => 49,
 			'atomdir' => 13,
 			'mdir' => 327,
-			'filter' => 30,
 			'sterm' => 70,
+			'filter' => 30,
 			'ident' => 150,
 			'setlist' => 72,
 			'try' => 36,
@@ -15296,13 +15306,13 @@ $STATES = [
 		},
 		DEFAULT => -64,
 		GOTOS => {
-			'expr' => 258,
 			'sterm' => 70,
 			'item' => 255,
-			'param' => 256,
 			'node' => 23,
 			'ident' => 254,
 			'term' => 60,
+			'expr' => 258,
+			'param' => 256,
 			'lterm' => 58
 		}
 	},
@@ -15323,13 +15333,13 @@ $STATES = [
 		},
 		DEFAULT => -65,
 		GOTOS => {
-			'expr' => 258,
 			'sterm' => 70,
 			'item' => 255,
-			'param' => 256,
 			'node' => 23,
 			'ident' => 254,
 			'term' => 60,
+			'expr' => 258,
+			'param' => 256,
 			'lterm' => 58
 		}
 	},
@@ -19924,15 +19934,12 @@ BEGIN { $INC{'Jemplate.pm'} = 'dummy/Jemplate.pm'; }
 BEGIN {
 #line 0 "Jemplate.pm"
 
-
 package Jemplate;
-use 5.006001;
 use strict;
 use warnings;
 use Template 2.14;
 use Getopt::Long;
 
-our $VERSION = '0.27';
 
 use Jemplate::Parser;
 
@@ -19962,7 +19969,7 @@ Where "--runtime" and "runtime-opt" can include:
     --json=json2        Include http://www.json.org/json2.js for parsing/stringifying
     --json=yui          Use YUI: YAHOO.lang.JSON (requires external YUI)
     --json=none         Doesn't provide any JSON functionality except a warning
-    
+
     --ajax              By itself, equivalent to --ajax=xhr
     --ajax=jquery       Use jQuery for Ajax get and post (requires external jQuery)
     --ajax=yui          Use YUI: yui/connection/connection.js (requires external YUI)
@@ -20232,7 +20239,7 @@ sub runtime_source_code {
     push @runtime, $Jemplate_Runtime->kernel if $runtime;
 
     push @runtime, $Jemplate_Runtime->json2 if $json =~ m/^json2?$/i;
-    
+
     push @runtime, $Jemplate_Runtime->ajax_xhr if $ajax eq "xhr";
     push @runtime, $Jemplate_Runtime->ajax_jquery if $ajax eq "jquery";
     push @runtime, $Jemplate_Runtime->ajax_yui if $ajax eq "yui";
@@ -20317,7 +20324,7 @@ sub _preamble {
    Template Toolkit. Any changes made to this file will be lost the next
    time the templates are compiled.
 
-   Copyright 2006-2008 - Ingy döt Net - All rights reserved.
+   Copyright 2006-2014 - Ingy döt Net - All rights reserved.
 */
 
 var Jemplate;

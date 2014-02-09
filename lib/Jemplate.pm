@@ -394,7 +394,7 @@ sub _preamble {
    Template Toolkit. Any changes made to this file will be lost the next
    time the templates are compiled.
 
-   Copyright 2006-2008 - Ingy döt Net - All rights reserved.
+   Copyright 2006-2014 - Ingy döt Net - All rights reserved.
 */
 
 var Jemplate;
@@ -413,6 +413,10 @@ if (typeof(Jemplate) == 'undefined')
 __END__
 
 =encoding utf8
+
+=head1 NAME
+
+Jemplate - JavaScript Templating with Template Toolkit
 
 =head1 NAME
 

@@ -20,7 +20,7 @@ my $content;
 sub _jemplate($@) {
     my $file = shift;
     unshift @_, "--compact" if TEST_COMPACT;
-    ok(system("$^X ./jemplate @_ > $file") == 0);
+    ok(system("$^X ./bin/jemplate @_ > $file") == 0);
 }
 
 sub jemplate(@) {

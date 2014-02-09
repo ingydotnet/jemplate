@@ -316,8 +316,8 @@ $STATES = [
 			'node' => 23,
 			'ident' => 79,
 			'term' => 97,
-			'lterm' => 58,
-			'list' => 94
+			'list' => 94,
+			'lterm' => 58
 		}
 	},
 	{#State 11
@@ -828,13 +828,13 @@ $STATES = [
 			"\${" => 38
 		},
 		GOTOS => {
-			'expr' => 152,
 			'sterm' => 70,
 			'item' => 41,
-			'assign' => 151,
 			'node' => 23,
 			'ident' => 150,
 			'term' => 60,
+			'expr' => 152,
+			'assign' => 151,
 			'lterm' => 58
 		}
 	},
@@ -1334,8 +1334,8 @@ $STATES = [
 			'LITERAL' => 59,
 			"\"" => 62,
 			'PROCESS' => 63,
-			'FILTER' => 25,
 			'RETURN' => 66,
+			'FILTER' => 25,
 			'INSERT' => 67,
 			'NUMBER' => 26,
 			'REF' => 27,
@@ -1357,8 +1357,8 @@ $STATES = [
 			'atomexpr' => 49,
 			'atomdir' => 13,
 			'mdir' => 195,
-			'filter' => 30,
 			'sterm' => 70,
+			'filter' => 30,
 			'ident' => 150,
 			'setlist' => 72,
 			'try' => 36,
@@ -1399,8 +1399,8 @@ $STATES = [
 			'LITERAL' => 59,
 			"\"" => 62,
 			'PROCESS' => 63,
-			'FILTER' => 25,
 			'RETURN' => 66,
+			'FILTER' => 25,
 			'INSERT' => 67,
 			'NUMBER' => 26,
 			'REF' => 27,
@@ -1422,8 +1422,8 @@ $STATES = [
 			'atomexpr' => 49,
 			'atomdir' => 13,
 			'mdir' => 198,
-			'filter' => 30,
 			'sterm' => 70,
+			'filter' => 30,
 			'ident' => 150,
 			'setlist' => 72,
 			'try' => 36,
@@ -2336,13 +2336,13 @@ $STATES = [
 		},
 		DEFAULT => -164,
 		GOTOS => {
-			'expr' => 258,
 			'sterm' => 70,
 			'item' => 255,
-			'param' => 256,
 			'node' => 23,
 			'ident' => 254,
 			'term' => 60,
+			'expr' => 258,
+			'param' => 256,
 			'lterm' => 58
 		}
 	},
@@ -2537,14 +2537,14 @@ $STATES = [
 			"\${" => 38
 		},
 		GOTOS => {
-			'expr' => 152,
 			'sterm' => 70,
 			'item' => 41,
-			'assign' => 151,
 			'margs' => 270,
 			'node' => 23,
 			'ident' => 150,
 			'term' => 60,
+			'expr' => 152,
+			'assign' => 151,
 			'lterm' => 58
 		}
 	},
@@ -2622,13 +2622,13 @@ $STATES = [
 		},
 		DEFAULT => -66,
 		GOTOS => {
-			'expr' => 258,
 			'sterm' => 70,
 			'item' => 255,
-			'param' => 256,
 			'node' => 23,
 			'ident' => 254,
 			'term' => 60,
+			'expr' => 258,
+			'param' => 256,
 			'lterm' => 58
 		}
 	},
@@ -2924,13 +2924,13 @@ $STATES = [
 			"\${" => 38
 		},
 		GOTOS => {
-			'expr' => 258,
 			'sterm' => 70,
 			'item' => 255,
-			'param' => 256,
 			'node' => 23,
 			'ident' => 254,
 			'term' => 60,
+			'expr' => 258,
+			'param' => 256,
 			'lterm' => 58
 		}
 	},
@@ -3499,13 +3499,13 @@ $STATES = [
 		},
 		DEFAULT => -163,
 		GOTOS => {
-			'expr' => 258,
 			'sterm' => 70,
 			'item' => 255,
-			'param' => 256,
 			'node' => 23,
 			'ident' => 254,
 			'term' => 60,
+			'expr' => 258,
+			'param' => 256,
 			'lterm' => 58
 		}
 	},
@@ -3532,13 +3532,13 @@ $STATES = [
 			"\${" => 38
 		},
 		GOTOS => {
-			'expr' => 258,
 			'sterm' => 70,
 			'item' => 255,
-			'param' => 256,
 			'node' => 23,
 			'ident' => 254,
 			'term' => 60,
+			'expr' => 258,
+			'param' => 256,
 			'lterm' => 58
 		}
 	},
@@ -4367,8 +4367,8 @@ $STATES = [
 			'LITERAL' => 59,
 			"\"" => 62,
 			'PROCESS' => 63,
-			'FILTER' => 25,
 			'RETURN' => 66,
+			'FILTER' => 25,
 			'INSERT' => 67,
 			'NUMBER' => 26,
 			'REF' => 27,
@@ -4390,8 +4390,8 @@ $STATES = [
 			'atomexpr' => 49,
 			'atomdir' => 13,
 			'mdir' => 327,
-			'filter' => 30,
 			'sterm' => 70,
+			'filter' => 30,
 			'ident' => 150,
 			'setlist' => 72,
 			'try' => 36,
@@ -4422,13 +4422,13 @@ $STATES = [
 		},
 		DEFAULT => -64,
 		GOTOS => {
-			'expr' => 258,
 			'sterm' => 70,
 			'item' => 255,
-			'param' => 256,
 			'node' => 23,
 			'ident' => 254,
 			'term' => 60,
+			'expr' => 258,
+			'param' => 256,
 			'lterm' => 58
 		}
 	},
@@ -4449,13 +4449,13 @@ $STATES = [
 		},
 		DEFAULT => -65,
 		GOTOS => {
-			'expr' => 258,
 			'sterm' => 70,
 			'item' => 255,
-			'param' => 256,
 			'node' => 23,
 			'ident' => 254,
 			'term' => 60,
+			'expr' => 258,
+			'param' => 256,
 			'lterm' => 58
 		}
 	},

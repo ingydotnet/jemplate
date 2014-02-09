@@ -33,7 +33,7 @@ t.is(
 === Test without VARIABLES set in config hash
 --- output
 Hello, Wally!
-=== Test with VARIABLES set in config hash 
+=== Test with VARIABLES set in config hash
 --- output
 Hello, Beaver!
 === Test with VARIABLES set in config hash being overridden by local var
