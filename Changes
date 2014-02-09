@@ -1,4 +1,11 @@
 ---
+version: 0.28
+date:    Sun Feb  9 02:17:08 UTC 2014
+changes:
+- Add flag for excluding files (fbelton++)
+- Switched tooling to dzil (with fbelton++)
+
+---
 version: 0.27
 date:    Sat May 26 02:53:31 UTC 2012
 changes:
