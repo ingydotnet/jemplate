@@ -13,14 +13,14 @@ sub new {
         FACTORY => 'Jemplate::Directive',
         @_,
     );
-    
+
     # flags passed from Jemplate object
     my %args = @_;
 
     # eval-javascript is default "on"
     $parser->{EVAL_JAVASCRIPT} = exists $args{EVAL_JAVASCRIPT}
       ? $args{EVAL_JAVASCRIPT} : 1;
-    
+
     # tie the parser state-variable to the global Directive var
     $parser->{INJAVASCRIPT} = \$Jemplate::Directive::INJAVASCRIPT;
 
@@ -52,7 +52,7 @@ Ingy döt Net <ingy@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2006-2008. Ingy döt Net. All rights reserved.
+Copyright (c) 2006-2014. Ingy döt Net. All rights reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

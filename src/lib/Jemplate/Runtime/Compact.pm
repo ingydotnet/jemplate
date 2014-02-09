@@ -122,7 +122,7 @@ head2 xxx
 
 =head1 COPYRIGHT
 
-Copyright (c) 2008. Ingy döt Net.
+Copyright (c) 2014. Ingy döt Net.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

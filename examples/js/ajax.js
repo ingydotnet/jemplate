@@ -3,7 +3,7 @@
    Template Toolkit. Any changes made to this file will be lost the next
    time the templates are compiled.
 
-   Copyright 2006-2008 - Ingy döt Net - All rights reserved.
+   Copyright 2006-2014 - Ingy döt Net - All rights reserved.
 */
 
 if (typeof(Jemplate) == 'undefined')
