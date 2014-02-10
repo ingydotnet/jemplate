@@ -14,6 +14,7 @@ install:
   File::Find::Rule
   Spiffy
   Template
+  JavaScript::V8x::TestMoreish
   Devel::Cover::Report::Coveralls
 
 script:
