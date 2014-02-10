@@ -8,6 +8,7 @@ perl:
 - 5.8
 
 install:
+- apt-get install libv8-dev
 - git clone --depth=1 --branch=master
   git://github.com/ingydotnet/test-base-pm ../testml-pm
 - cpanm --quiet --notest
