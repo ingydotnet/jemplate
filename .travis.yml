@@ -12,8 +12,8 @@ install:
   git://github.com/ingydotnet/test-base-pm ../testml-pm
 - cpanm --quiet --notest
   File::Find::Rule
-  Spiffy
   Template
+  Spiffy
   Devel::Cover::Report::Coveralls
 
 script:
