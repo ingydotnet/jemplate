@@ -1,4 +1,10 @@
 ---
+version: 0.29
+date:    Mon Feb 10 14:12:03 PST 2014
+changes:
+- Fixes for cpantesters failures. Needs 'inc' in path.
+
+---
 version: 0.28
 date:    Sun Feb  9 02:17:08 UTC 2014
 changes:
