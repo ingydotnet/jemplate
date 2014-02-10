@@ -1,4 +1,5 @@
 package t::TestJemplate;
+use lib 'inc';
 use Test::Base -Base;
 
 use Jemplate;
