@@ -1,4 +1,10 @@
 ---
+version: 0.30
+date:    Thu Feb 13 12:03:07 PST 2014
+changes:
+- Diasable a test that was breaking cpantesters.
+
+---
 version: 0.29
 date:    Mon Feb 10 14:12:03 PST 2014
 changes:
