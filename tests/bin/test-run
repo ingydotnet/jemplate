@@ -1,19 +1,19 @@
-#!/bin/sh
+#!/bin/bash
 
 JEMPLATE="perl -I../.. ../../jemplate"
 DAEMON_PID=
 
 function run() {
-    $JEMPLATE $* > runtime.js
-    echo -e "\n"
-    echo -e "*** Testing: $*"
-    echo -e "*** Press return when you're ready to continue ***";
-    read;
+  $JEMPLATE $* > runtime.js
+  echo -e "\n"
+  echo -e "*** Testing: $*"
+  echo -e "*** Press return when you're ready to continue ***"
+  read
 }
 
 function quit() {
-    [ -n "$DAEMON_PID" ] && kill -9 $DAEMON_PID
-    exit
+  [ -n "$DAEMON_PID" ] && kill -9 $DAEMON_PID
+  exit
 }
 
 trap "quit" SIGINT SIGTERM

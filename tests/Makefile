@@ -39,9 +39,9 @@ test: all
 
 clean:
 	rm -fr $(ALL_TARGETS) $(ALL_LIBS) $(ALL_JS)
-	if [ "$(TEST_TEMPLATE_MD5)" = \
+	if [ "$(TEST_TEMPLATE_MD5)" == \
      "$(TEST_LOCAL_MD5)" ]; then rm -f $(TEST_LOCAL); fi
-	if [ "$(INDEX_TEMPLATE_MD5)" = \
+	if [ "$(INDEX_TEMPLATE_MD5)" == \
      "$(INDEX_LOCAL_MD5)" ]; then rm -f $(INDEX_LOCAL); fi
 	-find $(ALL_DIRS) -depth -type d | xargs rmdir 2> /dev/null
 
