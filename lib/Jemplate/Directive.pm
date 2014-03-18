@@ -19,24 +19,8 @@ sub template {
     my ($class, $block) = @_;
 
     return "function() { return ''; }" unless $block =~ /\S/;
-
-    return <<"...";
-function(context) {
-    if (! context) throw('Jemplate function called without context\\n');
-    var stash = context.stash;
-    var output = '';
-
-    try {
-$block
-    }
-    catch(e) {
-        var error = context.set_error(e, output);
-        throw(error);
-    }
-
-    return output;
-}
-...
+    return "Jemplate.applier(function(stash, output) { $block; return output; })";
+    
 }
  
 # Try to do 1 .. 10 expansions
