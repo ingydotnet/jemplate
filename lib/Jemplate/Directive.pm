@@ -19,7 +19,7 @@ sub template {
     my ($class, $block) = @_;
 
     return "function() { return ''; }" unless $block =~ /\S/;
-    return "Jemplate.applier(function(stash, output) { $block return output; });\n";
+    return "Jemplate.applier(function(stash, output) {\n $block return output; });\n\n";
     
 }
  
