@@ -408,13 +408,10 @@ if (typeof(Jemplate) == 'undefined')
 Jemplate.applier = function(block) {
     return function(context) {
         if (!context) throw('Jemplate function called without context\\n');
-        var stash = context.stash, output = '';
         try {
-            output = block(stash, output);
+            return block(context.stash, context);
         } catch(e) {
-            throw(context.set_error(e, output));
-        } finally {
-            return output;
+            throw(e);
         }
     }
 };
