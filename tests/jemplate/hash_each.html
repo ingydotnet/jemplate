@@ -1,0 +1,11 @@
+[%# This is a bit convoluted because sort order can not be guaranteed -%]
+[%# please fix it if you can find a better way... -%]
+[%# There are a few other tests below that are very similar -%]
+[% SET hash = { a=1 b=2 c=3 };
+   SET list = hash.each;
+   FOR kindex IN [0,2,4];
+     SET vindex = kindex + 1;
+     SET key = list.${kindex};
+     SET value = list.${vindex};
+     (key AND hash.${key} == value) ? 1 : 0;
+   END %]

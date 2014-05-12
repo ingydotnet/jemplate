@@ -1,0 +1,30 @@
+[% FILTER indent -%]
+1
+2
+3
+4
+[%- END %]
+#
+[% FILTER indent(3) -%]
+1
+2
+3
+4
+[%- END %]
+#
+[% FILTER indent('2') -%]
+1
+2
+3
+4
+[%- END %]
+#
+[% FILTER indent(0) -%]
+1
+2
+3
+4
+[%- END %]
+#
+[% text = 'The cat sat on the mat';
+   text | indent('> ') | indent('+') %]

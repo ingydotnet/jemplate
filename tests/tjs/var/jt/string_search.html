@@ -1,0 +1,3 @@
+[% SET a = 'aaa12aaa34aaa56' -%]
+[% a.search('\\\d\\\d') ? 1 : 0 %]
+[% a.search('w') ? 1 : 0 %]

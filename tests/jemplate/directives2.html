@@ -1,0 +1,7 @@
+[% SET num = 4 -%]
+[% array = [] -%]
+[% WHILE num < 7 -%]
+[% IF num % 2 %][% CALL array.push('Odd') %][% ELSE %][% CALL array.push('Even') %][% END -%]
+[% num = num + 1 -%]
+[% END -%]
+[% array.join('***') %]

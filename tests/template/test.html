@@ -1,0 +1,16 @@
+<html>
+<head>
+    <title>[% index_title | html %] - [% test_file | html %]</title>
+    <script type="text/javascript">
+        var testBaseCurrentScript = '[% test_file %]';
+    </script>
+    <script type="text/javascript" src="lib/Test/Builder.js"></script>
+    <script type="text/javascript" src="lib/Test/Base.js"></script>
+[% FOR lib = import_libs -%]
+    <script type="text/javascript" src="[% lib %]"></script>
+[% END -%]
+</head>
+<body>
+    <script type="text/javascript" src="[% test_file %]"></script>
+</body>
+</html>

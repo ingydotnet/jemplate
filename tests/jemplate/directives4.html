@@ -1,0 +1,6 @@
+[%- JAVASCRIPT -%]
+stash.set("obj", {"key1": "val1", "key2": "val2"});
+[%- END -%]
+[%- FOR key IN obj -%]
+[% key %]: [% obj.$key %]
+[% END -%]

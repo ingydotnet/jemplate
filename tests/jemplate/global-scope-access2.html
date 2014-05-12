@@ -1,0 +1,36 @@
+#1
+[% 
+	global_foo = 'local_foo'; #creates local variable
+	GLOBAL.global_foo;
+%]
+#2
+[% global_foo %]
+#3
+[% 
+	local_var = "foo"; #new variables are always local
+	GLOBAL.local_var; #empty	
+%]
+#4
+[% 
+	GLOBAL.new_global_var = "new_global_var"; #new global vars could be created only this way
+	new_global_var; #empty
+%]
+#5
+[% GLOBAL.new_global_var; %]
+#6
+[%
+	new_global_var = "local_value";
+	new_global_var; #not empty
+%]
+#7
+[% GLOBAL.new_global_var; %]
+#8
+[% 
+	global_foo = "global_foo2";
+	global_foo;
+%]
+#9
+[%
+	LOCAL.global_foo = "masked"; #LOCAL access	
+	global_foo; 
+%]

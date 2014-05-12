@@ -1,0 +1,7 @@
+[% FILTER html %]This is some html text
+All the <tags> should be escaped & protected
+[% END %]
+[% text = "The <cat> sat on the <mat>" %]
+[% text FILTER html %]
+[% FILTER html %]
+"It isn't what I expected", he replied.[% END %]

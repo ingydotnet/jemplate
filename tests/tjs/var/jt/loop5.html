@@ -1,0 +1,6 @@
+[%- FOR i IN [0,1,2,3] -%]
+    [%- i -%]:[%-loop.prev%]:[%-loop.next%]
+[% END -%]
+[%- FOR i IN {a => 0, b => 1, c => 3, d => 4 } -%]
+    [%- i -%]:[%-loop.prev%]:[%-loop.next%]
+[% END -%]

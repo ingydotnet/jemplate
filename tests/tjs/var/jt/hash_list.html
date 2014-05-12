@@ -1,0 +1,16 @@
+[% SET hash = { a=1 b=2 c=3 } -%]
+[% hash.list('keys').sort.join(' ') %]
+[% hash.list('values').sort.join(' ') %]
+[% SET list = hash.list('each');
+   FOR kindex IN [0,2,4];
+     SET vindex = kindex + 1;
+     SET key = list.${kindex};
+     SET value = list.${vindex};
+     (key AND hash.${key} == value) ? 1 : 0;
+   END %]
+[% SET list = hash.list();
+   FOR entry IN list;
+     SET key = entry.key;
+     SET value = entry.value;
+     (hash.${key} == value) ? 1 : 0;
+   END %]

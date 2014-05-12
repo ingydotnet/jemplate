@@ -1,0 +1,12 @@
+-- incomplete --
+
+./mangle.pl  --context=ctx.tst < $TT_HOME/t/parser.t > newtest.t.js
+
+- mangle.pl tries its best to generate Test.Data based on TT test suite
+- $TT_HOME/t/parser.t is the TT test suite being extracted
+- ctx.tst is a manual extract of the $context (often called $params) object
+  used in TT (in $TT_HOME/t/parser.t)
+- newtest.t.js is the Test.Data file generated
+- in ./jemplates is the 'jemplates' files defined in the jemplate block
+
+
