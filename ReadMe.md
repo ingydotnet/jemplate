@@ -177,7 +177,7 @@ Jemplate now supports almost all the TT directives, including:
     * [% LAST %]
     * [% CLEAR %]
     * [%# this is a comment %]
-    * [% MACRO name(param1, param2) BLOCK %] ... [% END %]  
+    * [% MACRO name(param1, param2) BLOCK %] ... [% END %]
 
 ALL of the string virtual functions are supported.
 
@@ -194,11 +194,11 @@ in the distro for a list of all features and their progress.
 
 Tested successfully in:
 
-    * Firefox Mac/Win32/Linux
-    * IE 6.0
-    * Safari
-    * Opera
-    * Konqueror
+* Firefox Mac/Win32/Linux
+* IE 6.0
+* Safari
+* Opera
+* Konqueror
 
 All tests run 100% successful in the above browsers.
 
@@ -215,6 +215,55 @@ Jemplate development is being discussed at irc://irc.freenode.net/#jemplate
 
 If you want a committer bit, just ask ingy on the irc channel.
 
+# DEVELOPMENT TOOLS
+
+Here are the tools you will need to build the repo:
+
+* java
+* rhino (javascript interpreter written in java)
+    * On a Mac: `brew install rhino`
+* yapp (Parse::Yapp - Perl extension for generating and using LALR parsers.)
+    * `cpanm Parse::Yapp`
+* dzil (Dist::Zilla is a program to make it easier to write, package, manage, and release free software.)
+    * `cpanm Dist::Zilla`
+* Test::Base (Test::Base - A Data Driven Testing Framework)
+    * `cpanm Test::Base`
+* Zilla::Dist (Zilla::Dist - Dist::Zilla Mixed Up)
+    * `cpanm Zilla::Dist`
+
+# BUILDING
+
+Clone jemplate repo:
+
+    git clone git@github.com:buzzfeed/jemplate.git
+
+Clone Test::Base repo:
+
+    git clone https://github.com/ingydotnet/test-base-pm.git
+
+Change working directory to jemplate:
+
+    cd jemplate
+
+Install any missing author dependencies:
+
+    dzil authordeps --missing | cpanm
+
+Install any missing dependencies:
+
+    dzil listdeps --missing | cpanm
+
+At this point you can make changes in the repo.
+
+If you make any changes under `src` you should then run make to re-generate the javascript and perl code:
+
+    cd src
+    make
+
+Then commit your changes and use dzil at the top level to build the package:
+
+    dzil build
+
 # CREDIT
 
 This module is only possible because of Andy Wardley's mighty Template
@@ -224,13 +273,13 @@ drinking them ;)
 
 # AUTHORS
 
-Ingy döt Net <ingy@cpan.org>
+Ingy dÃ¶t Net <ingy@cpan.org>
 
 (Note: I had to list myself first so that this line would go into META.yml)
 
 Jemplate is truly a community authored project:
 
-Ingy döt Net <ingy@cpan.org>
+Ingy dÃ¶t Net <ingy@cpan.org>
 
 Tatsuhiko Miyagawa <miyagawa@bulknews.net>
 
