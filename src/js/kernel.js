@@ -29,6 +29,10 @@ Jemplate.process = function() {
     return jemplate.process.apply(jemplate, arguments);
 }
 
+if (typeof(exports) == "object") {
+    exports.Jemplate = Jemplate;
+}
+
 ;(function(){
 
 if (! Jemplate.templateMap)
