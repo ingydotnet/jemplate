@@ -1,6 +1,6 @@
 == The Jemplate Compiler ==
 
-The program called 'jemplate' that is next to this INSTALL file is a
+The program called 'jemplate' that is next to this Install file is a
 standalone compiler for Jemplate. It has no dependencies except that there
 must be a 'perl' executable command in your PATH. (Most machines come with
 Perl preinstalled these days.)

@@ -75,8 +75,8 @@ directory that you can run by simply loading the index.html file into
 any supported browser. These tests use a JavaScript port of the
 Test.Base framework.
 
-We also have a more adhoc `examples/` directory with stuff that you need to
-run by hand.
+We also have a more adhoc `eg/` directory with stuff that you need to run by
+hand.
 
 
 = FEATURE CHECKLIST
