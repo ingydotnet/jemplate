@@ -405,6 +405,17 @@ if (typeof(exports) == 'object') {
 if (typeof(Jemplate) == 'undefined')
     throw('Jemplate.js must be loaded before any Jemplate template files');
 
+Jemplate.applier = function(func) {
+    return function(context) {
+        if (!context) throw('Jemplate function called without context\\n');
+        try {
+            return func(context.stash, context);
+        } catch(e) {
+            throw(e);
+        }
+    }
+};
+
 ...
 }
 
