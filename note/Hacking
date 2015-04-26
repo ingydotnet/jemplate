@@ -1,0 +1,24 @@
+= HACKING
+
+To be able to build Jemplate you must first set up Dist::Zilla.
+
+% cpanm Dist::Zilla
+% dzil authordeps --missing | cpanm
+% dzil listdeps --missing | cpanm
+
+At this point the following command should complete successfully:
+
+% dzil build
+
+= TESTING
+
+The tests rely on Test::Base, as configured by the Dist::Zilla Plugin
+TestBaseIncluder. To run the tests you must have the git repository of
+Test::Base available in the parent directory!
+
+% git clone git@github.com:ingydotnet/test-base-pm.git ../test-base-pm
+
+At this point the following command should complete successfully:
+
+% dzil test --release
+
