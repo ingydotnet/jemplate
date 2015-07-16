@@ -386,18 +386,18 @@ sub compile_template_content {
     my @maps = (
 	    { name => $template_name, func => $parse_tree->{BLOCK} },
 	    map {
-	    	{ name => $_, func => $parse_tree->{DEFBLOCKS}{$_} }
+	        { name => $_, func => $parse_tree->{DEFBLOCKS}{$_} }
 	    } sort keys %{$parse_tree->{DEFBLOCKS}}
     );
-    my $output = join "\n", map {
+    my $output = (join "\n", map {
         "Jemplate.templateMap['$_->{name}'] = $_->{func}"
-    } @maps;
+    } @maps) . "\n";
     $output = join "\n", (
         "define(['jemplate'], function(Jemplate) {",
         $output,
 	"return function(data, target) { return Jemplate.process('$template_name', data, target); };",
         '});',
-    ) if $self->{amd};
+    ) if ref $parser && $parser->{amd};
     return $output;
 }
 
