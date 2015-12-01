@@ -834,6 +834,10 @@ proto.list_functions.last = function(list) {
     return list.slice(-1);
 }
 
+proto.list_functions.item = function(list, n) {
+    return list[n];
+};
+
 proto.hash_functions = {};
 
 // typeof
