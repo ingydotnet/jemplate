@@ -374,11 +374,16 @@ sub compile_template_content {
     my $parse_tree = $parser->parse(
         $template_content, {name => $template_name}
     ) or die $parser->error;
+    my $used_names = ref $self ? \$self->{USED_NAMES} : \ {};
+    warn "Duplicate template or block name $template_name\n"
+      if $$used_names->{$template_name}++;
     my $output =
         "Jemplate.templateMap['$template_name'] = " .
         $parse_tree->{BLOCK} .
         "\n";
     for my $function_name (sort keys %{$parse_tree->{DEFBLOCKS}}) {
+        warn "Duplicate template or block name $function_name\n"
+          if $$used_names->{$function_name}++;
         $output .=
             "Jemplate.templateMap['$function_name'] = " .
             $parse_tree->{DEFBLOCKS}{$function_name} .
