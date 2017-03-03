@@ -40,14 +40,22 @@ $block
 }
  
 # Try to do 1 .. 10 expansions
+# and 'word'..'otherword' expansions
 sub _attempt_range_expand_val ($) {
     my $val = shift;
     return $val unless
         my ( $from, $to ) = $val =~ m/\s*\[\s*(\S+)\s*\.\.\s*(\S+)\s*\]/;
 
-    die "Range expansion is current supported for positive/negative integer values only (e.g. [ 1 .. 10 ])\nCannot expand: $val" unless $from =~ m/^-?\d+$/ && $to =~ m/^-?\d+$/;
+		if ($from =~ m{^(["'])\w+\1$} && $to =~ m{(["'])\w+\1$}) {
+			(undef, $from) = $from =~ m{^(["'])(\w+)\1$};
+			(undef, $to  ) = $to   =~ m{^(["'])(\w+)\1$};
+    		return join '', '[', join( ',', map("'$_'", ($from .. $to) ) ), ']';
+		} elsif ($from =~ m/^-?\d+$/ && $to =~ m/^-?\d+$/) {
+    		return join '', '[', join( ',', $from .. $to ), ']';
+		} else {
+    		die "Range expansion is current only supported for positive/negative integer values ([ 1 .. 10 ]) and word characters ('a'..'z')(\nCannot expand: $val"; 
+		}
 
-    return join '', '[', join( ',', $from .. $to ), ']';
 }
 
 #------------------------------------------------------------------------
